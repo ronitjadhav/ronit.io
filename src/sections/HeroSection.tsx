@@ -1,12 +1,13 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { TypeAnimation } from 'react-type-animation'
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
 
 export default function HeroSection() {
     return (
         <header className="dark:bg-secondaryBlack inset-0 flex min-h-[100dvh] w-full flex-col items-center justify-center bg-white bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px]">
             <div className="mx-auto w-container max-w-full px-5 py-[110px] text-left lg:py-[150px] flex flex-col lg:flex-row">
-                <div className="w-full lg:w-1/2">
+                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
                     <TypeAnimation
                         className={`
       text-3xl lg:text-3xl
@@ -30,12 +31,22 @@ export default function HeroSection() {
                         I love to work with maps, data, and code.
                         I&#39;m passionate about open-source, web technologies, and building cool stuff.
                     </p>
-                    <Button
-                        size="lg"
-                        className="h-12 text-base font-heading md:text-lg lg:h-14 lg:text-xl"
-                    >
-                        Contact me
-                    </Button>
+                    <div className="flex flex-col items-center lg:items-start mb-8">
+                        <div className="flex space-x-6 mb-6">
+                            <a href="https://github.com/ronitjadhav" target="_blank" rel="noopener noreferrer">
+                                <FaGithub className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
+                            </a>
+                            <a href="https://www.linkedin.com/in/ronitjadhav/" target="_blank" rel="noopener noreferrer">
+                                <FaLinkedin className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
+                            </a>
+                        </div>
+                        <Button
+                            size="lg"
+                            className="h-12 text-base font-heading md:text-lg lg:h-14 lg:text-xl"
+                        >
+                            Contact me
+                        </Button>
+                    </div>
                 </div>
                 <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
                     {/* New blank section */}
