@@ -48,7 +48,7 @@ export default function NavBar() {
                         border-[#80808033] px-3 sm:px-4 text-text
                         transition-transform duration-300 ease-in-out`,
                         showNav ? 'translate-y-0' : '-translate-y-[calc(100%+20px)]',
-                        'bg-white dark:bg-secondaryBlack'
+                        'bg-white dark:bg-secondaryBlack shadow-light dark:shadow-dark'
                     )}
                 >
                     {/* Ronit.io Text with responsive styling and theme support */}
