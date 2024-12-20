@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { motion } from 'framer-motion'
 
 import Hamburger from './hamburger'
 import { ThemeSwitcher } from './theme-switcher'
@@ -38,9 +39,24 @@ export default function NavBar() {
         }
     }, [lastScrollY])
 
+    // Variants for the navbar sliding from the top animation
+    const navbarVariants = {
+        hidden: { y: '-120%' },  // Move navbar further up so no part is visible
+        visible: {
+            y: 0,
+            transition: { duration: 1, delay: 1 }  // Slide down with delay
+        },
+    }
+
     return (
         <>
-            <nav className="fixed left-0 top-0 z-50 w-full px-2 sm:px-3">
+            {/* Navbar wrapper with slide-in effect */}
+            <motion.nav
+                className="fixed left-0 top-0 z-50 w-full px-2 sm:px-3"
+                variants={navbarVariants}
+                initial="hidden"
+                animate="visible"
+            >
                 <div
                     className={twMerge(
                         `mx-auto mt-2 sm:mt-3 flex h-[80px] w-full max-w-screen-xl
@@ -65,7 +81,7 @@ export default function NavBar() {
                         {/* "Let's Work Together!" Button visible only on medium and larger screens */}
                         <div className="flex items-center gap-1 sm:gap-2">
                             <DialogComponent
-                                triggerButtonText="Let&apos;s Work Together!"
+                                triggerButtonText="Get in Touch!"
                                 dialogTitle="Get in Touch"
                                 dialogDescription="Please fill out the form below to get in touch with us."
                                 inputLabels={{ name: 'Name', email: 'Email', message: 'Message' }}
@@ -81,7 +97,7 @@ export default function NavBar() {
                         <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
                     </div>
                 </div>
-            </nav>
+            </motion.nav>
 
             {/* Mobile menu */}
             {isOpen && (
@@ -95,7 +111,7 @@ export default function NavBar() {
 
                     {/* "Let's Work Together!" button in mobile view */}
                     <DialogComponent
-                        triggerButtonText="Let&apos;s Work Together!"
+                        triggerButtonText="Get in Touch!"
                         dialogTitle="Get in Touch"
                         dialogDescription="Please fill out the form below to get in touch with us."
                         inputLabels={{ name: 'Name', email: 'Email', message: 'Message' }}
