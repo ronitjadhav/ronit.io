@@ -16,6 +16,7 @@ import {
     SiQgis,
     SiTypescript
 } from "react-icons/si"
+import Image from 'next/image';
 
 export default function HeroSection() {
     const skills = [
@@ -107,7 +108,7 @@ export default function HeroSection() {
     }
 
     return (
-        <header className="relative flex min-h-[100vh] w-full flex-col items-center justify-center bg-white dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px]">
+        <header className="relative flex min-h-[100vh] w-full flex-col items-center justify-center bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px]">
             <motion.div
                 className="mx-auto w-container max-w-full px-5 py-[110px] text-left lg:py-[150px] flex flex-col lg:flex-row"
                 variants={containerVariants}
@@ -181,10 +182,16 @@ export default function HeroSection() {
                 </div>
 
                 <motion.div
-                    className="w-full lg:w-1/2 mt-8 lg:mt-0"
+                    className="w-full lg:w-1/2 mt-8 lg:mt-0 flex justify-center"
                     variants={itemVariants}
                 >
-                    {/* New blank section */}
+                    <Image
+                        src="/ronit.png"
+                        alt="Ronit Jadhav"
+                        width={450}
+                        height={450}
+                        className="mt-[-40px] ml-38"
+                    />
                 </motion.div>
             </motion.div>
 
