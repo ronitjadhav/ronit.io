@@ -74,6 +74,10 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
+        env:
+          NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: ${{ secrets.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN }}
+          NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL: ${{ secrets.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL }}
+          NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL: ${{ secrets.NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
