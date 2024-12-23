@@ -5,6 +5,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { BiLogoPostgresql } from "react-icons/bi"
 import Marquee from "react-fast-marquee"
 import { motion } from 'framer-motion'
+import ronitImage from '@/media/ronit.png'
 import {
     SiAngular,
     SiArcgis, SiDocker, SiGit,
@@ -186,7 +187,7 @@ export default function HeroSection() {
                     variants={itemVariants}
                 >
                     <Image
-                        src="/ronit.png"
+                        src={ronitImage}
                         alt="Ronit Jadhav"
                         width={450}
                         height={450}

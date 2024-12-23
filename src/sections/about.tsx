@@ -2,10 +2,10 @@
 
 import React from 'react'
 
-import Character1 from '../../public/svgs/Character1.svg'
-import Character2 from '../../public/svgs/Character2.svg'
-import Character3 from '../../public/svgs/Character3.svg'
-import Character4 from '../../public/svgs/Character4.svg'
+import Character1 from '@/media/svgs/Character1.svg'
+import Character2 from '@/media/svgs/Character2.svg'
+import Character3 from '@/media/svgs/Character3.svg'
+import Character4 from '@/media/svgs/Character4.svg'
 import { InfoCardsContainer } from './info-card'
 import type { InfoCardProps } from './info-card' // Make sure to export this type from info-card.tsx
 
