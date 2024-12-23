@@ -142,11 +142,11 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ entry, onClick }) => (
 const Popup: React.FC<PopupProps> = ({ title, description }) => (
     <div className="relative">
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-50
-                    bg-white dark:bg-gray-800 border-4 border-black dark:border-white
+                    bg-white dark:bg-darkBg border-4 border-black dark:border-darkBorder
                     p-4 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                    dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]
+                    dark:shadow-darkBorder
                     min-w-[250px] max-w-[350px]">
-            <h2 className="font-black text-xl mb-2 border-b-4 border-black dark:border-white pb-2
+            <h2 className="font-black text-xl mb-2 border-b-4 border-black dark:border-darkBorder pb-2
                        text-black dark:text-white">
                 {title}
             </h2>
@@ -157,7 +157,7 @@ const Popup: React.FC<PopupProps> = ({ title, description }) => (
         {/* Pointer triangle */}
         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4
                     bg-white dark:bg-gray-800 border-b-4 border-r-4
-                    border-black dark:border-white rotate-45">
+                    border-black dark:border-darkBorder rotate-45">
         </div>
     </div>
 );
@@ -165,25 +165,26 @@ const Popup: React.FC<PopupProps> = ({ title, description }) => (
 const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, children }) => (
     <div
         className={`
-            fixed md:absolute top-0 left-0
-            max-h-[100vh] md:h-full w-full sm:w-[420px]
-            bg-white/95 backdrop-blur-md
-            border-r-4 border-black
-            transition-transform duration-300 ease-in-out
-            ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-            z-20
-            flex flex-col
-            overflow-hidden
-            ${!isOpen ? 'invisible md:visible' : 'visible'}
-        `}
+        absolute top-0 left-0 
+        h-full w-full sm:w-[420px]
+        bg-white/95 dark:bg-darkBg backdrop-blur-md
+        border-r-4 border-black dark:border-darkBorder
+        transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        z-20
+        flex flex-col
+        overflow-hidden
+        ${!isOpen ? 'invisible md:visible' : 'visible'}
+    `}
     >
-        <div className="flex-none flex items-center justify-between p-4 border-b-4 border-black bg-white">
-            <h2 className="font-black text-xl">Journey Timeline</h2>
+        <div
+            className="flex-none flex items-center justify-between p-4 border-b-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg">
+            <h2 className="font-black text-xl text-black dark:text-white">Journey Timeline</h2>
             <button
                 onClick={onClose}
-                className="p-2 bg-black text-white hover:bg-gray-800 transition-colors rounded"
+                className="p-2 bg-black dark:bg-darkBg text-white dark:text-darkText hover:bg-gray-800 dark:hover:bg-black transition-colors rounded"
             >
-                <ChevronLeft size={24} />
+                <ChevronLeft size={24}/>
             </button>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar relative">
@@ -193,12 +194,12 @@ const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, 
 );
 
 
-const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom }) => (
+const ZoomControl: React.FC<ZoomControlProps> = ({onZoom}) => (
     <div className="absolute bottom-4 md:top-4 right-4 flex flex-col gap-2">
         {[
-            { label: '+', direction: 'in' as const },
-            { label: '−', direction: 'out' as const }
-        ].map(({ label, direction }) => (
+            {label: '+', direction: 'in' as const},
+            {label: '−', direction: 'out' as const}
+        ].map(({label, direction}) => (
             <button
                 key={direction}
                 onClick={() => onZoom(direction)}
@@ -217,7 +218,7 @@ const MapComponent: React.FC = () => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<Map | null>(null);
     const [overlay, setOverlay] = useState<Overlay | null>(null);
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [activeIndex, setActiveIndex] = useState<number>(-1); // Set initial activeIndex to -1
     const [isTimelineOpen, setIsTimelineOpen] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth >= 768);
     const popupRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<string>(createSVGMarker());
@@ -269,13 +270,11 @@ const MapComponent: React.FC = () => {
             })
         });
 
-        // Create features with explicit property setting
         const features = timelineData.map(entry => {
             const transformedCoords = fromLonLat(entry.location);
             const feature = new Feature({
                 geometry: new Point(transformedCoords)
             });
-            // Explicitly set properties on the feature
             feature.setProperties({
                 id: entry.id,
                 title: entry.title,
@@ -294,7 +293,6 @@ const MapComponent: React.FC = () => {
         const vectorLayer = new VectorLayer({ source: vectorSource });
         mapInstance.addLayer(vectorLayer);
 
-        // Handle hover events
         let currentFeature: Feature | null = null;
 
         mapInstance.on('pointermove', (event) => {
@@ -309,10 +307,6 @@ const MapComponent: React.FC = () => {
                     const coords = (feature.getGeometry() as Point).getCoordinates();
                     const props = feature.getProperties();
 
-                    // Debug log to verify properties
-                    console.log('Hover properties:', props);
-
-                    // Only render popup if we have the required properties
                     if (props.popupTitle && props.popupDescription) {
                         popupRoot.render(
                             <Popup
@@ -324,14 +318,13 @@ const MapComponent: React.FC = () => {
                     }
                 }
             } else {
-                if (!activeIndex) {  // Only hide if no point is actively selected
+                if (activeIndex === -1) {
                     currentFeature = null;
                     overlayInstance.setPosition(undefined);
                 }
             }
         });
 
-        // Handle click events
         mapInstance.on('click', (event) => {
             const pixel = mapInstance.getEventPixel(event.originalEvent);
             const feature = mapInstance.forEachFeatureAtPixel(pixel, feature => feature);
@@ -340,7 +333,6 @@ const MapComponent: React.FC = () => {
                 const props = feature.getProperties();
                 const transformedCoords = (feature.getGeometry() as Point).getCoordinates();
 
-                // Find the index in timelineData
                 const index = timelineData.findIndex(item => item.id === props.id);
                 setActiveIndex(index);
 
@@ -364,7 +356,7 @@ const MapComponent: React.FC = () => {
             popupRoot.unmount();
             mapInstance.setTarget(undefined);
         };
-    }, [theme, mapboxToken, mapboxLightStyle, mapboxDarkStyle, activeIndex]);
+    }, [theme, mapboxToken, mapboxLightStyle, mapboxDarkStyle]);
 
     useEffect(() => {
         if (!map) return;
@@ -387,7 +379,6 @@ const MapComponent: React.FC = () => {
         const entry = timelineData[index];
         const transformedCoords = fromLonLat(entry.location);
 
-        // Update all features to use normal marker style
         const vectorLayer = map.getLayers().getArray()
             .find(layer => layer instanceof VectorLayer) as VectorLayer<VectorSource>;
 
@@ -431,60 +422,58 @@ const MapComponent: React.FC = () => {
     };
 
     return (
-        <div className="relative border-4 border-black dark:border-white bg-white dark:bg-gray-900
-                      shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)]
-                      h-[100dvh] md:h-[800px] overflow-hidden">
-            {/* Title Section */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40">
-                <h1 className="text-xl md:text-2xl font-bold bg-white dark:bg-gray-900
-                             border-2 border-black dark:border-white py-2 px-4 rounded-lg
-                             shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]
-                             whitespace-nowrap text-black dark:text-white">
+        <div className="flex flex-col gap-8 p-8 dark:bg-darkBg">
+            <div className="w-full bg-bg border-4 border-black dark:bg-darkBg
+                          shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
+                          transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
+                          transition-all duration-300 p-6">
+                <h1 className="text-4xl md:text-5xl font-black text-black text-center dark:text-darkText
+                             relative rotate-1">
                     My Journey Through Time and Space 🗺️
                 </h1>
             </div>
 
-            {/* Map container */}
-            <div ref={mapRef} className="w-full h-full relative">
-                {/* Timeline Container */}
-                <TimelineContainer
-                    isOpen={isTimelineOpen}
-                    onClose={toggleTimeline}
-                >
-                    <div className="space-y-4">
-                        {timelineData.map((entry, index) => (
-                            <TimelineItem
-                                key={entry.id}
-                                entry={entry}
-                                isActive={index === activeIndex}
-                                onClick={() => {
-                                    handleTimelineClick(index);
-                                    if (isMobile) {
-                                        setIsTimelineOpen(false);
-                                    }
-                                }}
-                            />
-                        ))}
-                    </div>
-                </TimelineContainer>
+            <div className="relative border-4 border-black dark:darkBorder bg-white dark:bg-darkBg
+                          shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-darkBorder
+                          h-[100dvh] md:h-[800px] overflow-hidden">
+                <div ref={mapRef} className="w-full h-full relative">
+                    <TimelineContainer
+                        isOpen={isTimelineOpen}
+                        onClose={toggleTimeline}
+                    >
+                        <div className="space-y-4">
+                            {timelineData.map((entry, index) => (
+                                <TimelineItem
+                                    key={entry.id}
+                                    entry={entry}
+                                    isActive={index === activeIndex}
+                                    onClick={() => {
+                                        handleTimelineClick(index);
+                                        if (isMobile) {
+                                            setIsTimelineOpen(false);
+                                        }
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </TimelineContainer>
+                </div>
+
+                {(isMobile || !isTimelineOpen) && (
+                    <button
+                        onClick={toggleTimeline}
+                        className="absolute top-4 left-4 z-30 p-3 bg-black dark:bg-white text-white dark:text-black
+                                 border-4 border-black dark:border-white rounded-lg
+                                 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]
+                                 hover:shadow-none hover:translate-x-1 hover:translate-y-1
+                                 transition-all duration-200"
+                    >
+                        <Menu size={24}/>
+                    </button>
+                )}
+
+                <ZoomControl onZoom={handleZoom}/>
             </div>
-
-            {/* Toggle Timeline Button */}
-            {(isMobile || !isTimelineOpen) && (
-                <button
-                    onClick={toggleTimeline}
-                    className="absolute top-4 left-4 z-30 p-3 bg-black dark:bg-white text-white dark:text-black
-                             border-4 border-black dark:border-white rounded-lg
-                             shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]
-                             hover:shadow-none hover:translate-x-1 hover:translate-y-1
-                             transition-all duration-200"
-                >
-                    <Menu size={24}/>
-                </button>
-            )}
-
-            {/* Zoom Controls */}
-            <ZoomControl onZoom={handleZoom}/>
         </div>
     );
 };
