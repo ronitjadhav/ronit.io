@@ -218,17 +218,17 @@ const MapComponent: React.FC = () => {
     const [map, setMap] = useState<Map | null>(null);
     const [overlay, setOverlay] = useState<Overlay | null>(null);
     const [activeIndex, setActiveIndex] = useState<number>(0);
-    const [isTimelineOpen, setIsTimelineOpen] = useState<boolean>(window.innerWidth >= 768);
+    const [isTimelineOpen, setIsTimelineOpen] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth >= 768);
     const popupRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<string>(createSVGMarker());
-    const [isMobile] = useState<boolean>(window.innerWidth < 768);
+    const [isMobile] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth < 768);
     const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
     const mapboxLightStyle = String(process.env.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL);
     const mapboxDarkStyle = String(process.env.NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL);
     const { theme } = useTheme();
 
     useEffect(() => {
-        if (!mapRef.current) return;
+        if (typeof window === 'undefined' || !mapRef.current) return;
 
         const popupElement = document.createElement('div');
         popupRef.current = popupElement;
@@ -479,12 +479,12 @@ const MapComponent: React.FC = () => {
                              hover:shadow-none hover:translate-x-1 hover:translate-y-1
                              transition-all duration-200"
                 >
-                    <Menu size={24} />
+                    <Menu size={24}/>
                 </button>
             )}
 
             {/* Zoom Controls */}
-            <ZoomControl onZoom={handleZoom} />
+            <ZoomControl onZoom={handleZoom}/>
         </div>
     );
 };
