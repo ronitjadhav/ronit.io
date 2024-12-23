@@ -54,48 +54,59 @@ interface ZoomControlProps {
 const timelineData: TimelineEntry[] = [
     {
         id: 1,
-        title: "Early Education in Mumbai",
-        date: "2010-2014",
-        description: "Started my journey in computer science with a focus on web development and programming fundamentals.",
-        location: [72.8777, 19.0760],
-        locationName: "Mumbai, India",
-        popupTitle: "Mumbai University",
-        popupDescription: "Completed Bachelor's in Computer Science with distinction.",
-        icon: "🎓"
+        title: "Software Engineer @ Camptocamp",
+        date: "Oct 2023 - Present",
+        description: "Kicked off my journey into the open-source geospatial realm at Camptocamp, working with QGIS, Geonetwork-UI, developing custom GIS dashboards, and contributing to QGIS plugins. Diving into Docker, web GIS, and everything open-source!",
+        location: [13.4050, 52.5200],
+        locationName: "Berlin, Germany (Hybrid)",
+        popupTitle: "Camptocamp - Berlin",
+        popupDescription: "Became part of the open-source geospatial community, building web GIS solutions and exploring the power of QGIS.",
+        icon: "🌍"
     },
     {
         id: 2,
-        title: "First Tech Role",
-        date: "2014-2016",
-        description: "Worked as a junior developer at a startup, focusing on frontend development and UI/UX design.",
-        location: [77.5946, 12.9716],
-        locationName: "Bangalore, India",
-        popupTitle: "Tech Startup - Bangalore",
-        popupDescription: "Frontend Developer working with React and Node.js",
-        icon: "💻"
+        title: "Software Engineering for Industrial Applications @ Hochschule Hof",
+        date: "2022 - 2024",
+        description: "Diving deep into advanced programming, software engineering, and IoT, while focusing on Industry 4.0. Gaining expertise in applied cloud computing, non-relational databases, and spatial technologies to bridge software and the real world.",
+        location: [11.8954, 50.3217],
+        locationName: "Hof, Germany",
+        popupTitle: "Hochschule Hof",
+        popupDescription: "Expanding my skillset in software engineering, focusing on Industry 4.0, cloud computing, and real-world applications.",
+        icon: "💡"
     },
     {
         id: 3,
-        title: "Senior Developer",
-        date: "2016-2020",
-        description: "Led development teams and architected large-scale applications using modern tech stacks.",
-        location: [2.3522, 48.8566],
-        locationName: "Paris, France",
-        popupTitle: "Tech Lead - Paris",
-        popupDescription: "Senior Developer position focusing on system architecture",
-        icon: "👨‍💻"
+        title: "GIS Developer @ Gistec",
+        date: "2019 - 2022",
+        description: "Joined Gistec to create custom geoprocessing tools, work with ArcGIS Enterprise, and develop web mapping apps with Esri tech. Basically, a geospatial problem-solver.",
+        location: [78.4867, 17.3850],
+        locationName: "Hyderabad, India",
+        popupTitle: "Gistec - Hyderabad",
+        popupDescription: "Built mapping tools and apps while mastering Python (ArcPy), ArcGIS Server, and the Esri stack.",
+        icon: "🌐"
     },
     {
         id: 4,
-        title: "Tech Architect",
-        date: "2020-Present",
-        description: "Currently working as a Technical Architect, designing scalable solutions and mentoring teams.",
-        location: [-0.1276, 51.5074],
-        locationName: "London, UK",
-        popupTitle: "Lead Architect - London",
-        popupDescription: "Technical Architect role with focus on cloud infrastructure",
-        icon: "🚀"
-    }
+        title: "Student Intern @ University of Cologne",
+        date: "2019 - 2019",
+        description: "Interned at the University of Cologne, applying GIS and spatial analysis to hydrological modeling with ArcSWAT for the Mula-Mutha river. Automated tasks using Python and supported geospatial research for water resources.",
+        location: [6.9603, 50.9375],
+        locationName: "Cologne, Germany",
+        popupTitle: "University of Cologne",
+        popupDescription: "Leveraged GIS and spatial data to contribute to water flux modeling and the SWAT tool's application in India.",
+        icon: "🌍"
+    },
+    {
+        id: 5,
+        title: "M.Sc. in Geoinformatics: The Spatial Awakening",
+        date: "2017 - 2019",
+        description: "Learned to wield GIS, remote sensing, and code like a spatial wizard. Maps and code—what could go wrong?",
+        location: [72.8777, 19.0760],
+        locationName: "Pune, India",
+        popupTitle: "BVIEER - Pune",
+        popupDescription: "Where I discovered that geography is more than just knowing where places are.",
+        icon: "🗺️"
+    },
 ];
 
 const createSVGMarker = (): string => {
@@ -252,7 +263,7 @@ const MapComponent: React.FC = () => {
             ],
             controls: [],
             view: new View({
-                center: fromLonLat([0, 0]),
+                center: fromLonLat([0, 38]),
                 zoom: 2,
                 maxZoom: 18,
                 minZoom: 2
