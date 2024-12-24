@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import ReCAPTCHA from 'react-google-recaptcha';
-import { toast } from 'react-toastify';
 
 interface ReCaptchaDialogProps {
     onVerified: () => void;
