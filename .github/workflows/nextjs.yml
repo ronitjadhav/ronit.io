@@ -78,6 +78,7 @@ jobs:
           NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: ${{ secrets.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN }}
           NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL: ${{ secrets.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL }}
           NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL: ${{ secrets.NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL }}
+          NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
