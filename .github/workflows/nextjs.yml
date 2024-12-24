@@ -79,6 +79,9 @@ jobs:
           NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL: ${{ secrets.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL }}
           NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL: ${{ secrets.NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL }}
           NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY }}
+          NEXT_PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}
+          NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: ${{ secrets.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID }}
+          NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
