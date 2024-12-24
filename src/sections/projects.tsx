@@ -91,7 +91,7 @@ const ProjectsShowcase = () => {
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-white font-bold transform transition-transform hover:-translate-y-1 hover:shadow-lg dark:text-black"
+                                className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-black font-bold transform transition-transform hover:-translate-y-1 hover:shadow-lg dark:text-black"
                                 style={{
                                     border: '2px solid black',
                                     boxShadow: '4px 4px 0px 0px #000000',
@@ -104,7 +104,7 @@ const ProjectsShowcase = () => {
                                 href={project.live}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 bg-green-400 text-white font-bold transform transition-transform hover:-translate-y-1 hover:shadow-lg dark:text-black"
+                                className="flex items-center gap-2 px-4 py-2 bg-green-400 text-black font-bold transform transition-transform hover:-translate-y-1 hover:shadow-lg dark:text-black"
                                 style={{
                                     border: '2px solid black',
                                     boxShadow: '4px 4px 0px 0px #000000',

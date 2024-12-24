@@ -3,18 +3,26 @@ import Navbar from "@/components/Navbar";
 import MapComponent from "@/components/openlayers-map/map";
 import Footer from "@/sections/footer";
 import ProjectsShowcase from "@/sections/projects";
+import {ToastContainer} from "react-toastify";
 
 
 export default function Home() {
   return (
-    <>
-        <Navbar />
-        <Header />
-        <MapComponent />
-        <ProjectsShowcase />
-        <Footer />
+      <>
+          <Navbar/>
+          <ToastContainer/>
+          <div id={"home"}>
+              <Header/>
+          </div>
+          <div id={"journey"}>
+              <MapComponent/>
+          </div>
+          <div id={"projects"}>
+              <ProjectsShowcase/>
+          </div>
+          <Footer/>
 
 
-    </>
+      </>
   )
 }

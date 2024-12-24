@@ -57,10 +57,10 @@ const timelineData: TimelineEntry[] = [
         title: "Software Engineer @ Camptocamp",
         date: "Oct 2023 - Present",
         description: "Kicked off my journey into the open-source geospatial realm at Camptocamp, working with QGIS, Geonetwork-UI, developing custom GIS dashboards, and contributing to QGIS plugins. Diving into Docker, web GIS, and everything open-source!",
-        location: [13.4050, 52.5200],
+        location: [13.427691769504001, 52.49983698027357],
         locationName: "Berlin, Germany (Hybrid)",
-        popupTitle: "Camptocamp - Berlin",
-        popupDescription: "Became part of the open-source geospatial community, building web GIS solutions and exploring the power of QGIS.",
+        popupTitle: "Camptocamp",
+        popupDescription: "Became part of the open-source geospatial world, building geospatial solutions and exploring the power of QGIS.",
         icon: "🌍"
     },
     {
@@ -81,7 +81,7 @@ const timelineData: TimelineEntry[] = [
         description: "Joined Gistec to create custom geoprocessing tools, work with ArcGIS Enterprise, and develop web mapping apps with Esri tech. Basically, a geospatial problem-solver.",
         location: [78.4867, 17.3850],
         locationName: "Hyderabad, India",
-        popupTitle: "Gistec - Hyderabad",
+        popupTitle: "Gistec",
         popupDescription: "Built mapping tools and apps while mastering Python (ArcPy), ArcGIS Server, and the Esri stack.",
         icon: "🌐"
     },
@@ -103,7 +103,7 @@ const timelineData: TimelineEntry[] = [
         description: "Learned to wield GIS, remote sensing, and code like a spatial wizard. Maps and code—what could go wrong?",
         location: [72.8777, 19.0760],
         locationName: "Pune, India",
-        popupTitle: "BVIEER - Pune",
+        popupTitle: "BVIEER",
         popupDescription: "Where I discovered that geography is more than just knowing where places are.",
         icon: "🗺️"
     },
@@ -131,7 +131,7 @@ const createSVGMarker = (): string => {
 };
 
 const TimelineItem: React.FC<TimelineItemProps> = ({ entry, onClick }) => (
-    <div onClick={onClick} className="cursor-pointer w-full transition-all duration-300 hover:bg-yellow-100">
+    <div onClick={onClick} className="cursor-pointer w-full transition-all duration-300 hover:bg-yellow-100 dark:hover:bg-gray-500">
         <div className="flex items-center gap-3">
             <span className="text-3xl bg-white p-2 border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 {entry.icon}
@@ -472,9 +472,9 @@ const MapComponent: React.FC = () => {
                 {(isMobile || !isTimelineOpen) && (
                     <button
                         onClick={toggleTimeline}
-                        className="absolute top-4 left-4 z-30 p-3 bg-black dark:bg-white text-white dark:text-black
-                                 border-4 border-black dark:border-white rounded-lg
-                                 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]
+                        className="absolute top-4 left-4 z-30 p-3 bg-bg dark:bg-black text-black dark:text-white
+                                 border-4 border-black rounded-lg dark:border-white
+                                 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]]
                                  hover:shadow-none hover:translate-x-1 hover:translate-y-1
                                  transition-all duration-200"
                     >

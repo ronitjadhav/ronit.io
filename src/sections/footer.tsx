@@ -1,6 +1,7 @@
+'use client'
 import React from 'react';
-import { Coffee } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import {DialogComponent} from "@/components/getInTouchDialog";
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -31,7 +32,7 @@ const Footer = () => {
 
                     {/* Let's Connect */}
                     <div className="transform -rotate-1">
-                        <h3 className="text-2xl font-black mb-4 text-text uppercase tracking-wider">Get in Touch!</h3>
+                        <h3 className="text-2xl font-black mb-4 text-text uppercase tracking-wider dark:text-darkText">Get in Touch!</h3>
                         <div className="flex flex-col items-center lg:items-start mb-8">
                             <div className="flex space-x-6 mb-6">
                                 <a
@@ -55,29 +56,25 @@ const Footer = () => {
                     </div>
 
                     {/* Buy Me a Coffee Section */}
-                    <div className="transform rotate-1">
-                        <h3 className="text-2xl font-black mb-4 text-white uppercase tracking-wider">Support My
-                            Work</h3>
-                        <a
-                            href="#"
-                            className="inline-flex items-center gap-3 bg-blue-300 text-black font-bold px-6 py-3
-                         border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                         hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-200
-                         hover:translate-x-[-4px] hover:translate-y-[-4px]"
-                        >
-                            <Coffee className="w-6 h-6"/>
-                            Buy Me a Coffee
-                        </a>
+                    <div className="">
+                        <DialogComponent
+                            triggerButtonText="Get in Touch!"
+                            dialogTitle="Get in Touch"
+                            dialogDescription="Please fill out the form below to get in touch with me."
+                            inputLabels={{name: 'Name', email: 'Email', message: 'Message'}}
+                            onSubmit={() => alert('Form submitted!')}
+                            buttonClassName="h-12 text-base font-heading md:text-lg lg:h-14 lg:text-xl" // Add this line to increase the button size
+                        />
                     </div>
                 </div>
 
                 {/* Bottom Section */}
                 <div
                     className="border-t-4 border-black pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-text font-bold text-lg transform -rotate-1">
-                        © {currentYear} Ronit  | Built with ❤��� & ☕
+                    <p className="text-text font-bold text-lg dark:text-darkText">
+                        © {currentYear} Ronit  | Built with ❤ & ☕
                     </p>
-                    <div className="bg-black text-white px-4 py-2 font-mono text-sm transform rotate-1 dark:bg-bg dark:text-black">
+                    <div className="bg-black text-white px-4 py-2 font-mono text-sm dark:bg-bg dark:text-black">
                         &lt;/&gt; with Next.js + Tailwind
                     </div>
                 </div>

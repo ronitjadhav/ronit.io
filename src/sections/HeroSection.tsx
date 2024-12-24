@@ -117,7 +117,7 @@ export default function HeroSection() {
                 initial="hidden"
                 animate="visible"
             >
-                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start ml-6">
+                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
                     <motion.div variants={itemVariants}>
                         <TypeAnimation
                             className="text-3xl lg:text-3xl font-bold text-[#2b55ff] dark:text-[#4b6fff] relative z-10"
@@ -176,9 +176,8 @@ export default function HeroSection() {
                             <DialogComponent
                                 triggerButtonText="Get in Touch!"
                                 dialogTitle="Get in Touch"
-                                dialogDescription="Please fill out the form below to get in touch with us."
+                                dialogDescription="Please fill out the form below to get in touch with me."
                                 inputLabels={{name: 'Name', email: 'Email', message: 'Message'}}
-                                onSubmit={() => alert('Form submitted!')}
                                 buttonClassName="h-12 text-base font-heading md:text-lg lg:h-14 lg:text-xl" // Add this line to increase the button size
                             />
                         </motion.div>
@@ -194,7 +193,7 @@ export default function HeroSection() {
                         alt="Ronit Jadhav"
                         width={450}
                         height={450}
-                        className="mt-[-40px] ml-40"
+                        className="mt-[-40px] "
                     />
                 </motion.div>
             </motion.div>
