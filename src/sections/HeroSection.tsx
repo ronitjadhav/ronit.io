@@ -110,7 +110,8 @@ export default function HeroSection() {
     }
 
     return (
-        <header className="relative flex min-h-[100vh] w-full flex-col items-center justify-center bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px]">
+        <header
+            className="relative flex min-h-[100vh] w-full flex-col items-center justify-center bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] pt-16 lg:pt-0">
             <motion.div
                 className="mx-auto w-container max-w-full px-5 py-[110px] text-left lg:py-[150px] flex flex-col lg:flex-row"
                 variants={containerVariants}
@@ -153,7 +154,8 @@ export default function HeroSection() {
                                 variants={socialIconVariants}
                                 whileHover="hover"
                             >
-                                <FaGithub className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300"/>
+                                <FaGithub
+                                    className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300"/>
                             </motion.a>
                             <motion.a
                                 href="https://www.linkedin.com/in/ronitjadhav/"
@@ -162,7 +164,8 @@ export default function HeroSection() {
                                 variants={socialIconVariants}
                                 whileHover="hover"
                             >
-                                <FaLinkedin className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300"/>
+                                <FaLinkedin
+                                    className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300"/>
                             </motion.a>
                         </motion.div>
 
@@ -214,9 +217,9 @@ export default function HeroSection() {
                         <motion.div
                             className="flex items-center mx-8"
                             key={id}
-                            whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+                            whileHover={{scale: 1.1, transition: {duration: 0.2}}}
                         >
-                            <skill.Icon className="text-5xl mr-4" />
+                            <skill.Icon className="text-5xl mr-4"/>
                             <span className="text-xl font-heading sm:text-2xl lg:text-4xl">
                                 {skill.text}
                             </span>
