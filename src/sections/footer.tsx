@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Twitter, Linkedin, Mail, Coffee } from 'lucide-react';
+import { Coffee } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 
 const Footer = () => {

@@ -14,6 +14,7 @@ interface DialogProps {
     dialogDescription: string
     inputLabels: { name: string, email: string, message: string }
     onSubmit: () => void
+    buttonClassName?: string // Add this line
 }
 
 export function DialogComponent({
@@ -21,20 +22,20 @@ export function DialogComponent({
                                     dialogTitle,
                                     dialogDescription,
                                     inputLabels,
-                                    onSubmit
+                                    onSubmit,
+                                    buttonClassName // Add this line
                                 }: DialogProps) {
     const [captchaVerified, setCaptchaVerified] = useState(false)
     const googleReCaptchaKey = process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
 
     const handleCaptchaChange = (value: string | null) => {
-        // Set captcha verification status to true when user completes the CAPTCHA
         setCaptchaVerified(!!value)
     }
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">{triggerButtonText}</Button>
+                <Button variant="default" className={buttonClassName}>{triggerButtonText}</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -60,10 +61,9 @@ export function DialogComponent({
                         </Label>
                         <Textarea id="message" className="w-3/4" />
                     </div>
-                    {/* CAPTCHA */}
                     <div className="flex justify-center mb-4">
                         <ReCAPTCHA
-                            sitekey= {googleReCaptchaKey}// Replace with your site key from Google reCAPTCHA
+                            sitekey={googleReCaptchaKey}
                             onChange={handleCaptchaChange}
                         />
                     </div>
@@ -72,7 +72,7 @@ export function DialogComponent({
                     <Button
                         type="submit"
                         onClick={onSubmit}
-                        disabled={!captchaVerified} // Disable the button if CAPTCHA is not verified
+                        disabled={!captchaVerified}
                     >
                         Send
                     </Button>
