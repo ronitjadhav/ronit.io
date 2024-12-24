@@ -191,7 +191,7 @@ export default function HeroSection() {
                         alt="Ronit Jadhav"
                         width={450}
                         height={450}
-                        className="mt-[-40px] ml-38"
+                        className="mt-[-40px] ml-40"
                     />
                 </motion.div>
             </motion.div>

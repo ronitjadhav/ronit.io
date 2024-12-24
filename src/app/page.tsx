@@ -1,8 +1,8 @@
 import Header from "@/sections/HeroSection";
 import Navbar from "@/components/Navbar";
-import About from "@/sections/about";
 import MapComponent from "@/components/openlayers-map/map";
 import Footer from "@/sections/footer";
+import ProjectsShowcase from "@/sections/projects";
 
 
 export default function Home() {
@@ -11,7 +11,7 @@ export default function Home() {
         <Navbar />
         <Header />
         <MapComponent />
-        <About />
+        <ProjectsShowcase />
         <Footer />
 
 

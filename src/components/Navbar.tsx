@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { motion } from 'framer-motion'
-
-import Hamburger from './hamburger'
 import { ThemeSwitcher } from './theme-switcher'
 import { DialogComponent } from './getInTouchDialog'
+import Image from 'next/image'
+import ronitLogo from '@/media/ronitLogo.png'
 
-export default function NavBar() {
+const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [showNav, setShowNav] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
@@ -16,70 +16,102 @@ export default function NavBar() {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY
-
-            // Hide navbar when scrolling down more than 100px
             if (currentScrollY > lastScrollY && currentScrollY > 100) {
                 setShowNav(false)
-            }
-            // Show navbar when scrolling up or at the top of the page
-            else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
+            } else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
                 setShowNav(true)
             }
-
-            // Always update last scroll position
             setLastScrollY(currentScrollY)
         }
 
-        // Add scroll event listener
         window.addEventListener('scroll', handleScroll)
-
-        // Cleanup listener on component unmount
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
+        return () => window.removeEventListener('scroll', handleScroll)
     }, [lastScrollY])
 
-    // Variants for the navbar sliding from the top animation
     const navbarVariants = {
-        hidden: { y: '-120%' },  // Move navbar further up so no part is visible
+        hidden: { y: '-120%' },
         visible: {
             y: 0,
-            transition: { duration: 1, delay: 1 }  // Slide down with delay
+            transition: { duration: 0.5, delay: 0.2 }
         },
     }
 
     return (
         <>
-            {/* Navbar wrapper with slide-in effect */}
             <motion.nav
-                className="fixed left-0 top-0 z-50 w-full px-2 sm:px-3"
+                className="fixed left-0 top-0 z-50 w-full px-4"
                 variants={navbarVariants}
                 initial="hidden"
                 animate="visible"
             >
                 <div
                     className={twMerge(
-                        `mx-auto mt-2 sm:mt-3 flex h-[80px] w-full max-w-screen-xl
-                        items-center justify-between rounded-base border-2
-                        border-[#80808033] px-3 sm:px-4 text-text
-                        transition-transform duration-300 ease-in-out`,
-                        showNav ? 'translate-y-0' : '-translate-y-[calc(100%+20px)]',
-                        'bg-white dark:bg-secondaryBlack shadow-light dark:shadow-dark'
+                        `mx-auto mt-4 flex h-[80px] w-full max-w-screen-xl
+        items-center justify-between px-6 transition-transform
+        duration-300 ease-in-out bg-yellow-300 dark:bg-darkBg transform `,
+                        showNav ? 'translate-y-0' : '-translate-y-[calc(100%+40px)]'
                     )}
+                    style={{
+                        border: '3px solid black',
+                        boxShadow: '8px 8px 0px 0px #000000',
+                    }}
                 >
-                    {/* Ronit.io Text with responsive styling and theme support */}
-                    <h1 className="text-3xl font-Space_Grotesk font-extrabold tracking-tight
-                        text-cerulean-400 dark:text-white
-                        min-w-[80px] xs:min-w-[100px] lg:text-5xl">
-                        ronit.io
+                    {/* Logo */}
+                    <h1 className="text-3xl font-black font-Space_Grotesk tracking-tight
+                        text-black dark:text-white transform -rotate-2 hover:rotate-0 transition-transform
+                        duration-300 min-w-[80px] xs:min-w-[100px] lg:text-5xl">
+                        <Image src={ronitLogo} alt="Ronit Logo" width={70} height={70}/>
                     </h1>
 
-                    {/* Desktop Navbar Links */}
-                    <div className="hidden md:flex items-center text-xs sm:text-base lg:text-lg space-x-2 sm:space-x-4 lg:space-x-6">
-                        <NavLinks />
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex items-center text-base lg:text-lg space-x-6">
+                        <NavLinks/>
 
-                        {/* "Let's Work Together!" Button visible only on medium and larger screens */}
-                        <div className="flex items-center gap-1 sm:gap-2">
+                        <div className="flex items-center gap-4">
+                            <DialogComponent
+                                triggerButtonText="Get in Touch!"
+                                dialogTitle="Get in Touch"
+                                dialogDescription="Please fill out the form below to get in touch with us."
+                                inputLabels={{name: 'Name', email: 'Email', message: 'Message'}}
+                                onSubmit={() => alert('Form submitted!')}
+                            />
+                            <ThemeSwitcher/>
+                        </div>
+                    </div>
+
+                    {/* Mobile Menu Toggle */}
+                    <div className="md:hidden flex items-center gap-4">
+                        <ThemeSwitcher/>
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="p-2 bg-blue-400 dark:bg-blue-600 transform hover:-rotate-3 transition-transform"
+                            style={{
+                                border: '2px solid black',
+                                boxShadow: '4px 4px 0px 0px #000000',
+                            }}
+                        >
+                            <div className="w-6 h-0.5 bg-black dark:bg-white mb-1"></div>
+                            <div className="w-6 h-0.5 bg-black dark:bg-white mb-1"></div>
+                            <div className="w-6 h-0.5 bg-black dark:bg-white"></div>
+                        </button>
+                    </div>
+                </div>
+            </motion.nav>
+
+            {/* Mobile Menu */}
+            {isOpen && (
+                <div
+                    className="fixed top-[100px] z-50 w-full px-4"
+                >
+                    <div
+                        className="w-full bg-white dark:bg-darkBg p-4 transform"
+                        style={{
+                            border: '3px solid black',
+                            boxShadow: '8px 8px 0px 0px #000000',
+                        }}
+                    >
+                        <MobileNavLinks />
+                        <div className="mt-4 p-2">
                             <DialogComponent
                                 triggerButtonText="Get in Touch!"
                                 dialogTitle="Get in Touch"
@@ -87,43 +119,14 @@ export default function NavBar() {
                                 inputLabels={{ name: 'Name', email: 'Email', message: 'Message' }}
                                 onSubmit={() => alert('Form submitted!')}
                             />
-                            <ThemeSwitcher />
                         </div>
                     </div>
-
-                    {/* Mobile menu toggle */}
-                    <div className="md:hidden flex items-center gap-2 sm:gap-3">
-                        <ThemeSwitcher />
-                        <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
-                    </div>
-                </div>
-            </motion.nav>
-
-            {/* Mobile menu */}
-            {isOpen && (
-                <div
-                    className={twMerge(
-                        'flex flex-col divide-y-4 divide-[#80808033] border-2 fixed top-[80px] z-50 ' +
-                        'bg-white dark:bg-secondaryBlack border-[#80808033] w-full px-2 sm:px-4 pb-2 sm:pb-4'
-                    )}
-                >
-                    <MobileNavLinks />
-
-                    {/* "Let's Work Together!" button in mobile view */}
-                    <DialogComponent
-                        triggerButtonText="Get in Touch!"
-                        dialogTitle="Get in Touch"
-                        dialogDescription="Please fill out the form below to get in touch with us."
-                        inputLabels={{ name: 'Name', email: 'Email', message: 'Message' }}
-                        onSubmit={() => alert('Form submitted!')}
-                    />
                 </div>
             )}
         </>
     )
 }
 
-// Separate component for nav links to reduce repetition
 function NavLinks() {
     const links = [
         { href: "#home", label: "Home" },
@@ -139,7 +142,12 @@ function NavLinks() {
                 <a
                     key={link.href}
                     href={link.href}
-                    className="text-xs sm:text-base hover:text-cerulean-400 dark:text-white transition-colors duration-300"
+                    className="px-3 py-1 font-bold text-black dark:text-white hover:-translate-y-1 hover:rotate-2
+                             transform transition-all duration-200"
+                    style={{
+                        border: '2px solid transparent',
+                        borderRadius: '0px',
+                    }}
                 >
                     {link.label}
                 </a>
@@ -148,7 +156,6 @@ function NavLinks() {
     )
 }
 
-// Separate component for mobile nav links
 function MobileNavLinks() {
     const links = [
         { href: "#home", label: "Home" },
@@ -159,17 +166,23 @@ function MobileNavLinks() {
     ]
 
     return (
-        <>
+        <div className="flex flex-col space-y-3">
             {links.map((link) => (
                 <a
                     key={link.href}
                     href={link.href}
-                    className="py-2 sm:py-3 text-center text-sm sm:text-xl text-slate-900 dark:text-white
-                               hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300"
+                    className="p-2 text-center text-lg font-bold bg-yellow-300 dark:bg-darkBg
+                             transform hover:rotate-2 transition-transform"
+                    style={{
+                        border: '2px solid black',
+                        boxShadow: '4px 4px 0px 0px #000000',
+                    }}
                 >
                     {link.label}
                 </a>
             ))}
-        </>
+        </div>
     )
 }
+
+export default NavBar

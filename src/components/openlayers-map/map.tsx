@@ -438,8 +438,7 @@ const MapComponent: React.FC = () => {
                           shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
                           transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
                           transition-all duration-300 p-6">
-                <h1 className="text-4xl md:text-5xl font-black text-black text-center dark:text-darkText
-                             relative rotate-1">
+                <h1 className="text-4xl md:text-5xl font-black text-black text-center dark:text-darkText">
                     My Journey Through Time and Space 🗺️
                 </h1>
             </div>
