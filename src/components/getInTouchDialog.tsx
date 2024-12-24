@@ -24,6 +24,7 @@ export function DialogComponent({
                                     onSubmit
                                 }: DialogProps) {
     const [captchaVerified, setCaptchaVerified] = useState(false)
+    const googleReCaptchaKey = process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
 
     const handleCaptchaChange = (value: string | null) => {
         // Set captcha verification status to true when user completes the CAPTCHA
@@ -62,7 +63,7 @@ export function DialogComponent({
                     {/* CAPTCHA */}
                     <div className="flex justify-center mb-4">
                         <ReCAPTCHA
-                            sitekey="your-recaptcha-site-key" // Replace with your site key from Google reCAPTCHA
+                            sitekey= {googleReCaptchaKey}// Replace with your site key from Google reCAPTCHA
                             onChange={handleCaptchaChange}
                         />
                     </div>
