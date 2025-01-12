@@ -194,6 +194,7 @@ export default function HeroSection() {
                     <Image
                         src={ronitImage}
                         alt="Ronit Jadhav"
+                        loading="lazy"
                         width={450}
                         height={450}
                         className="mt-[-40px] lg:ml-28"
