@@ -12,7 +12,7 @@ function NavLinks() {
         { href: "https://blog.maplabs.tech/", label: "Blogs" },
     ];
 
-    const scrolltoHash = (id) => {
+    const scrolltoHash = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
