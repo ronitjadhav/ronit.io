@@ -1,81 +1,102 @@
 'use client';
 import { useEffect, useState } from "react";
-import Header from "@/sections/HeroSection";
-import Navbar from "@/components/Navbar";
-import MapComponent from "@/components/openlayers-map/map";
-import Footer from "@/sections/footer";
-import ProjectsShowcase from "@/sections/projects";
+import dynamic from 'next/dynamic';
 import { ToastContainer } from "react-toastify";
 import LoadingScreen from "@/components/loadingScreen";
+import Navbar from "@/components/Navbar";
+import Header from "@/sections/HeroSection";
+import Footer from "@/sections/footer";
 
-// Type for section data
+// Dynamically import heavy components
+const MapComponent = dynamic(() => import("@/components/openlayers-map/map"), {
+    loading: () => <div className="h-screen flex items-center justify-center">Loading Map...</div>,
+    ssr: false
+});
+
+const ProjectsShowcase = dynamic(() => import("@/sections/projects"), {
+    loading: () => <div className="h-screen flex items-center justify-center">Loading Projects...</div>
+});
+
+// Define section interface
 interface Section {
     id: string;
     component: React.ComponentType;
+    priority: boolean;
 }
 
 export default function Home() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isContentVisible, setIsContentVisible] = useState(false);
+    const [loadingState, setLoadingState] = useState({
+        isLoading: true,
+        isContentVisible: false
+    });
 
-    // Define sections configuration
+    // Define sections with priority flag
     const sections: Section[] = [
-        { id: 'home', component: Header },
-        { id: 'journey', component: MapComponent },
-        { id: 'projects', component: ProjectsShowcase }
+        { id: 'home', component: Header, priority: true },
+        { id: 'journey', component: MapComponent, priority: false },
+        { id: 'projects', component: ProjectsShowcase, priority: false }
     ];
 
     useEffect(() => {
-        // Track when all critical resources are loaded
-        const handleLoad = async () => {
+        let mounted = true;
+
+        const loadInitialContent = async () => {
             try {
-                // Wait for document and images to load
+                // Only wait for critical above-the-fold images
+                const criticalImages = Array.from(document.images)
+                    .filter(img => {
+                        const rect = img.getBoundingClientRect();
+                        return rect.top < window.innerHeight;
+                    });
+
                 await Promise.all([
-                    // Wait for document to be fully loaded
-                    new Promise(resolve => {
-                        if (document.readyState === 'complete') {
-                            resolve(true);
-                        } else {
-                            window.addEventListener('load', () => resolve(true), { once: true });
-                        }
-                    }),
-                    // Wait for key images to load (if any)
-                    ...Array.from(document.images)
+                    // Wait for critical images
+                    ...criticalImages
                         .filter(img => !img.complete)
-                        .map(img => new Promise(resolve => {
+                        .map(img => new Promise((resolve) => {
                             img.onload = resolve;
-                            img.onerror = resolve; // Handle failed image loads gracefully
-                        }))
+                            img.onerror = resolve;
+                        })),
+                    // Small delay for smoother transition
+                    new Promise(resolve => setTimeout(resolve, 300))
                 ]);
 
-                // Add a small delay for smooth transition
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                setIsLoading(false);
-
-                // Trigger fade-in animation for content
-                setTimeout(() => setIsContentVisible(true), 100);
-
+                if (mounted) {
+                    setLoadingState({
+                        isLoading: false,
+                        isContentVisible: true
+                    });
+                }
             } catch (error) {
-                console.error('Error during loading:', error);
-                setIsLoading(false); // Ensure we don't get stuck on loading screen
+                console.error('Loading error:', error);
+                if (mounted) {
+                    setLoadingState({
+                        isLoading: false,
+                        isContentVisible: true
+                    });
+                }
             }
         };
 
-        handleLoad();
+        loadInitialContent();
 
-        // Cleanup function
         return () => {
-            window.removeEventListener('load', () => {});
+            mounted = false;
         };
     }, []);
+
+    const { isLoading, isContentVisible } = loadingState;
 
     if (isLoading) {
         return <LoadingScreen />;
     }
 
     return (
-        <div className={`min-h-screen ${isContentVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}>
+        <div
+            className={`min-h-screen ${
+                isContentVisible ? 'opacity-100' : 'opacity-0'
+            } transition-opacity duration-300`}
+        >
             <Navbar />
             <ToastContainer
                 position="top-right"
@@ -91,11 +112,13 @@ export default function Home() {
             />
 
             <main className="relative">
-                {sections.map(({ id, component: Component }) => (
+                {sections.map(({ id, component: Component, priority }) => (
                     <section
                         key={id}
                         id={id}
-                        className="scroll-mt-16" // Offset for fixed navbar
+                        className={`scroll-mt-16 ${
+                            priority ? '' : 'lazy-section'
+                        }`}
                     >
                         <Component />
                     </section>
