@@ -1,7 +1,51 @@
 'use client'
 import React from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import {DialogComponent} from "@/components/getInTouchDialog";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+
+function NavLinks() {
+    const links = [
+        { href: "#home", label: "Home" },
+        { href: "#journey", label: "Journey" },
+        { href: "#projects", label: "Projects" },
+        { href: "https://blog.maplabs.tech/", label: "Blogs" },
+    ];
+
+    const scrolltoHash = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    return (
+        <ul className="space-y-3">
+            {links.map((link) => (
+                <li key={link.href}>
+                    <a
+                        href={link.href}
+                        target={link.href.startsWith('http') ? '_blank' : '_self'}
+                        rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="text-text border-4 border-transparent hover:border-black hover:bg-yellow-300
+                             px-4 py-1 transition-all duration-200 dark:text-darkText dark:hover:text-black"
+                        onClick={(e) => {
+                            if (link.href.startsWith('#')) {
+                                e.preventDefault();
+                                scrolltoHash(link.href.substring(1));
+                            }
+                        }}
+                    >
+                        {link.label}
+                        {link.href.startsWith('http') && (
+                            <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-2" />
+                        )}
+                    </a>
+                </li>
+            ))}
+        </ul>
+    );
+}
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -14,20 +58,7 @@ const Footer = () => {
                     {/* Quick Links */}
                     <div>
                         <h3 className="text-2xl font-black mb-4 text-text uppercase tracking-wider dark:text-darkText">Quick Links</h3>
-                        <ul className="space-y-3">
-                            {['Projects', 'About', 'Blog', 'Contact'].map((item) => (
-                                <li key={item}>
-                                    <a
-                                        href={`#${item.toLowerCase()}`}
-                                        className="text-text
-                             border-4 border-transparent hover:border-black hover:bg-yellow-300
-                             px-4 py-1 transition-all duration-200 dark:text-darkText dark:hover:text-black"
-                                    >
-                                        {item}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+                        <NavLinks />
                     </div>
 
                     {/* Let's Connect */}
@@ -41,7 +72,7 @@ const Footer = () => {
                                     rel="noopener noreferrer"
                                 >
                                     <FaGithub
-                                        className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300"/>
+                                        className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
                                 </a>
                                 <a
                                     href="https://www.linkedin.com/in/ronitjadhav/"
@@ -49,21 +80,10 @@ const Footer = () => {
                                     rel="noopener noreferrer"
                                 >
                                     <FaLinkedin
-                                        className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300"/>
+                                        className="text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
                                 </a>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Buy Me a Coffee Section */}
-                    <div className="">
-                        <DialogComponent
-                            triggerButtonText="Get in Touch!"
-                            dialogTitle="Get in Touch"
-                            dialogDescription="Please fill out the form below to get in touch with me."
-                            inputLabels={{name: 'Name', email: 'Email', message: 'Message'}}
-                            buttonClassName="h-12 text-base font-heading md:text-lg lg:h-14 lg:text-xl" // Add this line to increase the button size
-                        />
                     </div>
                 </div>
 
@@ -71,7 +91,7 @@ const Footer = () => {
                 <div
                     className="border-t-4 border-black pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-text font-bold text-lg dark:text-darkText">
-                        © {currentYear} Ronit  | Built with ❤ & ☕
+                        © {currentYear} Ronit | Built with ❤ & ☕
                     </p>
                     <div className="bg-black text-white px-4 py-2 font-mono text-sm dark:bg-bg dark:text-black">
                         &lt;/&gt; with Next.js + Tailwind
