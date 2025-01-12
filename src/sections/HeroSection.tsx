@@ -118,7 +118,7 @@ export default function HeroSection() {
                 initial="hidden"
                 animate="visible"
             >
-                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
+                <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start lg:ml-8">
                     <motion.div variants={itemVariants}>
                         <TypeAnimation
                             className="text-3xl lg:text-3xl font-bold text-[#2b55ff] dark:text-[#4b6fff] relative z-10"
@@ -196,7 +196,7 @@ export default function HeroSection() {
                         alt="Ronit Jadhav"
                         width={450}
                         height={450}
-                        className="mt-[-40px] "
+                        className="mt-[-40px] lg:ml-28"
                     />
                 </motion.div>
             </motion.div>
