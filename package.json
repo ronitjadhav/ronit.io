@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "\"prettier --write .\"",
-    "check-format": "\"prettier --check .\""
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
