@@ -233,11 +233,29 @@ const MapComponent: React.FC = () => {
     const [isTimelineOpen, setIsTimelineOpen] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth >= 768);
     const popupRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<string>(createSVGMarker());
-    const [isMobile] = useState<boolean>(typeof window !== 'undefined' && window.innerWidth < 768);
+    const [isMobile, setIsMobile] = useState<boolean>(
+        typeof window !== 'undefined' && window.innerWidth < 768
+    );
     const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
     const mapboxLightStyle = String(process.env.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL);
     const mapboxDarkStyle = String(process.env.NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL);
     const { theme } = useTheme();
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Initial check
+        handleResize();
+
+        // Cleanup listener on component unmount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []); // Empty dependency array ensures this runs only once on mount and cleans up on unmount
 
     useEffect(() => {
         if (typeof window === 'undefined' || !mapRef.current) return;
@@ -469,10 +487,10 @@ const MapComponent: React.FC = () => {
                     </TimelineContainer>
                 </div>
 
-                {(isMobile || !isTimelineOpen) && (
+                {isMobile && !isTimelineOpen && (
                     <button
                         onClick={toggleTimeline}
-                        className="absolute top-4 left-4 z-30 p-3 bg-bg dark:bg-black text-black dark:text-white
+                        className="absolute top-6 left-4 z-30 p-3 bg-bg dark:bg-black text-black dark:text-white
                                  border-4 border-black rounded-lg dark:border-white
                                  shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]]
                                  hover:shadow-none hover:translate-x-1 hover:translate-y-1
