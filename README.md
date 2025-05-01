@@ -5,6 +5,7 @@
 Welcome to my personal website!
 
 ## Table of Contents
+
 - [About](#about)
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
@@ -22,24 +23,26 @@ Welcome to my personal website!
 
 <!-- If you have screenshots, add them here -->
 <!-- ![Homepage Screenshot](./screenshots/homepage.png) -->
+
 ![Screenshot of the homepage of Ronit.io, showing the main layout and navigation](./screenshots/screenshot_home.png)
 
 ![Screenshot of the Journey page of Ronit.io, showcasing the timeline of personal milestones](./screenshots/screenshot_journey.png)
 
 ![Screenshot of the Projects page of Ronit.io, displaying a list of projects with descriptions and links](./screenshots/screenshot_projects.png)
 
-
 ## Getting Started
 
 To run the website locally, follow these steps:
 
 1. **Clone the repository:**
+
 ```bash
 git clone https://github.com/ronitjadhav/ronit.io.git
 cd ronit.io
 ```
 
 2. **Install dependencies:**
+
 ```bash
 npm install
 # or
@@ -49,6 +52,7 @@ pnpm install
 ```
 
 3. **Run the development server:**
+
 ```bash
 npm run dev
 # or
@@ -79,6 +83,7 @@ pnpm dev
 This site can be easily deployed to platforms like [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/).
 
 To build for production:
+
 ```bash
 npm run build
 npm start
@@ -93,7 +98,6 @@ Contributions are welcome! If you have suggestions, bug reports, or want to add 
 3. Commit your changes (`git commit -m 'Add some feature'`)
 4. Push to the branch (`git push origin feature/YourFeature`)
 5. Open a pull request
-
 
 ## Contact
 
