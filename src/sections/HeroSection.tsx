@@ -34,6 +34,7 @@ export default function HeroSection() {
         { text: "PostGIS", Icon: BiLogoPostgresql },
         { text: "Version Control", Icon: SiGit },
         { text: "Docker", Icon: SiDocker },
+        { text: "Git", Icon: SiGit },
     ]
 
     const containerVariants = {
