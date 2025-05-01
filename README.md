@@ -22,11 +22,11 @@ Welcome to my personal website!
 
 <!-- If you have screenshots, add them here -->
 <!-- ![Homepage Screenshot](./screenshots/homepage.png) -->
-![Home](./screenshots/screenshot_home.png)
+![Screenshot of the homepage of Ronit.io, showing the main layout and navigation](./screenshots/screenshot_home.png)
 
-![Journey](./screenshots/screenshot_journey.png)
+![Screenshot of the Journey page of Ronit.io, showcasing the timeline of personal milestones](./screenshots/screenshot_journey.png)
 
-![Projects](./screenshots/screenshot_projects.png)
+![Screenshot of the Projects page of Ronit.io, displaying a list of projects with descriptions and links](./screenshots/screenshot_projects.png)
 
 
 ## Getting Started
