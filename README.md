@@ -10,15 +10,13 @@ Welcome to my personal website!
 
 To run the website locally, follow these steps:
 
-1. Clone the repository:
-
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/ronitjadhav/ronit.io.git
    cd ronit.io
    ```
 
-2. Install dependencies:
-
+2. **Install dependencies:**
    ```bash
    npm install
    # or
@@ -27,8 +25,7 @@ To run the website locally, follow these steps:
    pnpm install
    ```
 
-3. Run the development server:
-
+3. **Run the development server:**
    ```bash
    npm run dev
    # or
