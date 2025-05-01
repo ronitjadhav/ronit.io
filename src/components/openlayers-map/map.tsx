@@ -111,19 +111,15 @@ const timelineData: TimelineEntry[] = [
 
 const createSVGMarker = (): string => {
     const svg = `
-    <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#76fbd9;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#76fbd9;stop-opacity:1" />
-        </linearGradient>
-        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.5)"/>
+        <filter id="marker-shadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.3"/>
         </filter>
       </defs>
-      <g filter="url(#shadow)">
-        <circle cx="24" cy="24" r="20" fill="url(#grad1)" stroke="#333" stroke-width="3"/>
-        <circle cx="24" cy="24" r="8" fill="#FFF" stroke="#333" stroke-width="2"/>
+      <g filter="url(#marker-shadow)">
+        <circle cx="18" cy="18" r="14" fill="#FFD700" stroke="#000000" stroke-width="2"/>
+        <circle cx="18" cy="18" r="6" fill="#000000"/>
       </g>
     </svg>
   `;
@@ -193,7 +189,7 @@ const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, 
             <h2 className="font-black text-xl text-black dark:text-white">Journey Timeline</h2>
             <button
                 onClick={onClose}
-                className="p-2 bg-black dark:bg-darkBg text-white dark:text-darkText hover:bg-gray-800 dark:hover:bg-black transition-colors rounded"
+                className="p-2 bg-black dark:bg-darkBg text-white dark:text-darkText hover:bg-gray-800 dark:hover:bg-black transition-colors rounded md:hidden"
             >
                 <ChevronLeft size={24}/>
             </button>
@@ -485,6 +481,10 @@ const MapComponent: React.FC = () => {
                             ))}
                         </div>
                     </TimelineContainer>
+                    {/* Instructional Text Overlay */}
+                    <div className="absolute top-6 left-20 md:top-4 md:right-24 md:left-auto z-10 bg-white/80 dark:bg-black/80 backdrop-blur-sm p-3 rounded-lg border-2 border-black dark:border-darkBorder shadow-md text-sm text-black dark:text-white font-medium">
+                        Click on map markers or timeline items to explore!
+                    </div>
                 </div>
 
                 {isMobile && !isTimelineOpen && (
