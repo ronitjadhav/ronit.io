@@ -157,7 +157,7 @@ function NavLinks() {
     { href: '#home', label: 'Home' },
     { href: '#journey', label: 'Journey' },
     { href: '#projects', label: 'Projects' },
-    { href: 'https://blog.maplabs.tech/', label: 'Blogs' },
+    { href: 'https://dev.to/ronitjadhav', label: 'Blogs' },
   ];
 
   return (
@@ -200,7 +200,7 @@ function MobileNavLinks({
     { href: '#home', label: 'Home' },
     { href: '#journey', label: 'Journey' },
     { href: '#projects', label: 'Projects' },
-    { href: 'https://blog.maplabs.tech/', label: 'Blogs' },
+    { href: 'https://dev.to/ronitjadhav', label: 'Blogs' },
   ];
 
   return (
