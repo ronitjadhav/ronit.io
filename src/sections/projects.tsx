@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import digipinImage from '../media/digipin.jpeg';
-import qgisHubImage from '../media/qgisHub.png';
+import qgisHubImage from '../media/QGIS-Banner.jpg';
 import olBenchImage from '../media/olBench.png';
 import Image from 'next/image';
 
@@ -59,12 +59,12 @@ const ProjectsShowcase = () => {
               boxShadow: '8px 8px 0px 0px #000000',
             }}
           >
-            <div className="relative mb-4 overflow-hidden rounded-lg">
+            <div className="relative mb-4 overflow-hidden rounded-lg h-48 w-full">
               <Image
                 src={project.image}
                 alt={project.title}
-                className="w-full object-cover transition-transform group-hover:scale-110"
-                width={600} // Add width and height attributes
+                className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                width={600}
                 height={400}
               />
             </div>

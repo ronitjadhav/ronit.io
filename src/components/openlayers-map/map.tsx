@@ -1,7 +1,7 @@
 'use client';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { createRoot, Root } from 'react-dom/client'; // Import Root type
-import { Menu, ChevronLeft, MapPin } from 'lucide-react';
+import { Menu, ChevronLeft, MapPin, Home } from 'lucide-react';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -47,6 +47,7 @@ interface TimelineContainerProps {
 
 interface ZoomControlProps {
   onZoom: (direction: 'in' | 'out') => void;
+  onReset: () => void;
 }
 
 // --- Data ---
@@ -129,6 +130,26 @@ const createSVGMarker = (): string => {
     </svg>
   `;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+};
+
+// Throttle utility function for performance optimization
+const throttle = <T extends (...args: Parameters<T>) => void>(func: T, limit: number): T => {
+  let lastFunc: ReturnType<typeof setTimeout>;
+  let lastRan: number;
+  return ((...args: Parameters<T>) => {
+    if (!lastRan) {
+      func(...args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if ((Date.now() - lastRan) >= limit) {
+          func(...args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  }) as T;
 };
 
 // --- Components ---
@@ -223,7 +244,7 @@ const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, 
   </div>
 );
 
-const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom }) => (
+const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
   <div className="absolute bottom-4 md:bottom-6 lg:top-4 right-4 flex flex-col gap-2 z-10">
     {[
       { label: '+', direction: 'in' as const, aria: 'Zoom in' },
@@ -241,6 +262,17 @@ const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom }) => (
         {label}
       </button>
     ))}
+    {/* Reset to Initial View Button */}
+    <button
+      onClick={onReset}
+      aria-label="Reset to initial view"
+      className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-12 h-12 text-lg font-black
+                       border-4 border-black dark:border-white rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
+                       hover:shadow-none hover:translate-x-1 hover:translate-y-1
+                       transition-all duration-200 flex items-center justify-center"
+    >
+      <Home size={20} />
+    </button>
   </div>
 );
 
@@ -252,10 +284,47 @@ const MapComponent: React.FC = () => {
   const [map, setMap] = useState<Map | null>(null);
   const [overlay, setOverlay] = useState<Overlay | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(-1); // Start with no active item
+  const activeIndexRef = useRef(activeIndex); // Ref to hold the current activeIndex
   const [isTimelineOpen, setIsTimelineOpen] = useState<boolean>(true); // Default to open, will adjust based on screen size
-  const markerIconUrl = useRef<string>(createSVGMarker());
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const { theme } = useTheme();
+
+  // Keep activeIndexRef updated with the latest activeIndex
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  // Memoize the marker icon URL for performance
+  const markerIconUrl = useMemo(() => createSVGMarker(), []);
+
+  // Define initial view state for reset functionality
+  const initialViewState = useMemo(() => ({
+    center: fromLonLat([10, 45]),
+    zoom: 3,
+  }), []);
+
+  // Memoize features creation for performance
+  const features = useMemo(() => {
+    const markerStyle = new Style({
+      image: new Icon({
+        anchor: [0.5, 0.5],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'fraction',
+        src: markerIconUrl,
+        scale: 1,
+      }),
+    });
+
+    return timelineData.map((entry) => {
+      const transformedCoords = fromLonLat(entry.location);
+      const feature = new Feature({
+        geometry: new Point(transformedCoords),
+        ...entry
+      });
+      feature.setStyle(markerStyle);
+      return feature;
+    });
+  }, [markerIconUrl]);
 
   // --- Environment Variables (Ensure these are set in your .env.local) ---
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -287,13 +356,13 @@ const MapComponent: React.FC = () => {
         return;
     }
 
-
     // Create the DOM element for the popup only once
     if (!popupRef.current) {
         popupRef.current = document.createElement('div');
         popupRef.current.id = 'popup-container'; // Optional: for debugging
     }
     // Create React root for the popup element only once
+    // Ensure popupRef.current exists before creating a root for it.
     if (!popupRootRef.current && popupRef.current) {
         popupRootRef.current = createRoot(popupRef.current);
     }
@@ -329,32 +398,11 @@ const MapComponent: React.FC = () => {
     setMap(mapInstance);
     setOverlay(overlayInstance);
 
-    // Define Marker Style
-     const markerStyle = new Style({
-       image: new Icon({
-         anchor: [0.5, 0.5], // Center the anchor
-         anchorXUnits: 'fraction',
-         anchorYUnits: 'fraction',
-         src: markerIconUrl.current, // Use the generated SVG URL
-         scale: 1,
-       }),
-     });
-
-
-    // Create Features from Data
-    const features = timelineData.map((entry) => {
-      const transformedCoords = fromLonLat(entry.location);
-      const feature = new Feature({
-        geometry: new Point(transformedCoords),
-        // Store all necessary data directly on the feature
-        ...entry
-      });
-      feature.setStyle(markerStyle); // Apply the style
-      return feature;
+    // Add Vector Layer with memoized features
+    const vectorSource = new VectorSource({ 
+      features,
+      wrapX: false // Disable wrapping for better performance
     });
-
-    // Add Vector Layer
-    const vectorSource = new VectorSource({ features });
     const vectorLayer = new VectorLayer({
         source: vectorSource,
         zIndex: 10 // Ensure markers are above the base layer
@@ -364,8 +412,8 @@ const MapComponent: React.FC = () => {
     // --- Map Interactions ---
     let currentHoverFeature: Feature<Geometry> | null = null;
 
-    // Hover Effect (Pointer Move)
-    mapInstance.on('pointermove', (event) => {
+    // Throttled Hover Effect (Pointer Move) - Performance optimization
+    const handlePointerMove = throttle((event: import('ol/MapBrowserEvent').default<UIEvent>) => {
       if (event.dragging || !overlayInstance || !popupRootRef.current) return; // Ignore while dragging or if overlay/root not ready
 
       const pixel = mapInstance.getEventPixel(event.originalEvent);
@@ -392,93 +440,112 @@ const MapComponent: React.FC = () => {
         }
       } else {
         // Only hide popup if the currently active item is NOT the one being hovered off
-        const activeEntry = activeIndex >= 0 ? timelineData[activeIndex] : null;
+        const currentActiveIdx = activeIndexRef.current; // Use ref here
+        const activeEntry = currentActiveIdx >= 0 ? timelineData[currentActiveIdx] : null;
         if (!activeEntry || currentHoverFeature?.get('id') !== activeEntry.id) {
            overlayInstance.setPosition(undefined); // Hide popup
         }
         currentHoverFeature = null;
       }
-    });
+    }, 16); // Throttle to ~60fps for smooth performance
 
-    // Click Effect
-    mapInstance.on('click', (event) => {
-       if (!overlayInstance || !popupRootRef.current) return;
+    mapInstance.on('pointermove', handlePointerMove);
+
+    // Click Effect - Use singleclick instead of click to avoid conflicts with double-click
+    const handleSingleClick = (event: import('ol/MapBrowserEvent').default<UIEvent>) => {
+       console.log('Single click detected!'); // Debug log
+       if (!overlayInstance || !popupRootRef.current) {
+         console.log('Missing overlay or popup root'); // Debug log
+         return;
+       }
 
       const pixel = mapInstance.getEventPixel(event.originalEvent);
+      console.log('Pixel:', pixel); // Debug log
+      
        const feature = mapInstance.forEachFeatureAtPixel(
          pixel,
-         (f) => f as Feature<Geometry>,
+         (f) => {
+           console.log('Feature found:', f.getProperties()); // Debug log with properties
+           return f as Feature<Geometry>;
+         },
          { layerFilter: (l) => l === vectorLayer }
        );
 
+      console.log('Final feature:', feature); // Debug log
+
       if (feature) {
+        console.log('Processing feature click...'); // Debug log
         const props = feature.getProperties() as TimelineEntry;
         const coords = (feature.getGeometry() as Point).getCoordinates();
         const index = timelineData.findIndex((item) => item.id === props.id);
 
-        setActiveIndex(index); // Set this item as active
+        console.log('Setting active index:', index, 'for props:', props); // Debug log
 
-         // Ensure popup is visible and updated for the clicked item
-        popupRootRef.current.render(
-          <Popup title={props.popupTitle} description={props.popupDescription} />
-        );
+        // Set active index immediately
+        setActiveIndex(index);
+
+        // Show popup immediately
+        // Ensure popupRootRef.current is valid before rendering
+        if (popupRootRef.current) {
+            popupRootRef.current.render(
+              <Popup title={props.popupTitle} description={props.popupDescription} />
+            );
+        }
         overlayInstance.setPosition(coords);
 
-        // Animate map view to the feature
-        mapInstance.getView().animate({
-          center: coords,
-          zoom: Math.max(mapInstance.getView().getZoom() ?? 8, 8), // Zoom in, but not too much if already zoomed
-          duration: 800,
-        });
+        // Force zoom animation with a small delay to ensure state is set
+        setTimeout(() => {
+          console.log('Starting zoom animation to:', coords); // Debug log
+          const view = mapInstance.getView();
+          const currentZoom = view.getZoom() || 3;
+          const targetZoom = Math.max(currentZoom + 2, 8); // Always zoom in more aggressively
+          
+          view.animate({
+            center: coords,
+            zoom: targetZoom,
+            duration: 1000, // Longer duration to make it more visible
+          });
+        }, 50);
 
         // Optional: If on mobile, close the timeline sidebar after clicking a map marker
         if (isMobile) {
-           setIsTimelineOpen(false);
+          setIsTimelineOpen(false);
         }
-
       } else {
-        // Clicked outside a feature - potentially clear active state?
-        // setActiveIndex(-1); // Uncomment to deselect on map click outside features
-        // overlayInstance.setPosition(undefined); // Uncomment to hide popup on map click outside features
+        // Clicked outside a feature, potentially hide popup if not an active one
+        // (This logic might be complex if an item is "active" and its popup should persist on map click-off)
+        // For now, clicking off a feature will hide any non-sticky popup.
+        // The hover logic already handles keeping active popup if mouse moves off.
+        // Consider if activeIndex popup should be hidden on map click-off.
+        // overlayInstance.setPosition(undefined); // Example: hide any popup on map click-off
+        console.log('Clicked outside a feature.');
       }
-    });
-
-    // Cleanup function
-    return () => {
-      // Important: Unmount the React root when the component unmounts or map re-initializes
-       popupRootRef.current?.unmount();
-       popupRootRef.current = null; // Clear the ref
-       popupRef.current = null; // Clear the DOM element ref
-      mapInstance.setTarget(undefined); // Detach map from DOM
-       console.log("Map instance disposed");
     };
-    // Dependencies include theme and Mapbox details for re-initialization if they change
-    // Removed activeIndex from dependencies to prevent map re-initialization on selection
-  }, [theme, mapboxToken, mapboxLightStyle, mapboxDarkStyle, isMobile]); // Removed activeIndex to fix double-click issue
+    
+    mapInstance.on('singleclick', handleSingleClick);
 
-  // Update Map Style on Theme Change
-  useEffect(() => {
-    if (!map || !mapboxToken || !mapboxLightStyle || !mapboxDarkStyle) return;
+    // --- Cleanup function for the effect ---
+    return () => {
+      console.log("Cleaning up map effect for map instance target:", mapInstance.getTargetElement()?.id || 'unknown');
+      if (mapInstance) {
+        mapInstance.un('pointermove', handlePointerMove);
+        mapInstance.un('singleclick', handleSingleClick);
+        mapInstance.dispose();
+        console.log("Map instance disposed.");
+      }
+      // Unmount the React root for the popup and clear the ref
+      if (popupRootRef.current) {
+        popupRootRef.current.unmount();
+        popupRootRef.current = null; // Clear the ref after unmounting
+        console.log("Popup root unmounted and ref cleared.");
+      }
+      // The popupRef.current (DOM element) is managed by the OpenLayers Overlay.
+      // When the map is disposed, its overlays (and their elements) should be cleaned up by OL.
+    };
+  // Dependencies:
+  }, [theme, mapboxToken, mapboxLightStyle, mapboxDarkStyle, isMobile, markerIconUrl, initialViewState, features]); 
 
-    const layers = map.getLayers();
-    const firstLayer = layers.item(0); // Get the first layer (should be the base map)
-
-    if (firstLayer instanceof MapboxVectorLayer) {
-        // Replace the existing Mapbox layer with a new one using the updated style
-        const newStyleUrl = theme === 'dark' ? mapboxDarkStyle : mapboxLightStyle;
-        layers.setAt(0, new MapboxVectorLayer({
-            styleUrl: newStyleUrl,
-            accessToken: mapboxToken,
-        }));
-        console.log("Map style updated for theme:", theme);
-    } else {
-        console.warn("Could not find MapboxVectorLayer at index 0 to update theme.");
-    }
-  }, [theme, map, mapboxToken, mapboxLightStyle, mapboxDarkStyle]);
-
-
-  // --- Handlers ---
-
+  // Handle timeline item click
   const handleTimelineClick = (index: number) => {
     if (!map || !overlay || !popupRootRef.current) return;
 
@@ -516,6 +583,23 @@ const MapComponent: React.FC = () => {
       duration: 250, // Smooth animation
     });
   };
+
+  const handleReset = useCallback(() => {
+    if (!map) return;
+    const view = map.getView();
+    // Reset to initial view state with smooth animation
+    view.animate({
+      center: initialViewState.center,
+      zoom: initialViewState.zoom,
+      duration: 800, // Smooth animation back to initial state
+    });
+    
+    // Clear active selection and hide popup
+    setActiveIndex(-1);
+    if (overlay) {
+      overlay.setPosition(undefined);
+    }
+  }, [map, initialViewState, overlay]);
 
   const toggleTimeline = () => {
     setIsTimelineOpen((prev) => !prev);
@@ -583,7 +667,7 @@ const MapComponent: React.FC = () => {
         )}
 
         {/* Zoom Controls */}
-        <ZoomControl onZoom={handleZoom} />
+        <ZoomControl onZoom={handleZoom} onReset={handleReset} />
       </div>
     </div>
   );
