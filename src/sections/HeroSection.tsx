@@ -20,24 +20,26 @@ import {
 } from 'react-icons/si';
 import Image from 'next/image';
 import { DialogComponent } from '@/components/getInTouchDialog';
-import React from 'react';
+import React, { memo } from 'react';
 
-export default function HeroSection() {
-  const skills = [
-    { text: 'ArcGIS', Icon: SiArcgis },
-    { text: 'QGIS', Icon: SiQgis },
-    { text: 'OpenLayers', Icon: SiOpenlayers },
-    { text: 'Leaflet', Icon: SiLeaflet },
-    { text: 'Python', Icon: SiPython },
-    { text: 'JavaScript', Icon: SiJavascript },
-    { text: 'HTML', Icon: SiHtml5 },
-    { text: 'TypeScript', Icon: SiTypescript },
-    { text: 'Angular', Icon: SiAngular },
-    { text: 'PostGIS', Icon: BiLogoPostgresql },
-    { text: 'Version Control', Icon: SiGit },
-    { text: 'Docker', Icon: SiDocker },
-    { text: 'Git', Icon: SiGit },
-  ];
+// Memoize skills array to prevent re-creation on every render
+const skills = [
+  { text: 'ArcGIS', Icon: SiArcgis },
+  { text: 'QGIS', Icon: SiQgis },
+  { text: 'OpenLayers', Icon: SiOpenlayers },
+  { text: 'Leaflet', Icon: SiLeaflet },
+  { text: 'Python', Icon: SiPython },
+  { text: 'JavaScript', Icon: SiJavascript },
+  { text: 'HTML', Icon: SiHtml5 },
+  { text: 'TypeScript', Icon: SiTypescript },
+  { text: 'Angular', Icon: SiAngular },
+  { text: 'PostGIS', Icon: BiLogoPostgresql },
+  { text: 'Version Control', Icon: SiGit },
+  { text: 'Docker', Icon: SiDocker },
+  { text: 'Git', Icon: SiGit },
+];
+
+const HeroSection = memo(function HeroSection() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -186,10 +188,12 @@ export default function HeroSection() {
           <Image
             src={ronitImage}
             alt="Ronit Jadhav"
-            loading="lazy"
+            priority // This is above the fold, so load it immediately
             width={450}
             height={450}
+            sizes="(max-width: 768px) 100vw, 450px"
             className="mt-[-40px] lg:ml-28"
+            placeholder="blur"
           />
         </motion.div>
       </motion.div>
@@ -220,4 +224,6 @@ export default function HeroSection() {
       </motion.div>
     </header>
   );
-}
+});
+
+export default HeroSection;

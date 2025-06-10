@@ -12,6 +12,10 @@ body {
   --sb-track-color: #ffffff;
   --sb-thumb-color: #000000;
   @apply text-text dark:text-darkText;
+  /* Improve text rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body::-webkit-scrollbar {
@@ -32,7 +36,14 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
+/* GPU acceleration for better performance */
+.gpu-accelerate {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
 /* Add consistent section spacing */
 section {
-  @apply relative overflow-visible;
+  position: relative;
+  overflow: visible;
 }

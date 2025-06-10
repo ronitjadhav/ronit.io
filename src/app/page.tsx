@@ -1,13 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { ToastContainer } from 'react-toastify';
 import LoadingScreen from '@/components/loadingScreen';
 import Navbar from '@/components/Navbar';
 import Header from '@/sections/HeroSection';
 import Footer from '@/sections/footer';
 
-// Dynamically import heavy components
+// Optimize dynamic imports with better loading strategies
 const MapComponent = dynamic(() => import('@/components/openlayers-map/map'), {
   loading: () => <div className="h-screen flex items-center justify-center">Loading Map...</div>,
   ssr: false,
@@ -17,6 +16,12 @@ const ProjectsShowcase = dynamic(() => import('@/sections/projects'), {
   loading: () => (
     <div className="h-screen flex items-center justify-center">Loading Projects...</div>
   ),
+  ssr: false, // Projects don't need SSR for better performance
+});
+
+// Lazy load ToastContainer
+const LazyToastContainer = dynamic(() => import('react-toastify').then(mod => ({ default: mod.ToastContainer })), {
+  ssr: false,
 });
 
 // Define section interface
@@ -102,18 +107,20 @@ export default function Home() {
       } transition-opacity duration-300`}
     >
       <Navbar />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <Suspense fallback={null}>
+        <LazyToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </Suspense>
 
       <main className="relative flex flex-col space-y-0">
         {sections.map(({ id, component: Component, priority }) => (

@@ -3,7 +3,12 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Metadata } from 'next';
 
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  display: 'swap', // Better font loading performance
+  preload: true,
+  variable: '--font-space-grotesk',
+});
 
 // Metadata needs to be exported this way in Next.js 13+
 export const metadata: Metadata = {
