@@ -114,7 +114,7 @@ const HeroSection = memo(function HeroSection() {
   };
 
   return (
-    <header className="relative flex min-h-screen w-full flex-col items-center justify-start bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] pt-20 md:pt-24 lg:pt-24 overflow-hidden">
+    <header className="relative flex min-h-screen w-full flex-col items-center justify-start bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] pt-20 md:pt-24 lg:pt-24 overflow-hidden pb-16 sm:pb-20">
       <motion.div
         className="mx-auto w-container max-w-full px-5 py-4 md:py-16 lg:py-20 text-left flex flex-col lg:flex-row mt-10 md:mt-0"
         variants={containerVariants}
@@ -167,14 +167,20 @@ const HeroSection = memo(function HeroSection() {
               </motion.a>
             </motion.div>
 
-            {/* Removed hover effect here */}
-            <motion.div variants={buttonVariants} initial="hidden" animate="visible" whileTap="tap">
+            {/* Contact button with proper spacing for mobile */}
+            <motion.div
+              variants={buttonVariants}
+              initial="hidden"
+              animate="visible"
+              whileTap="tap"
+              className="relative z-10 mt-2"
+            >
               <DialogComponent
                 triggerButtonText="Get in Touch!"
                 dialogTitle="Get in Touch"
                 dialogDescription="Please fill out the form below to get in touch with me."
                 inputLabels={{ name: 'Name', email: 'Email', message: 'Message' }}
-                buttonClassName="h-10 text-base font-heading md:h-12 md:text-lg lg:h-14 lg:text-xl" // Add this line to increase the button size
+                buttonClassName="h-10 text-base font-heading md:h-12 md:text-lg lg:h-14 lg:text-xl"
               />
             </motion.div>
           </div>
@@ -198,7 +204,7 @@ const HeroSection = memo(function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-0 left-0 w-full"
+        className="absolute bottom-0 left-0 w-full z-0"
         variants={marqueeContainerVariants}
         initial="hidden"
         animate="visible"

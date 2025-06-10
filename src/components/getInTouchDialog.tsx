@@ -115,11 +115,11 @@ export function DialogComponent({
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogPortal>
-          <div className="fixed inset-0 bg-black/50 dialog-overlay" aria-hidden="true" />
-          <div className="fixed inset-0 overflow-y-auto">
+          <div className="fixed inset-0 bg-black/50 dialog-overlay z-40" aria-hidden="true" />
+          <div className="fixed inset-0 overflow-y-auto z-50">
             <div className="flex min-h-full items-center justify-center p-4">
-              <DialogContent className="animate-in fade-in-0 slide-in-from-bottom-0 sm:zoom-in-0 sm:slide-in-from-bottom-0 w-full max-w-lg rounded-lg bg-white">
-                <div className="px-6 py-4">
+              <DialogContent className="animate-in fade-in-0 slide-in-from-bottom-0 sm:zoom-in-0 sm:slide-in-from-bottom-0 w-full max-w-lg rounded-lg bg-white overflow-hidden">
+                <div className="px-3 py-3 md:px-6 md:py-4">
                   <DialogHeader>
                     <DialogTitle className="text-xl font-semibold">{dialogTitle}</DialogTitle>
                     <DialogDescription className="text-sm text-gray-500">
