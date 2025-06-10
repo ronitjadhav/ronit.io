@@ -115,7 +115,7 @@ export default function Home() {
         theme="light"
       />
 
-      <main className="relative">
+      <main className="relative flex flex-col space-y-0">
         {sections.map(({ id, component: Component, priority }) => (
           <section key={id} id={id} className={`scroll-mt-16 ${priority ? '' : 'lazy-section'}`}>
             <Component />

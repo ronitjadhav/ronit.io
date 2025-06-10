@@ -113,9 +113,9 @@ export default function HeroSection() {
   };
 
   return (
-    <header className="relative flex min-h-[100vh] w-full flex-col items-center justify-center bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] pt-16 lg:pt-0">
+    <header className="relative flex min-h-screen max-h-screen w-full flex-col items-center justify-start md:justify-center bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] pt-28 md:pt-28 lg:pt-24">
       <motion.div
-        className="mx-auto w-container max-w-full px-5 py-[110px] text-left lg:py-[150px] flex flex-col lg:flex-row"
+        className="mx-auto w-container max-w-full px-5 py-4 md:py-16 lg:py-20 text-left flex flex-col lg:flex-row mt-10 md:mt-0"
         variants={containerVariants}
         initial="hidden"
         animate="visible"

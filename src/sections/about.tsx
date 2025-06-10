@@ -50,8 +50,8 @@ export default function About() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-secondaryBlack">
-      <div className="mx-auto w-container max-w-full px-5 py-[110px] text-left lg:py-[150px]">
+    <div className="w-full py-16 bg-white dark:bg-secondaryBlack">
+      <div className="mx-auto w-container max-w-full px-5 py-8 md:py-12 text-left">
         <InfoCardsContainer cards={cards} />
       </div>
     </div>

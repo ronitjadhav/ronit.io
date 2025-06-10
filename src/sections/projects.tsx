@@ -37,7 +37,7 @@ const ProjectsShowcase = () => {
   ];
 
   return (
-    <div className="w-full p-8 bg-bg dark:bg-darkBg">
+    <div className="w-full py-16 p-8 bg-bg dark:bg-darkBg">
       <div
         className="w-full bg-bg border-4 border-black dark:bg-darkBg
                           shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]

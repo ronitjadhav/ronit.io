@@ -633,7 +633,7 @@ const MapComponent: React.FC = () => {
   // --- Render ---
   return (
     // Outer container for padding and background
-    <div className="p-4 sm:p-6 md:p-8 bg-bg dark:bg-secondaryBlack min-h-screen">
+    <div className="p-4 sm:p-6 md:p-8 bg-bg dark:bg-secondaryBlack py-16">
       {/* Title Section */}
       <div
         className="w-full bg-bg border-4 border-black dark:bg-darkBg
@@ -650,7 +650,7 @@ const MapComponent: React.FC = () => {
       <div
         className="relative border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
                           shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
-                          h-[calc(100vh-12rem)] md:h-[700px] lg:h-[800px] // Responsive height
+                          h-[550px] md:h-[600px] lg:h-[700px] // Fixed responsive height
                           overflow-hidden rounded-md" // Added slight rounding
       >
         {/* Map Container */}

@@ -31,3 +31,8 @@ body::-webkit-scrollbar-thumb {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
 }
+
+/* Add consistent section spacing */
+section {
+  @apply relative overflow-visible;
+}
