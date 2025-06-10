@@ -20,9 +20,12 @@ const ProjectsShowcase = dynamic(() => import('@/sections/projects'), {
 });
 
 // Lazy load ToastContainer
-const LazyToastContainer = dynamic(() => import('react-toastify').then(mod => ({ default: mod.ToastContainer })), {
-  ssr: false,
-});
+const LazyToastContainer = dynamic(
+  () => import('react-toastify').then((mod) => ({ default: mod.ToastContainer })),
+  {
+    ssr: false,
+  },
+);
 
 // Define section interface
 interface Section {
@@ -124,9 +127,9 @@ export default function Home() {
 
       <main className="relative flex flex-col space-y-0" role="main">
         {sections.map(({ id, component: Component, priority }) => (
-          <section 
-            key={id} 
-            id={id} 
+          <section
+            key={id}
+            id={id}
             className={`scroll-mt-16 ${priority ? '' : 'lazy-section'}`}
             role="region"
             aria-labelledby={`${id}-heading`}

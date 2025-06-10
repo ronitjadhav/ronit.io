@@ -3,7 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Metadata } from 'next';
 
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap', // Better font loading performance
   preload: true,
@@ -14,7 +14,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: {
     default: 'Ronit Jadhav - Geospatial Developer & Software Engineer',
-    template: '%s | Ronit Jadhav'
+    template: '%s | Ronit Jadhav',
   },
   description:
     "Based in Germany, I'm a Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies. Expert in ArcGIS, QGIS, OpenLayers, Python, and JavaScript.",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     'Data Visualization',
     'Maps',
     'Cartography',
-    'Remote Sensing'
+    'Remote Sensing',
   ],
   authors: [{ name: 'Ronit Jadhav', url: 'https://ronitjadhav.github.io' }],
   creator: 'Ronit Jadhav',
@@ -102,7 +102,8 @@ export default function RootLayout({
     '@type': 'Person',
     name: 'Ronit Jadhav',
     jobTitle: 'Geospatial Developer & Software Engineer',
-    description: 'Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies.',
+    description:
+      'Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies.',
     url: 'https://ronitjadhav.github.io/ronit.io',
     image: 'https://ronitjadhav.github.io/ronit.io/ronit.png',
     address: {
@@ -124,7 +125,7 @@ export default function RootLayout({
       'PostGIS',
       'Web Development',
       'Data Visualization',
-      'Geographic Information Systems'
+      'Geographic Information Systems',
     ],
     worksFor: {
       '@type': 'Organization',

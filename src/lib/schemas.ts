@@ -27,7 +27,8 @@ export const portfolioSchema = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
   name: 'Ronit Jadhav Portfolio',
-  description: 'Professional portfolio showcasing geospatial development and software engineering projects',
+  description:
+    'Professional portfolio showcasing geospatial development and software engineering projects',
   author: {
     '@type': 'Person',
     name: 'Ronit Jadhav',

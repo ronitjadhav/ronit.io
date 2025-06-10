@@ -1,15 +1,15 @@
-import { ImageResponse } from 'next/og'
- 
-export const runtime = 'edge'
-export const dynamic = 'force-static'
- 
-export const alt = 'Ronit Jadhav - Geospatial Developer'
+import { ImageResponse } from 'next/og';
+
+export const runtime = 'edge';
+export const dynamic = 'force-static';
+
+export const alt = 'Ronit Jadhav - Geospatial Developer';
 export const size = {
   width: 1200,
   height: 630,
-}
-export const contentType = 'image/png'
- 
+};
+export const contentType = 'image/png';
+
 export default async function Image() {
   return new ImageResponse(
     (
@@ -89,6 +89,6 @@ export default async function Image() {
     ),
     {
       ...size,
-    }
-  )
+    },
+  );
 }

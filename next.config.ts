@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   distDir: 'out',
-  
+
   // Enable experimental optimizations
   experimental: {
     optimizePackageImports: [
@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
       'framer-motion',
     ],
   },
-  
+
   // Turbopack configuration (moved from experimental.turbo)
   turbopack: {
     rules: {
@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  
+
   // Image optimization (adjusted for static export)
   images: {
     unoptimized: true, // Required for static export
@@ -41,12 +41,12 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  
+
   // Enable compression
   compress: true,
 };
 
 // Apply bundle analyzer only for production builds to avoid Turbopack conflicts
-export default process.env.ANALYZE === 'true' && process.env.NODE_ENV === 'production' 
-  ? withBundleAnalyzer(nextConfig) 
+export default process.env.ANALYZE === 'true' && process.env.NODE_ENV === 'production'
+  ? withBundleAnalyzer(nextConfig)
   : nextConfig;

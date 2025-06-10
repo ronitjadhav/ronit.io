@@ -1,11 +1,11 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
 
 // Required for static export
-export const dynamic = 'force-static'
- 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://ronitjadhav.github.io/ronit.io'
-  
+  const baseUrl = 'https://ronitjadhav.github.io/ronit.io';
+
   return [
     {
       url: baseUrl,
@@ -31,5 +31,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-  ]
+  ];
 }
