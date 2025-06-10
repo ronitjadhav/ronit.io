@@ -122,9 +122,15 @@ export default function Home() {
         />
       </Suspense>
 
-      <main className="relative flex flex-col space-y-0">
+      <main className="relative flex flex-col space-y-0" role="main">
         {sections.map(({ id, component: Component, priority }) => (
-          <section key={id} id={id} className={`scroll-mt-16 ${priority ? '' : 'lazy-section'}`}>
+          <section 
+            key={id} 
+            id={id} 
+            className={`scroll-mt-16 ${priority ? '' : 'lazy-section'}`}
+            role="region"
+            aria-labelledby={`${id}-heading`}
+          >
             <Component />
           </section>
         ))}
