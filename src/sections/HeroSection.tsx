@@ -119,15 +119,15 @@ const HeroSection = memo(function HeroSection() {
       {/* Grid background */}
       <div
         className={cn(
-          "absolute inset-0",
-          "[background-size:20px_20px]",
-          "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
-          "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+          'absolute inset-0',
+          '[background-size:20px_20px]',
+          '[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]',
+          'dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]',
         )}
       />
       {/* Radial gradient for the container to give a faded look */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
-      
+
       <motion.div
         className="mx-auto max-w-full px-5 py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-between relative z-10 flex-1"
         variants={containerVariants}
@@ -228,19 +228,19 @@ const HeroSection = memo(function HeroSection() {
           speed={70}
           loop={0}
           gradientWidth={50}
-        >            {skills.map((skill, id) => (
-              <motion.div
-                className="flex items-center mx-4 sm:mx-6 lg:mx-8"
-                key={id}
-                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
-              >
-                <skill.Icon className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
-                <span className="text-lg sm:text-xl lg:text-2xl font-heading">
-                  {skill.text}
-                </span>
-              </motion.div>
-            ))}
-          </Marquee>
+        >
+          {' '}
+          {skills.map((skill, id) => (
+            <motion.div
+              className="flex items-center mx-4 sm:mx-6 lg:mx-8"
+              key={id}
+              whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+            >
+              <skill.Icon className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
+              <span className="text-lg sm:text-xl lg:text-2xl font-heading">{skill.text}</span>
+            </motion.div>
+          ))}
+        </Marquee>
       </motion.div>
     </header>
   );
