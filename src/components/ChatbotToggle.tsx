@@ -79,15 +79,8 @@ export default function ChatbotToggle() {
   };
 
   const handleOpen = () => {
-    if (isVerified) {
-      // If already verified, open chat directly
-      setIsOpen(true);
-      setShowPulse(false);
-    } else {
-      // Show captcha for verification first
-      setIsCaptchaVisible(true);
-      setCaptchaError(null);
-    }
+    // Chatbot is disabled - coming soon
+    return;
   };
 
   const handleClose = () => {
@@ -163,21 +156,23 @@ export default function ChatbotToggle() {
   return (
     <>
       <div className="relative z-40">
-        {/* Chatbot Component - Positioned above the button */}
+        {/* Chatbot Component - Disabled
         {isOpen && (
           <div className="absolute bottom-full right-0 mb-4 w-96 h-[600px] animate-in slide-in-from-bottom-4 duration-300">
             <Chatbot isOpen={isOpen} onClose={handleClose} />
           </div>
         )}
+        */}
 
-        {/* Floating Action Button - Changes appearance based on chat state */}
-        <div className="relative">
-          {/* Pulse Animation - only when closed */}
+        {/* Floating Action Button - Disabled state */}
+        <div className="relative group">
+          {/* Pulse Animation - disabled
           {showPulse && !isOpen && (
             <div className="absolute inset-0 rounded-full bg-purple-300 animate-ping opacity-75"></div>
           )}
+          */}
 
-          {/* AI Indicator - only when closed */}
+          {/* AI Indicator - disabled
           {!isOpen && (
             <div
               className={`absolute -top-1 -right-1 w-3 h-3 border-2 border-white dark:border-darkBg rounded-full ${
@@ -185,64 +180,42 @@ export default function ChatbotToggle() {
               }`}
             ></div>
           )}
+          */}
 
           <Button
             onClick={isOpen ? handleClose : handleOpen}
-            className={`relative px-6 py-3 h-auto rounded-full shadow-light dark:shadow-dark transition-all duration-200 border-2 border-black dark:border-white ${
-              isOpen
-                ? 'bg-gray-400 hover:bg-gray-500 scale-95'
-                : 'bg-purple-300 hover:bg-purple-400 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.1)] hover:scale-105 hover:-translate-y-1'
-            }`}
-            aria-label={isOpen ? 'Close AI chatbot' : 'Open AI chatbot to learn about Ronit'}
+            disabled={true}
+            className={`relative px-6 py-3 h-auto rounded-full shadow-light dark:shadow-dark transition-all duration-200 border-2 border-black dark:border-white opacity-60 cursor-not-allowed bg-gray-300 hover:bg-gray-300`}
+            aria-label="AI chatbot coming soon"
           >
             <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-black dark:text-black" />
-              <span className="font-heading text-sm font-bold text-black dark:text-black">
-                {isOpen ? 'Close Chat' : 'Ask Ronit AI'}
+              <MessageCircle className="w-5 h-5 text-gray-600 dark:text-gray-600" />
+              <span className="font-heading text-sm font-bold text-gray-600 dark:text-gray-600">
+                Ask Ronit AI
               </span>
-              <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center ml-2">
-                {isOpen ? (
-                  <svg
-                    className="w-4 h-4 text-white dark:text-black"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-4 h-4 text-white dark:text-black"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                )}
+              <div className="w-8 h-8 bg-gray-600 dark:bg-gray-600 rounded-full flex items-center justify-center ml-2">
+                <svg
+                  className="w-4 h-4 text-white dark:text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
               </div>
             </div>
           </Button>
 
-          {/* Tooltip - only when closed */}
-          {!isOpen && (
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 px-3 py-2 bg-black dark:bg-white text-white dark:text-black text-sm rounded-base shadow-light dark:shadow-dark opacity-0 hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border-2 border-black dark:border-white">
-              {isVerified
-                ? "Chat with Ronit's AI assistant! 💬"
-                : "Verify & chat with Ronit's AI! 🤖"}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black dark:border-t-white"></div>
-            </div>
-          )}
+          {/* Tooltip - Coming Soon message */}
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 px-3 py-2 bg-black dark:bg-white text-white dark:text-black text-sm rounded-base shadow-light dark:shadow-dark opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border-2 border-black dark:border-white">
+            Coming Soon... 🚀
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black dark:border-t-white"></div>
+          </div>
         </div>
       </div>
 
