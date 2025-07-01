@@ -35,9 +35,21 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const quickActions = [
-    { icon: Briefcase, text: "Tell me about Ronit's current role", message: "What is Ronit's current role and company?" },
-    { icon: Code, text: "What technologies does he use?", message: "What technologies and tools does Ronit work with?" },
-    { icon: MapPin, text: "Show me his projects", message: "What notable projects has Ronit worked on?" },
+    {
+      icon: Briefcase,
+      text: "Tell me about Ronit's current role",
+      message: "What is Ronit's current role and company?",
+    },
+    {
+      icon: Code,
+      text: 'What technologies does he use?',
+      message: 'What technologies and tools does Ronit work with?',
+    },
+    {
+      icon: MapPin,
+      text: 'Show me his projects',
+      message: 'What notable projects has Ronit worked on?',
+    },
   ];
 
   const scrollToBottom = () => {
@@ -75,11 +87,11 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
     setShowQuickActions(false); // Hide quick actions after first message
-    
+
     // Scroll to bottom when user sends a message
     setTimeout(() => scrollToBottom(), 100);
 
@@ -101,7 +113,7 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
       }
 
       const data = await response.json();
-      
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: data.response || data.error,
@@ -110,16 +122,19 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
         suggestions: data.suggestions,
       };
 
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: error instanceof Error ? error.message : "Sorry, I'm having trouble responding right now. Please try again in a moment!",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Sorry, I'm having trouble responding right now. Please try again in a moment!",
         isBot: true,
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -142,12 +157,7 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
           <MessageCircle className="w-5 h-5 text-black" />
           <h3 className="font-heading text-lg text-black font-bold">Ask Ronit AI</h3>
         </div>
-        <Button
-          variant="neutral"
-          size="icon"
-          onClick={onClose}
-          className="w-8 h-8"
-        >
+        <Button variant="neutral" size="icon" onClick={onClose} className="w-8 h-8">
           <X className="w-4 h-4" />
         </Button>
       </div>
@@ -156,51 +166,50 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-contain">
         {messages.map((message, index) => (
           <div key={message.id}>
-            <div
-              className={cn(
-                "flex",
-                message.isBot ? "justify-start" : "justify-end"
-              )}
-            >
+            <div className={cn('flex', message.isBot ? 'justify-start' : 'justify-end')}>
               <div
                 className={cn(
-                  "max-w-[80%] p-3 border-2 border-black dark:border-white rounded-base animate-in slide-in-from-bottom-2 duration-300",
+                  'max-w-[80%] p-3 border-2 border-black dark:border-white rounded-base animate-in slide-in-from-bottom-2 duration-300',
                   message.isBot
-                    ? "bg-white dark:bg-secondaryBlack text-black dark:text-darkText shadow-light dark:shadow-dark"
-                    : "bg-purple-300 text-black shadow-light dark:shadow-dark"
+                    ? 'bg-white dark:bg-secondaryBlack text-black dark:text-darkText shadow-light dark:shadow-dark'
+                    : 'bg-purple-300 text-black shadow-light dark:shadow-dark',
                 )}
               >
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
                 <span className="text-xs opacity-60 mt-1 block">
-                  {message.timestamp.toLocaleTimeString([], { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                  {message.timestamp.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
                   })}
                 </span>
               </div>
             </div>
-            
+
             {/* Suggestion Buttons for Bot Messages */}
-            {message.isBot && message.suggestions && message.suggestions.length > 0 && index === messages.length - 1 && index > 0 && (
-              <div className="mt-3 space-y-2 animate-in fade-in duration-500 delay-300">
-                <p className="text-xs opacity-70 mb-2">💡 You might also want to ask:</p>
-                <div className="flex flex-wrap gap-2">
-                  {message.suggestions.map((suggestion, suggestionIndex) => (
-                    <button
-                      key={suggestionIndex}
-                      onClick={() => handleSendMessage(suggestion)}
-                      disabled={isLoading}
-                      className="text-xs px-3 py-2 bg-white dark:bg-secondaryBlack border-2 border-black dark:border-white rounded-base hover:bg-purple-300 hover:shadow-light dark:hover:shadow-dark transition-all duration-200 disabled:opacity-50 text-left"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
+            {message.isBot &&
+              message.suggestions &&
+              message.suggestions.length > 0 &&
+              index === messages.length - 1 &&
+              index > 0 && (
+                <div className="mt-3 space-y-2 animate-in fade-in duration-500 delay-300">
+                  <p className="text-xs opacity-70 mb-2">💡 You might also want to ask:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {message.suggestions.map((suggestion, suggestionIndex) => (
+                      <button
+                        key={suggestionIndex}
+                        onClick={() => handleSendMessage(suggestion)}
+                        disabled={isLoading}
+                        className="text-xs px-3 py-2 bg-white dark:bg-secondaryBlack border-2 border-black dark:border-white rounded-base hover:bg-purple-300 hover:shadow-light dark:hover:shadow-dark transition-all duration-200 disabled:opacity-50 text-left"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         ))}
-        
+
         {/* Quick Action Buttons */}
         {showQuickActions && messages.length === 1 && (
           <div className="space-y-2 animate-in fade-in duration-500 delay-300">
@@ -220,7 +229,7 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
             </div>
           </div>
         )}
-        
+
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-white dark:bg-secondaryBlack text-black dark:text-darkText p-3 border-2 border-black dark:border-white rounded-base shadow-light dark:shadow-dark animate-in slide-in-from-bottom-2 duration-300">
@@ -231,7 +240,7 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
             </div>
           </div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
 

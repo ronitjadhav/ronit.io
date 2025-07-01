@@ -36,9 +36,10 @@ The website features an **AI-powered chatbot** that can answer questions about m
 
 ## AI Chatbot
 
-The website features an **AI-powered FAQ chatbot** that can answer questions about Ronit's professional background, projects, and experience. 
+The website features an **AI-powered FAQ chatbot** that can answer questions about Ronit's professional background, projects, and experience.
 
 ### Features:
+
 - 🤖 **AI-Powered**: Uses Google Gemini API for intelligent responses
 - 🛡️ **Anti-Abuse Protection**: reCAPTCHA verification prevents spam and misuse
 - 📱 **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
@@ -47,16 +48,19 @@ The website features an **AI-powered FAQ chatbot** that can answer questions abo
 - 🔒 **Session-Based**: Verify once per session for smooth user experience
 
 ### How it works:
+
 1. Click the "Ask Ronit AI" button (bottom-right on desktop, below "Get in Touch" on mobile)
 2. Complete reCAPTCHA verification (first-time only)
 3. Chat with the AI about Ronit's experience, projects, and professional background
 4. Get instant, contextual responses with suggested follow-up questions
 
 The chatbot operates in two modes:
+
 - **With Gemini API**: Full AI capabilities with natural language understanding
 - **Without API**: Falls back to curated FAQ responses for basic questions
 
 ### Security & Privacy:
+
 - reCAPTCHA verification prevents automated abuse and spam
 - No conversation data is stored or logged
 - API calls are rate-limited and monitored
@@ -110,30 +114,35 @@ pnpm dev
 This project requires several environment variables to function properly. Copy `.env.example` to `.env` and fill in your values:
 
 ### Required for AI Chatbot:
+
 - `GEMINI_API_KEY` - Google Gemini API key for AI responses
   - Get from: [Google AI Studio](https://makersuite.google.com/app/apikey)
   - **Note**: Chatbot will fall back to FAQ mode without this
 
 ### Required for Contact Form & Anti-Abuse:
+
 - `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` - Google reCAPTCHA v2 site key
   - Get from: [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin/create)
 - `NEXT_PUBLIC_EMAILJS_SERVICE_ID` - EmailJS service ID
-- `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` - EmailJS template ID  
+- `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` - EmailJS template ID
 - `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` - EmailJS public key
   - Get from: [EmailJS Dashboard](https://www.emailjs.com/)
 
 ### Required for Map Components:
+
 - `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` - Mapbox access token
 - `NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL` - Custom dark map style
 - `NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL` - Custom light map style
   - Get from: [Mapbox Account](https://account.mapbox.com/access-tokens/)
 
 ### Setup Instructions:
+
 1. Copy environment file: `cp .env.example .env`
 2. Fill in your API keys and tokens
 3. Restart the development server
 
 ### Troubleshooting:
+
 - **Chatbot not working**: Check `GEMINI_API_KEY` and ensure you have API quota
 - **Contact form failing**: Verify `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` and EmailJS credentials
 - **Maps not loading**: Ensure `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` is valid
@@ -155,7 +164,7 @@ This project requires several environment variables to function properly. Copy `
 ## Technologies Used
 
 - **Next.js 15:** React framework with App Router and Turbopack for fast development
-- **TypeScript:** Strongly typed JavaScript for better development experience  
+- **TypeScript:** Strongly typed JavaScript for better development experience
 - **Tailwind CSS:** Utility-first CSS framework for rapid UI development
 - **Google Gemini API:** Advanced AI for intelligent chatbot responses
 - **Mapbox:** Interactive maps with custom styling
@@ -170,17 +179,21 @@ This project requires several environment variables to function properly. Copy `
 This site can be easily deployed to platforms like [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/).
 
 ### Environment Variables for Production:
+
 When deploying, make sure to add all environment variables from `.env.example` to your deployment platform:
+
 - Vercel: Project Settings → Environment Variables
 - Netlify: Site Settings → Environment Variables
 
 ### Build Commands:
+
 ```bash
 npm run build
 npm start
 ```
 
 ### Important Notes:
+
 - All `NEXT_PUBLIC_*` variables are exposed to the client-side
 - Keep server-side variables (like `GEMINI_API_KEY`) secure and never expose them
 - Test all features (chatbot, contact form, maps) after deployment

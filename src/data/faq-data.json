@@ -30,7 +30,7 @@
         "What services does Ronit offer?"
       ]
     },
-    {   
+    {
       "id": "4",
       "question": "What is Ronit's educational background?",
       "answer": "Ronit holds an M.Sc. in Software Engineering for Industrial Applications from Hochschule Hof (2022-2024), focusing on Industry 4.0, applied cloud computing, IoT, and spatial technologies. He also completed an M.Sc. in Geoinformatics (2017-2019) in Pune, India, where he learned GIS, remote sensing, and spatial analysis, combining geography with programming skills.",
@@ -155,7 +155,7 @@
   "personality": "Respond in a professional yet approachable tone that reflects Ronit's passion for geospatial technology and software development. Highlight his unique expertise in bridging traditional GIS with modern web development. Use technical terms appropriately but explain them when needed. Show enthusiasm for open-source technologies and innovative spatial solutions.",
   "expertise_areas": [
     "Geospatial Development",
-    "Software Engineering", 
+    "Software Engineering",
     "Web Development",
     "GIS Technologies",
     "Open Source Solutions",
