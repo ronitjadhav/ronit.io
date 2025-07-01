@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Send, MessageCircle, Loader2, Briefcase, Code, MapPin, Mail } from 'lucide-react';
+import { X, Send, MessageCircle, Loader2, Briefcase, Code, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Message {

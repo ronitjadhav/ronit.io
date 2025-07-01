@@ -211,13 +211,13 @@ function findRelevantSuggestions(
   };
 
   // Find the best matching FAQ for suggestions
-  let bestMatches: FAQ[] = [];
+  const bestMatches: FAQ[] = [];
 
   for (const faq of faqData.faqs) {
     let relevanceScore = 0;
 
     // Check if FAQ topic is related to the current conversation
-    Object.entries(topicKeywords).forEach(([topic, keywords]) => {
+    Object.entries(topicKeywords).forEach(([, keywords]) => {
       const messageHasKeywords = keywords.some(
         (keyword) => lowerMessage.includes(keyword) || lowerResponse.includes(keyword),
       );
@@ -278,7 +278,6 @@ async function getFallbackResponse(
   for (const faq of (faqData as FAQData).faqs) {
     let score = 0;
     const questionWords = faq.question.toLowerCase().split(' ');
-    const answerWords = faq.answer.toLowerCase().split(' ');
 
     // Check for direct keyword matches in question and answer
     questionWords.forEach((word) => {
@@ -288,7 +287,7 @@ async function getFallbackResponse(
     });
 
     // Check for semantic keyword matches
-    Object.entries(keywordMap).forEach(([topic, keywords]) => {
+    Object.entries(keywordMap).forEach(([, keywords]) => {
       const topicInMessage = keywords.some((keyword) => lowerMessage.includes(keyword));
       const topicInFAQ = keywords.some(
         (keyword) =>
