@@ -58,7 +58,7 @@ const NavBar = () => {
   return (
     <>
       <motion.nav
-        className="sticky top-0 z-50 w-full px-4"
+        className="sticky top-4 z-50 w-full px-4"
         variants={navbarVariants}
         initial="hidden"
         animate="visible"
@@ -128,7 +128,7 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="fixed top-[100px] z-50 w-full px-4" ref={menuRef}>
+        <div className="fixed top-[120px] z-50 w-full px-4" ref={menuRef}>
           <div
             className="w-full bg-white dark:bg-darkBg p-4 transform"
             style={{
