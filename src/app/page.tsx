@@ -125,21 +125,24 @@ export default function Home() {
         />
       </Suspense>
 
-      <main className="relative flex flex-col space-y-0" role="main">
-        {sections.map(({ id, component: Component, priority }) => (
-          <section
-            key={id}
-            id={id}
-            className={`scroll-mt-16 ${priority ? '' : 'lazy-section'}`}
-            role="region"
-            aria-labelledby={`${id}-heading`}
-          >
-            <Component />
-          </section>
-        ))}
+      <main className="flex min-h-screen flex-col">
+        {loadingState.isLoading ? (
+          <LoadingScreen />
+        ) : (
+          <>
+            <Navbar />
+            <div className="flex-grow">
+              {sections.map(({ id, component: Component }) => (
+                <section key={id} id={id}>
+                  <Component />
+                </section>
+              ))}
+            </div>
+            <Footer />
+            <LazyToastContainer position="bottom-right" />
+          </>
+        )}
       </main>
-
-      <Footer />
     </div>
   );
 }

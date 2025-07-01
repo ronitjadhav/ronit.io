@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { createRoot, Root } from 'react-dom/client'; // Import Root type
 import { Menu, ChevronLeft, MapPin, Home } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -633,68 +634,82 @@ const MapComponent: React.FC = () => {
   // --- Render ---
   return (
     // Outer container for padding and background
-    <div className="p-4 sm:p-6 md:p-8 bg-bg dark:bg-secondaryBlack py-16">
-      {/* Title Section */}
+    <div className="relative p-4 sm:p-6 md:p-8 bg-white dark:bg-black py-16">
+      {/* Grid background */}
       <div
-        className="w-full bg-bg border-4 border-black dark:bg-darkBg
-                          shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
-                          transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
-                          transition-all duration-300 p-6 mb-10"
-      >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black dark:text-darkText text-center">
-          My Journey Through Time & Space 🗺️
-        </h1>
-      </div>
+        className={cn(
+          "absolute inset-0",
+          "[background-size:20px_20px]",
+          "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
+          "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+        )}
+      />
+      {/* Radial gradient for the container to give a faded look */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Title Section */}
+        <div
+          className="w-full bg-bg border-4 border-black dark:bg-darkBg
+                            shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
+                            transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
+                            transition-all duration-300 p-6 mb-10"
+        >
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black dark:text-darkText text-center">
+            My Journey Through Time & Space 🗺️
+          </h1>
+        </div>
 
-      {/* Map and Timeline Container */}
-      <div
-        className="relative border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
-                          shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
-                          h-[550px] md:h-[600px] lg:h-[700px] // Fixed responsive height
-                          overflow-hidden rounded-md" // Added slight rounding
-      >
-        {/* Map Container */}
-        <div ref={mapRef} className="w-full h-full" aria-label="Interactive Journey Map">
-          {/* Timeline Sidebar */}
-          <TimelineContainer isOpen={isTimelineOpen} onClose={toggleTimeline}>
-            {timelineData.map((entry, index) => (
-              <TimelineItem
-                key={entry.id}
-                entry={entry}
-                isActive={index === activeIndex}
-                onClick={() => handleTimelineClick(index)}
-              />
-            ))}
-          </TimelineContainer>
+        {/* Map and Timeline Container */}
+        <div
+          className="relative border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
+                            shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
+                            h-[550px] md:h-600px lg:h-[700px] xl:h-[750px] // Improved responsive height
+                            overflow-hidden rounded-md" // Added slight rounding
+        >
+          {/* Map Container */}
+          <div ref={mapRef} className="w-full h-full" aria-label="Interactive Journey Map">
+            {/* Timeline Sidebar */}
+            <TimelineContainer isOpen={isTimelineOpen} onClose={toggleTimeline}>
+              {timelineData.map((entry, index) => (
+                <TimelineItem
+                  key={entry.id}
+                  entry={entry}
+                  isActive={index === activeIndex}
+                  onClick={() => handleTimelineClick(index)}
+                />
+              ))}
+            </TimelineContainer>
 
-          {/* Instructional Text Overlay - improved positioning */}
-          <div
-            className="absolute top-4 right-4 left-auto md:right-20 lg:right-24 z-10
+            {/* Instructional Text Overlay - improved positioning */}
+            <div
+              className="absolute top-4 right-4 left-auto md:right-20 lg:right-24 z-10
                             bg-white/80 dark:bg-black/80 backdrop-blur-sm p-2 px-3 rounded-md
                             border-2 border-black dark:border-darkBorder shadow-md
                             text-xs sm:text-sm text-black dark:text-white font-medium max-w-[200px] sm:max-w-xs"
-          >
-            Click markers or timeline items to explore!
+            >
+              Click markers or timeline items to explore!
+            </div>
           </div>
-        </div>
 
-        {/* Mobile Toggle Button for Timeline */}
-        {isMobile && !isTimelineOpen && (
-          <button
-            onClick={toggleTimeline}
-            aria-label="Open timeline"
-            className="absolute top-4 left-4 z-30 p-3 bg-bg dark:bg-darkBg text-black dark:text-darkText
+          {/* Mobile Toggle Button for Timeline */}
+          {isMobile && !isTimelineOpen && (
+            <button
+              onClick={toggleTimeline}
+              aria-label="Open timeline"
+              className="absolute top-4 left-4 z-30 p-3 bg-bg dark:bg-darkBg text-black dark:text-darkText
                                  border-4 border-black dark:border-white rounded-lg
                                  shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
                                  hover:shadow-none hover:translate-x-1 hover:translate-y-1
                                  transition-all duration-200"
-          >
-            <Menu size={24} />
-          </button>
-        )}
+            >
+              <Menu size={24} />
+            </button>
+          )}
 
-        {/* Zoom Controls */}
-        <ZoomControl onZoom={handleZoom} onReset={handleReset} />
+          {/* Zoom Controls */}
+          <ZoomControl onZoom={handleZoom} onReset={handleReset} />
+        </div>
       </div>
     </div>
   );

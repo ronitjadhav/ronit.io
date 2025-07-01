@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       width: {
-        container: '1300px',
+        container: '1400px',
       },
       colors: {
         main: '#76fbd9',
