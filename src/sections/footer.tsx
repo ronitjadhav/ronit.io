@@ -52,7 +52,7 @@ const Footer = () => {
 
   return (
     <footer className="w-full bg-bg p-8 border-t-8 border-black dark:border-darkBorder dark:bg-darkBg">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-full mx-auto px-5">
         {/* Top Section with Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {/* Quick Links */}

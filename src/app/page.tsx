@@ -104,42 +104,46 @@ export default function Home() {
   }
 
   return (
-    <div
-      className={`min-h-screen ${
-        isContentVisible ? 'opacity-100' : 'opacity-0'
-      } transition-opacity duration-300`}
-    >
-      <Navbar />
-      <Suspense fallback={null}>
-        <LazyToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-      </Suspense>
+    <div className="min-h-screen bg-white dark:bg-darkBg p-4 md:p-6 lg:p-8">
+      <div
+        className={`mx-auto w-container max-w-full bg-white dark:bg-black border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] lg:min-h-[calc(100vh-4rem)] ${
+          isContentVisible ? 'opacity-100' : 'opacity-0'
+        } transition-opacity duration-300`}
+      >
+        <Navbar />
+        <Suspense fallback={null}>
+          <LazyToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+        </Suspense>
 
-      <main className="relative flex flex-col space-y-0" role="main">
-        {sections.map(({ id, component: Component, priority }) => (
-          <section
-            key={id}
-            id={id}
-            className={`scroll-mt-16 ${priority ? '' : 'lazy-section'}`}
-            role="region"
-            aria-labelledby={`${id}-heading`}
-          >
-            <Component />
-          </section>
-        ))}
-      </main>
-
-      <Footer />
+        <main className="flex min-h-full flex-col">
+          {loadingState.isLoading ? (
+            <LoadingScreen />
+          ) : (
+            <>
+              <div className="flex-grow">
+                {sections.map(({ id, component: Component }) => (
+                  <section key={id} id={id}>
+                    <Component />
+                  </section>
+                ))}
+              </div>
+              <Footer />
+              <LazyToastContainer position="bottom-right" />
+            </>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

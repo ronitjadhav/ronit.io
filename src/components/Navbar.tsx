@@ -58,14 +58,14 @@ const NavBar = () => {
   return (
     <>
       <motion.nav
-        className="fixed left-0 top-0 z-50 w-full px-4"
+        className="sticky top-0 z-50 w-full px-4"
         variants={navbarVariants}
         initial="hidden"
         animate="visible"
       >
         <div
           className={twMerge(
-            `mx-auto mt-4 flex h-[80px] w-full max-w-screen-xl
+            `mx-auto mt-4 flex h-[80px] w-full max-w-full
         items-center justify-between px-6 transition-transform
         duration-300 ease-in-out bg-yellow-300 dark:bg-darkBg transform `,
             showNav ? 'translate-y-0' : '-translate-y-[calc(100%+40px)]',

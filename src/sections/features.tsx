@@ -36,7 +36,7 @@ export default function Features() {
           Skills and Technologies
         </h2>
 
-        <div className="mx-auto grid w-container max-w-full grid-cols-1 gap-5 px-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-full grid-cols-1 gap-5 px-5 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((skill, i) => {
             return (
               <div

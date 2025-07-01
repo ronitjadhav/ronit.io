@@ -21,6 +21,7 @@ import {
 import Image from 'next/image';
 import { DialogComponent } from '@/components/getInTouchDialog';
 import React, { memo } from 'react';
+import { cn } from '@/lib/utils';
 
 // Memoize skills array to prevent re-creation on every render
 const skills = [
@@ -114,14 +115,26 @@ const HeroSection = memo(function HeroSection() {
   };
 
   return (
-    <header className="relative flex min-h-screen w-full flex-col items-center justify-start bg-bg dark:bg-secondaryBlack bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] pt-20 md:pt-24 lg:pt-24 overflow-hidden pb-16 sm:pb-20">
+    <header className="relative flex min-h-[600px] max-h-[900px] h-screen w-full flex-col items-center justify-center bg-white dark:bg-black overflow-hidden pb-16 sm:pb-20">
+      {/* Grid background */}
+      <div
+        className={cn(
+          'absolute inset-0',
+          '[background-size:20px_20px]',
+          '[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]',
+          'dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]',
+        )}
+      />
+      {/* Radial gradient for the container to give a faded look */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+
       <motion.div
-        className="mx-auto w-container max-w-full px-5 py-4 md:py-16 lg:py-20 text-left flex flex-col lg:flex-row mt-10 md:mt-0"
+        className="mx-auto max-w-full px-5 py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-between relative z-10 flex-1"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start lg:ml-8 order-2 lg:order-1">
+        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start lg:pl-8 order-2 lg:order-1">
           <motion.div variants={itemVariants}>
             <TypeAnimation
               className="text-2xl sm:text-3xl font-bold text-[#2b55ff] dark:text-[#4b6fff] relative z-10"
@@ -131,21 +144,21 @@ const HeroSection = memo(function HeroSection() {
 
           <motion.h1
             variants={itemVariants}
-            className="text-2xl font-heading md:text-3xl lg:text-5xl mt-3 md:mt-5"
+            className="text-2xl font-heading md:text-3xl lg:text-5xl mt-3 md:mt-5 text-center lg:text-left"
           >
             I&#39;m Ronit Jadhav. 👋
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="my-6 md:my-8 lg:my-12 mt-4 md:mt-6 lg:mt-8 text-base md:text-lg lg:text-2xl font-normal leading-relaxed lg:leading-relaxed"
+            className="my-5 md:my-6 lg:my-8 text-base md:text-lg lg:text-xl font-normal leading-relaxed lg:leading-relaxed text-center lg:text-left max-w-2xl lg:max-w-xl"
           >
             Based in Germany, I&#39;m a Geospatial Developer and a Software Engineer. I love to work
             with maps, data, and code. I&#39;m passionate about open-source, web technologies, and
             building cool stuff.
           </motion.p>
 
-          <div className="flex flex-col items-center lg:items-start mb-6 md:mb-8">
+          <div className="flex flex-col items-center lg:items-start mb-6 md:mb-8 w-full">
             <motion.div className="flex space-x-6 mb-5 md:mb-6" variants={itemVariants}>
               <motion.a
                 href="https://github.com/ronitjadhav"
@@ -187,7 +200,7 @@ const HeroSection = memo(function HeroSection() {
         </div>
 
         <motion.div
-          className="w-full lg:w-1/2 mt-2 lg:mt-0 flex justify-center order-1 lg:order-2"
+          className="w-full lg:w-1/2 mt-2 lg:mt-0 flex justify-center lg:justify-end order-1 lg:order-2"
           variants={itemVariants}
         >
           <Image
@@ -197,7 +210,7 @@ const HeroSection = memo(function HeroSection() {
             width={400}
             height={400}
             sizes="(max-width: 768px) 280px, (max-width: 1024px) 350px, 450px"
-            className="w-auto h-auto max-w-[280px] sm:max-w-[320px] md:max-w-[350px] lg:max-w-[400px] lg:ml-28"
+            className="w-auto h-auto max-w-[280px] sm:max-w-[320px] md:max-w-[350px] lg:max-w-[450px]"
             placeholder="blur"
           />
         </motion.div>
@@ -214,17 +227,17 @@ const HeroSection = memo(function HeroSection() {
           direction="left"
           speed={70}
           loop={0}
+          gradientWidth={50}
         >
+          {' '}
           {skills.map((skill, id) => (
             <motion.div
               className="flex items-center mx-4 sm:mx-6 lg:mx-8"
               key={id}
               whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
             >
-              <skill.Icon className="text-3xl sm:text-4xl lg:text-5xl mr-2 sm:mr-3 lg:mr-4" />
-              <span className="text-lg sm:text-xl lg:text-2xl xl:text-4xl font-heading">
-                {skill.text}
-              </span>
+              <skill.Icon className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
+              <span className="text-lg sm:text-xl lg:text-2xl font-heading">{skill.text}</span>
             </motion.div>
           ))}
         </Marquee>
