@@ -1,21 +1,27 @@
-name: Prettier Check
+# This workflow has been superseded by the comprehensive CI workflow (ci.yml)
+# which includes Prettier checks along with linting, type checking, and build verification.
+# 
+# Keeping this file for reference, but it's no longer active.
+# To re-enable, remove the comments and update the trigger conditions.
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+# name: Prettier Check
 
-jobs:
-  prettier:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: npm install
-      - name: Run Prettier check
-        run: npm run check-format
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+
+# jobs:
+#   prettier:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'
+#       - name: Install dependencies
+#         run: npm install
+#       - name: Run Prettier check
+#         run: npm run check-format
