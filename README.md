@@ -21,7 +21,7 @@ Welcome to my personal website!
 
 **ronit.io** is my personal website where I share my projects, blog posts, and more. It's built using [Next.js](https://nextjs.org) and styled with [Tailwind CSS](https://tailwindcss.com). The site is designed to be fast, accessible, and easy to maintain.
 
-The website features an **AI-powered chatbot** that can answer questions about my professional background and experience, making it easy for visitors to learn more about my work and projects interactively.
+The website will feature an **AI-powered chatbot** (coming soon) that can answer questions about my professional background and experience, making it easy for visitors to learn more about my work and projects interactively.
 
 ## Screenshots
 
@@ -34,27 +34,29 @@ The website features an **AI-powered chatbot** that can answer questions about m
 
 ![Screenshot of the Projects page of Ronit.io, displaying a list of projects with descriptions and links](./screenshots/screenshot_projects.png)
 
-## AI Chatbot
+## AI Chatbot (Coming Soon) 🚀
 
-The website features an **AI-powered FAQ chatbot** that can answer questions about Ronit's professional background, projects, and experience.
+The website will feature an **AI-powered FAQ chatbot** that can answer questions about Ronit's professional background, projects, and experience.
 
-### Features:
+> **Note**: The chatbot is currently disabled and shows "Coming Soon" on hover. It will be enabled once the site is deployed to a platform that supports server-side API routes (like Vercel or Netlify) instead of GitHub Pages.
 
-- 🤖 **AI-Powered**: Uses Google Gemini API for intelligent responses
-- 🛡️ **Anti-Abuse Protection**: reCAPTCHA verification prevents spam and misuse
-- 📱 **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+### Planned Features:
+
+- 🤖 **AI-Powered**: Will use Google Gemini API for intelligent responses
+- 🛡️ **Anti-Abuse Protection**: reCAPTCHA verification to prevent spam and misuse
+- 📱 **Responsive Design**: Will work seamlessly on desktop, tablet, and mobile
 - 🎨 **Neobrutalism Theme**: Clean, minimal design matching the site aesthetic
 - ⚡ **Quick Actions**: Pre-built suggestions for common questions
 - 🔒 **Session-Based**: Verify once per session for smooth user experience
 
-### How it works:
+### How it will work:
 
-1. Click the "Ask Ronit AI" button (bottom-right on desktop, below "Get in Touch" on mobile)
+1. Click the "Ask Ronit AI" button (currently shows "Coming Soon")
 2. Complete reCAPTCHA verification (first-time only)
 3. Chat with the AI about Ronit's experience, projects, and professional background
 4. Get instant, contextual responses with suggested follow-up questions
 
-The chatbot operates in two modes:
+The chatbot will operate in two modes:
 
 - **With Gemini API**: Full AI capabilities with natural language understanding
 - **Without API**: Falls back to curated FAQ responses for basic questions
@@ -62,9 +64,9 @@ The chatbot operates in two modes:
 ### Security & Privacy:
 
 - reCAPTCHA verification prevents automated abuse and spam
-- No conversation data is stored or logged
-- API calls are rate-limited and monitored
-- All interactions are session-based (no persistent data)
+- No conversation data will be stored or logged
+- API calls will be rate-limited and monitored
+- All interactions will be session-based (no persistent data)
 
 ## Getting Started
 
@@ -113,11 +115,11 @@ pnpm dev
 
 This project requires several environment variables to function properly. Copy `.env.example` to `.env` and fill in your values:
 
-### Required for AI Chatbot:
+### Required for AI Chatbot (Coming Soon):
 
 - `GEMINI_API_KEY` - Google Gemini API key for AI responses
   - Get from: [Google AI Studio](https://makersuite.google.com/app/apikey)
-  - **Note**: Chatbot will fall back to FAQ mode without this
+  - **Note**: Chatbot is currently disabled; will be enabled after deployment to Vercel/Netlify
 
 ### Required for Contact Form & Anti-Abuse:
 
@@ -143,14 +145,14 @@ This project requires several environment variables to function properly. Copy `
 
 ### Troubleshooting:
 
-- **Chatbot not working**: Check `GEMINI_API_KEY` and ensure you have API quota
+- **Chatbot not working**: Currently disabled (Coming Soon) - will be enabled after deployment to Vercel/Netlify
 - **Contact form failing**: Verify `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` and EmailJS credentials
 - **Maps not loading**: Ensure `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` is valid
 - **reCAPTCHA issues**: Confirm domain is registered in Google reCAPTCHA admin
 
 ## Features
 
-- **🤖 AI Chatbot:** Interactive FAQ assistant powered by Google Gemini API with anti-abuse protection
+- **🤖 AI Chatbot (Coming Soon):** Interactive FAQ assistant powered by Google Gemini API with anti-abuse protection
 - **📧 Contact Form:** Secure contact form with reCAPTCHA verification and EmailJS integration
 - **🗺️ Interactive Maps:** Custom Mapbox integration with light/dark theme support
 - **📱 Responsive Design:** Optimized for desktop, tablet, and mobile devices
