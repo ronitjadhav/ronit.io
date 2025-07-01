@@ -20,6 +20,7 @@ import {
 } from 'react-icons/si';
 import Image from 'next/image';
 import { DialogComponent } from '@/components/getInTouchDialog';
+import ChatbotToggle from '@/components/ChatbotToggle';
 import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -196,6 +197,16 @@ const HeroSection = memo(function HeroSection() {
                 buttonClassName="h-10 text-base font-heading md:h-12 md:text-lg lg:h-14 lg:text-xl"
               />
             </motion.div>
+
+            {/* Chatbot button - positioned below Get in Touch on mobile, right corner on desktop */}
+            <motion.div
+              variants={buttonVariants}
+              initial="hidden"
+              animate="visible"
+              className="relative z-10 mt-4 lg:hidden"
+            >
+              <ChatbotToggle />
+            </motion.div>
           </div>
         </div>
 
@@ -241,6 +252,16 @@ const HeroSection = memo(function HeroSection() {
             </motion.div>
           ))}
         </Marquee>
+      </motion.div>
+
+      {/* Chatbot positioned above the marquee in bottom-right corner on desktop */}
+      <motion.div
+        variants={buttonVariants}
+        initial="hidden"
+        animate="visible"
+        className="hidden lg:block absolute bottom-20 right-4 z-10 xl:bottom-24"
+      >
+        <ChatbotToggle />
       </motion.div>
     </header>
   );
