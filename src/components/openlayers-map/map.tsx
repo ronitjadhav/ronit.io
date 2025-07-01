@@ -647,7 +647,7 @@ const MapComponent: React.FC = () => {
       {/* Radial gradient for the container to give a faded look */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
       
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-full mx-auto px-5 relative z-10">
         {/* Title Section */}
         <div
           className="w-full bg-bg border-4 border-black dark:bg-darkBg

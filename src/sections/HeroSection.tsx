@@ -115,7 +115,7 @@ const HeroSection = memo(function HeroSection() {
   };
 
   return (
-    <header className="relative flex min-h-screen w-full flex-col items-center justify-center bg-white dark:bg-black pt-20 md:pt-24 lg:pt-0 overflow-hidden pb-16 sm:pb-20">
+    <header className="relative flex min-h-[600px] max-h-[900px] h-screen w-full flex-col items-center justify-center bg-white dark:bg-black overflow-hidden pb-16 sm:pb-20">
       {/* Grid background */}
       <div
         className={cn(
@@ -129,7 +129,7 @@ const HeroSection = memo(function HeroSection() {
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
       
       <motion.div
-        className="mx-auto w-container max-w-full px-5 py-4 md:py-16 lg:py-0 text-left flex flex-col lg:flex-row items-center justify-between relative z-10"
+        className="mx-auto max-w-full px-5 py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-between relative z-10 flex-1"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -228,20 +228,19 @@ const HeroSection = memo(function HeroSection() {
           speed={70}
           loop={0}
           gradientWidth={50}
-        >
-          {skills.map((skill, id) => (
-            <motion.div
-              className="flex items-center mx-4 sm:mx-6 lg:mx-8"
-              key={id}
-              whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
-            >
-              <skill.Icon className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
-              <span className="text-lg sm:text-xl lg:text-2xl font-heading">
-                {skill.text}
-              </span>
-            </motion.div>
-          ))}
-        </Marquee>
+        >            {skills.map((skill, id) => (
+              <motion.div
+                className="flex items-center mx-4 sm:mx-6 lg:mx-8"
+                key={id}
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+              >
+                <skill.Icon className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
+                <span className="text-lg sm:text-xl lg:text-2xl font-heading">
+                  {skill.text}
+                </span>
+              </motion.div>
+            ))}
+          </Marquee>
       </motion.div>
     </header>
   );
