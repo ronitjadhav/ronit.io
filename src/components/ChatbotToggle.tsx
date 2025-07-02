@@ -3,16 +3,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Chatbot from '@/components/Chatbot';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTheme } from 'next-themes';
 import { createPortal } from 'react-dom';
 
 export default function ChatbotToggle() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showPulse, setShowPulse] = useState(true);
   const [isCaptchaVisible, setIsCaptchaVisible] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
   const [captchaError, setCaptchaError] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const captchaContainerRef = useRef<HTMLDivElement>(null);
@@ -23,15 +20,6 @@ export default function ChatbotToggle() {
   // Ensure component is mounted before rendering portal
   useEffect(() => {
     setIsMounted(true);
-  }, []);
-
-  // Hide pulse after 10 seconds or when chatbot is opened
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPulse(false);
-    }, 10000);
-
-    return () => clearTimeout(timer);
   }, []);
 
   // Handle captcha modal outside clicks
@@ -62,10 +50,8 @@ export default function ChatbotToggle() {
 
   const handleCaptchaChange = (value: string | null) => {
     if (value) {
-      setIsVerified(true);
       setIsCaptchaVisible(false);
       setIsOpen(true);
-      setShowPulse(false);
     }
     setCaptchaError(null);
   };
