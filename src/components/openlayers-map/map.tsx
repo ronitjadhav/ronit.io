@@ -16,6 +16,7 @@ import { Style, Icon } from 'ol/style';
 import { MapboxVectorLayer } from 'ol-mapbox-style';
 import { useTheme } from 'next-themes';
 import { Geometry } from 'ol/geom';
+import { timelineData as configTimelineData } from '@/data/site-config';
 
 // --- Interfaces ---
 interface TimelineEntry {
@@ -51,69 +52,8 @@ interface ZoomControlProps {
   onReset: () => void;
 }
 
-// --- Data ---
-const timelineData: TimelineEntry[] = [
-  {
-    id: 1,
-    title: 'Software Engineer @ Camptocamp',
-    date: 'Oct 2023 - Present',
-    description:
-      'Kicked off my journey into the open-source geospatial realm at Camptocamp, working with QGIS, Geonetwork-UI, developing custom GIS dashboards, and contributing to QGIS plugins. Diving into Docker, web GIS, and everything open-source!',
-    location: [13.427683548268714, 52.499819181584776],
-    locationName: 'Berlin, Germany (Hybrid)',
-    popupTitle: 'Camptocamp',
-    popupDescription:
-      'Became part of the open-source geospatial world, building geospatial solutions and exploring the power of QGIS.',
-  },
-  {
-    id: 2,
-    title: 'Software Engineering for Industrial Applications @ Hochschule Hof',
-    date: '2022 - 2024',
-    description:
-      'Diving deep into advanced programming, software engineering, and IoT, while focusing on Industry 4.0. Gaining expertise in applied cloud computing, non-relational databases, and spatial technologies to bridge software and the real world.',
-    location: [11.941048555260455, 50.325469419408954],
-    locationName: 'Hof, Germany',
-    popupTitle: 'Hochschule Hof',
-    popupDescription:
-      'Expanding my skillset in software engineering, focusing on Industry 4.0, cloud computing, and real-world applications.',
-  },
-  {
-    id: 3,
-    title: 'GIS Developer @ Gistec',
-    date: '2019 - 2022',
-    description:
-      'Joined Gistec to create custom geoprocessing tools, work with ArcGIS Enterprise, and develop web mapping apps with Esri tech. Basically, a geospatial problem-solver.',
-    location: [78.39265742273773, 17.489373568497363],
-    locationName: 'Hyderabad, India',
-    popupTitle: 'Gistec',
-    popupDescription:
-      'Built mapping tools and apps while mastering Python (ArcPy), ArcGIS Server, and the Esri stack.',
-  },
-  {
-    id: 4,
-    title: 'Student Intern @ University of Cologne',
-    date: '2019 - 2019',
-    description:
-      'Interned at the University of Cologne, applying GIS and spatial analysis to hydrological modeling with ArcSWAT for the Mula-Mutha river. Automated tasks using Python and supported geospatial research for water resources.',
-    location: [6.936245553273681, 50.92747527039799],
-    locationName: 'Cologne, Germany',
-    popupTitle: 'University of Cologne',
-    popupDescription:
-      "Leveraged GIS and spatial data to contribute to water flux modeling and the SWAT tool's application in India.",
-  },
-  {
-    id: 5,
-    title: 'M.Sc. in Geoinformatics: The Spatial Awakening',
-    date: '2017 - 2019',
-    description:
-      'Learned to wield GIS, remote sensing, and code like a spatial wizard. Maps and code—what could go wrong?',
-    location: [73.85215058309475, 18.460275536163216],
-    locationName: 'Pune, India',
-    popupTitle: 'BVIEER',
-    popupDescription:
-      'Where I discovered that geography is more than just knowing where places are.',
-  },
-];
+// --- Data (from centralized config) ---
+const timelineData: TimelineEntry[] = configTimelineData;
 
 // --- Helper Functions ---
 const createSVGMarker = (): string => {
@@ -164,25 +104,23 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ entry, isActive, onClick })
     onClick={onClick}
     className={`
       relative cursor-pointer w-full transition-colors duration-200 rounded-md
-      pl-16 pr-4 py-4
-      border-l-4 border-transparent       /* reserve 4px for the spine always */
-      ${
-        isActive
-          ? 'bg-yellow-100 dark:bg-gray-700' /* only background changes when active */
-          : 'hover:bg-gray-100 dark:hover:bg-gray-600'
-      }
+      pl-10 sm:pl-14 md:pl-16 pr-2 sm:pr-4 py-3 sm:py-4
+      border-l-4 border-transparent
+      ${isActive ? 'bg-yellow-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-600'}
     `}
   >
     {/* Minimalistic pointer only - vertical line is now in the container */}
-    <div className="absolute left-6 top-1/2 -translate-y-1/2 w-2 h-2 bg-black dark:bg-white rounded-full z-10"></div>
+    <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-2 h-2 bg-black dark:bg-white rounded-full z-10"></div>
 
     {/* Content Area */}
     <div className="flex-1">
-      <h3 className="font-black text-xl mb-1">{entry.title}</h3>
-      <p className="text-sm font-mono font-bold text-gray-600 dark:text-gray-400">{entry.date}</p>
-      <p className="mt-2 text-base leading-relaxed">{entry.description}</p>
-      <div className="mt-3 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-        <MapPin size={16} />
+      <h3 className="font-black text-base sm:text-lg md:text-xl mb-1">{entry.title}</h3>
+      <p className="text-xs sm:text-sm font-mono font-bold text-gray-600 dark:text-gray-400">
+        {entry.date}
+      </p>
+      <p className="mt-1.5 sm:mt-2 text-sm sm:text-base leading-relaxed">{entry.description}</p>
+      <div className="mt-2 sm:mt-3 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+        <MapPin size={14} className="sm:w-4 sm:h-4" />
         <span>{entry.locationName}</span>
       </div>
     </div>
@@ -194,18 +132,20 @@ const Popup: React.FC<PopupProps> = ({ title, description }) => (
     {/* Popup Box */}
     <div
       className="absolute bottom-2 left-1/2 -translate-x-1/2 z-50
-                    bg-white dark:bg-darkBg border-4 border-black dark:border-darkBorder
-                    p-4 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+                    bg-white dark:bg-darkBg border-2 sm:border-4 border-black dark:border-darkBorder
+                    p-2 sm:p-4 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
                     dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
-                    min-w-[250px] max-w-[350px]"
+                    min-w-[180px] sm:min-w-[250px] max-w-[250px] sm:max-w-[350px]"
     >
       <h2
-        className="font-black text-xl mb-2 border-b-4 border-black dark:border-darkBorder pb-2
+        className="font-black text-base sm:text-xl mb-1 sm:mb-2 border-b-2 sm:border-b-4 border-black dark:border-darkBorder pb-1 sm:pb-2
                        text-black dark:text-white"
       >
         {title}
       </h2>
-      <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">{description}</p>
+      <p className="text-sm sm:text-base leading-relaxed text-gray-700 dark:text-gray-300">
+        {description}
+      </p>
     </div>
     {/* Pointer triangle */}
     <div
@@ -220,20 +160,20 @@ const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, 
   <div
     className={`
         absolute top-0 left-0
-        h-full w-full sm:w-[420px]
+        h-full w-full sm:w-[380px] md:w-[420px]
         bg-white/95 dark:bg-darkBg/95 backdrop-blur-md
-        border-r-4 border-black dark:border-darkBorder
+        border-r-2 sm:border-r-4 border-black dark:border-darkBorder
         transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         z-20
         flex flex-col
         overflow-hidden
-        ${!isOpen ? 'invisible md:visible' : 'visible'} // Keep visible on md+ when closed
+        ${!isOpen ? 'invisible md:visible' : 'visible'}
     `}
     // Added md:visible when closed to prevent layout shift on desktop if it was fully hidden
   >
-    <div className="flex-none flex items-center justify-between p-4 border-b-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg">
-      <h2 className="font-black text-xl text-black dark:text-white">Journey Timeline</h2>
+    <div className="flex-none flex items-center justify-between p-3 sm:p-4 border-b-2 sm:border-b-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg">
+      <h2 className="font-black text-lg sm:text-xl text-black dark:text-white">Journey Timeline</h2>
       <button
         onClick={onClose}
         className="p-2 bg-black dark:bg-darkBg text-white dark:text-darkText hover:bg-gray-800 dark:hover:bg-black transition-colors rounded md:hidden" // Hide close button on desktop
@@ -243,12 +183,14 @@ const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, 
       </button>
     </div>
     {/* Scrollable area with continuous vertical line */}
-    <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar relative">{children}</div>
+    <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 custom-scrollbar relative">
+      {children}
+    </div>
   </div>
 );
 
 const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
-  <div className="absolute bottom-4 md:bottom-6 lg:top-4 right-4 flex flex-col gap-2 z-10">
+  <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 lg:top-4 right-2 sm:right-4 flex flex-col gap-1.5 sm:gap-2 z-10">
     {[
       { label: '+', direction: 'in' as const, aria: 'Zoom in' },
       { label: '−', direction: 'out' as const, aria: 'Zoom out' },
@@ -257,10 +199,10 @@ const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
         key={direction}
         onClick={() => onZoom(direction)}
         aria-label={aria}
-        className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-12 h-12 text-2xl font-black
-                         border-4 border-black dark:border-white rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
+        className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 text-lg sm:text-xl md:text-2xl font-black
+                         border-2 sm:border-4 border-black dark:border-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
                          hover:shadow-none hover:translate-x-1 hover:translate-y-1
-                         transition-all duration-200 "
+                         transition-all duration-200"
       >
         {label}
       </button>
@@ -269,12 +211,12 @@ const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
     <button
       onClick={onReset}
       aria-label="Reset to initial view"
-      className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-12 h-12 text-lg font-black
-                       border-4 border-black dark:border-white rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
+      className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 text-sm sm:text-base md:text-lg font-black
+                       border-2 sm:border-4 border-black dark:border-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
                        hover:shadow-none hover:translate-x-1 hover:translate-y-1
                        transition-all duration-200 flex items-center justify-center"
     >
-      <Home size={20} />
+      <Home size={16} className="sm:w-5 sm:h-5" />
     </button>
   </div>
 );
@@ -634,7 +576,7 @@ const MapComponent: React.FC = () => {
   // --- Render ---
   return (
     // Outer container for padding and background
-    <div className="relative p-4 sm:p-6 md:p-8 bg-white dark:bg-black py-16">
+    <div className="relative p-2 sm:p-4 md:p-6 lg:p-8 bg-white dark:bg-black py-8 sm:py-12 md:py-16">
       {/* Grid background */}
       <div
         className={cn(
@@ -647,24 +589,26 @@ const MapComponent: React.FC = () => {
       {/* Radial gradient for the container to give a faded look */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
-      <div className="max-w-full mx-auto px-5 relative z-10">
+      <div className="max-w-full mx-auto px-2 sm:px-5 relative z-10">
         {/* Title Section */}
         <div
-          className="w-full bg-bg border-4 border-black dark:bg-darkBg
-                            shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
-                            transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
-                            transition-all duration-300 p-6 mb-10"
+          className="w-full bg-bg border-2 sm:border-4 border-black dark:border-darkBorder dark:bg-darkBg
+                            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
+                            dark:shadow-[4px_4px_0px_0px_#555555] dark:sm:shadow-[8px_8px_0px_0px_#555555]
+                            transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_#555555]
+                            transition-all duration-300 p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 md:mb-10"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black dark:text-darkText text-center">
+          <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-black dark:text-darkText text-center">
             My Journey Through Time & Space 🗺️
           </h1>
         </div>
 
         {/* Map and Timeline Container */}
         <div
-          className="relative border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
-                            shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
-                            h-[550px] md:h-600px lg:h-[700px] xl:h-[750px] // Improved responsive height
+          className="relative border-2 sm:border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
+                            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
+                            dark:shadow-[4px_4px_0px_0px_#555555] dark:sm:shadow-[8px_8px_0px_0px_#555555]
+                            h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[750px]
                             overflow-hidden rounded-md" // Added slight rounding
         >
           {/* Map Container */}

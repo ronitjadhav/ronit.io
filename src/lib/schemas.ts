@@ -1,3 +1,5 @@
+import { siteConfig, siteUrls, seoConfig } from '@/data/site-config';
+
 export const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -6,19 +8,19 @@ export const breadcrumbSchema = {
       '@type': 'ListItem',
       position: 1,
       name: 'Home',
-      item: 'https://ronitjadhav.github.io/ronit.io',
+      item: siteUrls.baseUrl,
     },
     {
       '@type': 'ListItem',
       position: 2,
       name: 'Journey',
-      item: 'https://ronitjadhav.github.io/ronit.io#journey',
+      item: `${siteUrls.baseUrl}#journey`,
     },
     {
       '@type': 'ListItem',
       position: 3,
       name: 'Projects',
-      item: 'https://ronitjadhav.github.io/ronit.io#projects',
+      item: `${siteUrls.baseUrl}#projects`,
     },
   ],
 };
@@ -26,14 +28,14 @@ export const breadcrumbSchema = {
 export const portfolioSchema = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
-  name: 'Ronit Jadhav Portfolio',
+  name: seoConfig.siteName,
   description:
     'Professional portfolio showcasing geospatial development and software engineering projects',
   author: {
     '@type': 'Person',
-    name: 'Ronit Jadhav',
+    name: siteConfig.name,
   },
-  url: 'https://ronitjadhav.github.io/ronit.io',
+  url: siteUrls.baseUrl,
   dateCreated: '2024',
   inLanguage: 'en-US',
   audience: {

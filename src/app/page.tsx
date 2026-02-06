@@ -104,9 +104,15 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-darkBg p-4 md:p-6 lg:p-8">
+    <div className="relative min-h-screen bg-white dark:bg-darkBg p-2 sm:p-4 md:p-6 lg:p-8">
+      {/* Contour SVG background behind all sections */}
       <div
-        className={`relative mx-auto w-container max-w-full bg-white dark:bg-black md:border-4 md:border-black md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] lg:min-h-[calc(100vh-4rem)] ${
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-100"
+        style={{ backgroundImage: 'url(/landing-dark.svg)' }}
+        aria-hidden="true"
+      />
+      <div
+        className={`relative z-10 mx-auto w-container max-w-full bg-white dark:bg-black border-2 border-black dark:border-darkBorder shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#555555] sm:border-2 md:border-4 md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:md:shadow-[12px_12px_0px_0px_#555555] min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] lg:min-h-[calc(100vh-4rem)] ${
           isContentVisible ? 'opacity-100' : 'opacity-0'
         } transition-opacity duration-300`}
       >

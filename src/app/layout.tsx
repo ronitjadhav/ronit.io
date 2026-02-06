@@ -2,6 +2,7 @@ import { Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Metadata } from 'next';
+import { siteConfig, siteUrls, seoConfig, skills } from '@/data/site-config';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -13,38 +14,17 @@ const spaceGrotesk = Space_Grotesk({
 // Metadata needs to be exported this way in Next.js 13+
 export const metadata: Metadata = {
   title: {
-    default: 'Ronit Jadhav - Geospatial Developer & Software Engineer',
-    template: '%s | Ronit Jadhav',
+    default: seoConfig.title,
+    template: seoConfig.titleTemplate,
   },
-  description:
-    "Based in Germany, I'm a Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies. Expert in ArcGIS, QGIS, OpenLayers, Python, and JavaScript.",
-  keywords: [
-    'Geospatial Developer',
-    'Software Engineer',
-    'Germany',
-    'ArcGIS',
-    'QGIS',
-    'OpenLayers',
-    'Leaflet',
-    'Python',
-    'JavaScript',
-    'TypeScript',
-    'React',
-    'Next.js',
-    'PostGIS',
-    'GIS',
-    'Web Development',
-    'Data Visualization',
-    'Maps',
-    'Cartography',
-    'Remote Sensing',
-  ],
-  authors: [{ name: 'Ronit Jadhav', url: 'https://ronitjadhav.github.io' }],
-  creator: 'Ronit Jadhav',
-  publisher: 'Ronit Jadhav',
-  metadataBase: new URL('https://ronitjadhav.github.io'),
+  description: seoConfig.description,
+  keywords: seoConfig.keywords,
+  authors: [{ name: siteConfig.name, url: new URL(siteUrls.baseUrl).origin }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  metadataBase: new URL(new URL(siteUrls.baseUrl).origin),
   alternates: {
-    canonical: 'https://ronitjadhav.github.io/ronit.io',
+    canonical: siteUrls.baseUrl,
   },
   robots: {
     index: true,
@@ -60,33 +40,29 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    title: 'Ronit Jadhav - Geospatial Developer & Software Engineer',
-    description:
-      "Based in Germany, I'm a Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies. Expert in ArcGIS, QGIS, OpenLayers, Python, and JavaScript.",
-    url: 'https://ronitjadhav.github.io/ronit.io',
-    siteName: 'Ronit Jadhav Portfolio',
+    title: seoConfig.title,
+    description: seoConfig.description,
+    url: siteUrls.baseUrl,
+    siteName: seoConfig.siteName,
     images: [
       {
-        url: 'https://ronitjadhav.github.io/ronit.io/ronit.png',
+        url: seoConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Ronit Jadhav - Geospatial Developer & Software Engineer',
+        alt: seoConfig.title,
         type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ronit Jadhav - Geospatial Developer & Software Engineer',
-    description:
-      "Based in Germany, I'm a Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies.",
-    images: ['https://ronitjadhav.github.io/ronit.io/ronit.png'],
-    creator: '@ronitjadhav', // Add your Twitter handle if you have one
+    title: seoConfig.title,
+    description: seoConfig.description,
+    images: [seoConfig.ogImage],
+    creator: siteUrls.twitterHandle,
   },
   verification: {
-    google: 'your-google-verification-code', // Replace with actual code when available
-    // yandex: 'your-yandex-verification-code',
-    // yahoo: 'your-yahoo-verification-code',
+    google: seoConfig.googleVerification,
   },
   category: 'technology',
   classification: 'Portfolio Website',
@@ -100,42 +76,21 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: 'Ronit Jadhav',
-    jobTitle: 'Geospatial Developer & Software Engineer',
-    description:
-      'Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies.',
-    url: 'https://ronitjadhav.github.io/ronit.io',
-    image: 'https://ronitjadhav.github.io/ronit.io/ronit.png',
+    name: siteConfig.name,
+    jobTitle: siteConfig.jobTitle,
+    description: seoConfig.description,
+    url: siteUrls.baseUrl,
+    image: seoConfig.ogImage,
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'Germany',
+      addressCountry: siteConfig.location,
     },
-    knowsAbout: [
-      'Geospatial Development',
-      'Software Engineering',
-      'ArcGIS',
-      'QGIS',
-      'OpenLayers',
-      'Leaflet',
-      'Python',
-      'JavaScript',
-      'TypeScript',
-      'React',
-      'Next.js',
-      'PostGIS',
-      'Web Development',
-      'Data Visualization',
-      'Geographic Information Systems',
-    ],
+    knowsAbout: skills.map((s) => s.text),
     worksFor: {
       '@type': 'Organization',
       name: 'Freelance',
     },
-    sameAs: [
-      'https://github.com/ronitjadhav',
-      'https://linkedin.com/in/ronitjadhav',
-      // Add other social profiles as needed
-    ],
+    sameAs: [siteUrls.github, siteUrls.linkedin].filter(Boolean),
   };
 
   return (

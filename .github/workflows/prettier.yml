@@ -1,6 +1,6 @@
 # This workflow has been superseded by the comprehensive CI workflow (ci.yml)
 # which includes Prettier checks along with linting, type checking, and build verification.
-# 
+#
 # Keeping this file for reference, but it's no longer active.
 # To re-enable, remove the comments and update the trigger conditions.
 

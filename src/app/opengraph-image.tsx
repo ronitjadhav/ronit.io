@@ -1,9 +1,10 @@
 import { ImageResponse } from 'next/og';
+import { siteConfig } from '@/data/site-config';
 
 export const runtime = 'edge';
 export const dynamic = 'force-static';
 
-export const alt = 'Ronit Jadhav - Geospatial Developer';
+export const alt = `${siteConfig.name} - ${siteConfig.jobTitle}`;
 export const size = {
   width: 1200,
   height: 630,
@@ -48,7 +49,7 @@ export default async function Image() {
               margin: '0 0 20px 0',
             }}
           >
-            Ronit Jadhav
+            {siteConfig.name}
           </h1>
           <h2
             style={{
@@ -58,7 +59,7 @@ export default async function Image() {
               fontWeight: '400',
             }}
           >
-            Geospatial Developer & Software Engineer
+            {siteConfig.jobTitle}
           </h2>
           <p
             style={{

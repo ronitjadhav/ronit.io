@@ -1,10 +1,11 @@
 import { MetadataRoute } from 'next';
+import { siteUrls } from '@/data/site-config';
 
 // Required for static export
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://ronitjadhav.github.io/ronit.io';
+  const baseUrl = siteUrls.baseUrl;
 
   return [
     {
