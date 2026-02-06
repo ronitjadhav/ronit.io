@@ -264,6 +264,6 @@ Contributions are welcome! If you have suggestions, bug reports, or want to add 
 
 ## Contact
 
-You can reach me at [hi@ronit.io](mailto:hi@ronit.io)
+You can reach me through the **Get in Touch** button by visiting [ronit.io](https://ronit.io).
 
 Thank you for visiting my website!
