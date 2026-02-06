@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { siteConfig, siteUrls, seoConfig } from '@/data/site-config';
 
 interface SEOProps {
   title?: string;
@@ -14,39 +15,18 @@ interface SEOProps {
 }
 
 export function generateSEO({
-  title = 'Ronit Jadhav - Geospatial Developer & Software Engineer',
-  description = "Based in Germany, I'm a Geospatial Developer and Software Engineer specializing in maps, data visualization, and web technologies.",
+  title = seoConfig.title,
+  description = seoConfig.description,
   keywords = [],
-  image = 'https://ronitjadhav.github.io/ronit.io/ronit.png',
-  url = 'https://ronitjadhav.github.io/ronit.io',
+  image = seoConfig.ogImage,
+  url = siteUrls.baseUrl,
   type = 'website',
   publishedTime,
   modifiedTime,
   section,
   tags = [],
 }: SEOProps = {}): Metadata {
-  const baseKeywords = [
-    'Geospatial Developer',
-    'Software Engineer',
-    'Germany',
-    'ArcGIS',
-    'QGIS',
-    'OpenLayers',
-    'Leaflet',
-    'Python',
-    'JavaScript',
-    'TypeScript',
-    'React',
-    'Next.js',
-    'PostGIS',
-    'GIS',
-    'Web Development',
-    'Data Visualization',
-    'Maps',
-    'Cartography',
-  ];
-
-  const allKeywords = [...baseKeywords, ...keywords, ...tags];
+  const allKeywords = [...seoConfig.keywords, ...keywords, ...tags];
 
   return {
     title,
@@ -60,7 +40,7 @@ export function generateSEO({
       title,
       description,
       url,
-      siteName: 'Ronit Jadhav Portfolio',
+      siteName: seoConfig.siteName,
       images: [
         {
           url: image,
@@ -80,7 +60,7 @@ export function generateSEO({
       title,
       description,
       images: [image],
-      creator: '@ronitjadhav', // Update with actual Twitter handle
+      creator: siteUrls.twitterHandle,
     },
     robots: {
       index: true,
@@ -92,7 +72,7 @@ export function generateSEO({
 export function generateArticleSchema({
   headline,
   description,
-  author = 'Ronit Jadhav',
+  author = siteConfig.name,
   datePublished,
   dateModified,
   image,
@@ -152,7 +132,7 @@ export function generateProjectSchema({
     operatingSystem: 'Any',
     author: {
       '@type': 'Person',
-      name: 'Ronit Jadhav',
+      name: siteConfig.name,
     },
     dateCreated,
     keywords: technologies.join(', '),

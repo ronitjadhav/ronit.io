@@ -7,13 +7,16 @@ import { motion } from 'framer-motion';
 import ronitImage from '@/media/ronit.png';
 import {
   SiAngular,
+  SiApacheairflow,
   SiArcgis,
+  SiArgo,
   SiDocker,
   SiGit,
-  SiHtml5,
   SiJavascript,
+  SiKubernetes,
   SiLeaflet,
   SiOpenlayers,
+  SiOsgeo,
   SiPython,
   SiQgis,
   SiTypescript,
@@ -23,23 +26,34 @@ import { DialogComponent } from '@/components/getInTouchDialog';
 import ChatbotToggle from '@/components/ChatbotToggle';
 import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { siteConfig, siteUrls, skills as siteSkills } from '@/data/site-config';
+import { IconType } from 'react-icons';
+
+// Map icon names from config to actual icon components
+const iconMap: Record<string, IconType> = {
+  SiArcgis,
+  SiQgis,
+  SiOpenlayers,
+  SiLeaflet,
+  SiPython,
+  SiJavascript,
+  SiTypescript,
+  SiAngular,
+  SiPostgresql: BiLogoPostgresql,
+  BiLogoPostgresql,
+  SiGit,
+  SiDocker,
+  SiKubernetes,
+  SiArgo,
+  SiApacheairflow,
+  SiOsgeo,
+};
 
 // Memoize skills array to prevent re-creation on every render
-const skills = [
-  { text: 'ArcGIS', Icon: SiArcgis },
-  { text: 'QGIS', Icon: SiQgis },
-  { text: 'OpenLayers', Icon: SiOpenlayers },
-  { text: 'Leaflet', Icon: SiLeaflet },
-  { text: 'Python', Icon: SiPython },
-  { text: 'JavaScript', Icon: SiJavascript },
-  { text: 'HTML', Icon: SiHtml5 },
-  { text: 'TypeScript', Icon: SiTypescript },
-  { text: 'Angular', Icon: SiAngular },
-  { text: 'PostGIS', Icon: BiLogoPostgresql },
-  { text: 'Version Control', Icon: SiGit },
-  { text: 'Docker', Icon: SiDocker },
-  { text: 'Git', Icon: SiGit },
-];
+const skills = siteSkills.map((skill) => ({
+  text: skill.text,
+  Icon: iconMap[skill.icon] || SiGit,
+}));
 
 const HeroSection = memo(function HeroSection() {
   const containerVariants = {
@@ -116,7 +130,7 @@ const HeroSection = memo(function HeroSection() {
   };
 
   return (
-    <header className="relative flex min-h-[600px] max-h-[900px] h-screen w-full flex-col items-center justify-center bg-white dark:bg-black overflow-hidden pb-16 sm:pb-20">
+    <header className="relative flex min-h-[500px] sm:min-h-[600px] max-h-[900px] h-screen w-full flex-col items-center justify-center bg-white dark:bg-black overflow-hidden pb-14 sm:pb-16 md:pb-20">
       {/* Grid background */}
       <div
         className={cn(
@@ -130,7 +144,7 @@ const HeroSection = memo(function HeroSection() {
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
       <motion.div
-        className="mx-auto max-w-full px-5 py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-between relative z-10 flex-1"
+        className="mx-auto max-w-full px-3 sm:px-5 py-2 sm:py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-between relative z-10 flex-1"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -138,46 +152,47 @@ const HeroSection = memo(function HeroSection() {
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start lg:pl-8 order-2 lg:order-1">
           <motion.div variants={itemVariants}>
             <TypeAnimation
-              className="text-2xl sm:text-3xl font-bold text-[#2b55ff] dark:text-[#4b6fff] relative z-10"
-              sequence={['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000, 'Namaste!', 1000]}
+              className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2b55ff] dark:text-[#4b6fff] relative z-10"
+              sequence={siteConfig.greetings}
             />
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="text-2xl font-heading md:text-3xl lg:text-5xl mt-3 md:mt-5 text-center lg:text-left"
+            className="text-xl sm:text-2xl font-heading md:text-3xl lg:text-5xl mt-2 sm:mt-3 md:mt-5 text-center lg:text-left"
           >
-            I&#39;m Ronit Jadhav. 👋
+            I&#39;m {siteConfig.name}. 👋
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="my-5 md:my-6 lg:my-8 text-base md:text-lg lg:text-xl font-normal leading-relaxed lg:leading-relaxed text-center lg:text-left max-w-2xl lg:max-w-xl"
+            className="my-3 sm:my-5 md:my-6 lg:my-8 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed lg:leading-relaxed text-center lg:text-left max-w-2xl lg:max-w-xl"
           >
-            Based in Germany, I&#39;m a Geospatial Developer and a Software Engineer. I love to work
-            with maps, data, and code. I&#39;m passionate about open-source, web technologies, and
-            building cool stuff.
+            {siteConfig.bio}
           </motion.p>
 
           <div className="flex flex-col items-center lg:items-start mb-6 md:mb-8 w-full">
-            <motion.div className="flex space-x-6 mb-5 md:mb-6" variants={itemVariants}>
+            <motion.div
+              className="flex space-x-4 sm:space-x-6 mb-4 sm:mb-5 md:mb-6"
+              variants={itemVariants}
+            >
               <motion.a
-                href="https://github.com/ronitjadhav"
+                href={siteUrls.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 variants={socialIconVariants}
                 whileHover="hover"
               >
-                <FaGithub className="text-3xl md:text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
+                <FaGithub className="text-2xl sm:text-3xl md:text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
               </motion.a>
               <motion.a
-                href="https://www.linkedin.com/in/ronitjadhav/"
+                href={siteUrls.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 variants={socialIconVariants}
                 whileHover="hover"
               >
-                <FaLinkedin className="text-3xl md:text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
+                <FaLinkedin className="text-2xl sm:text-3xl md:text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
               </motion.a>
             </motion.div>
 
@@ -216,12 +231,12 @@ const HeroSection = memo(function HeroSection() {
         >
           <Image
             src={ronitImage}
-            alt="Ronit Jadhav"
+            alt={siteConfig.name}
             priority // This is above the fold, so load it immediately
             width={400}
             height={400}
-            sizes="(max-width: 768px) 280px, (max-width: 1024px) 350px, 450px"
-            className="w-auto h-auto max-w-[280px] sm:max-w-[320px] md:max-w-[350px] lg:max-w-[450px]"
+            sizes="(max-width: 480px) 180px, (max-width: 640px) 220px, (max-width: 768px) 280px, (max-width: 1024px) 350px, 450px"
+            className="w-auto h-auto max-w-[180px] sm:max-w-[220px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[450px]"
             placeholder="blur"
           />
         </motion.div>

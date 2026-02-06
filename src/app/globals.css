@@ -19,7 +19,13 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: 16px;
+  width: 10px;
+}
+
+@media (min-width: 640px) {
+  body::-webkit-scrollbar {
+    width: 16px;
+  }
 }
 
 body::-webkit-scrollbar-track {

@@ -11,6 +11,7 @@ Welcome to my personal website!
 - [AI Chatbot](#ai-chatbot)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
+- [Customization](#customization)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Deployment](#deployment)
@@ -115,33 +116,65 @@ pnpm dev
 
 This project requires several environment variables to function properly. Copy `.env.example` to `.env` and fill in your values:
 
-### Required for AI Chatbot (Coming Soon):
+```bash
+cp .env.example .env
+```
 
-- `GEMINI_API_KEY` - Google Gemini API key for AI responses
-  - Get from: [Google AI Studio](https://makersuite.google.com/app/apikey)
-  - **Note**: Chatbot is currently disabled; will be enabled after deployment to Vercel/Netlify
+### Google reCAPTCHA v2 (Contact Form & Chatbot verification)
 
-### Required for Contact Form & Anti-Abuse:
+| Variable                                | Description                                        |
+| --------------------------------------- | -------------------------------------------------- |
+| `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` | reCAPTCHA v2 site key ("I'm not a robot" checkbox) |
 
-- `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` - Google reCAPTCHA v2 site key
-  - Get from: [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin/create)
-- `NEXT_PUBLIC_EMAILJS_SERVICE_ID` - EmailJS service ID
-- `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` - EmailJS template ID
-- `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` - EmailJS public key
-  - Get from: [EmailJS Dashboard](https://www.emailjs.com/)
+- Get your keys at: [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin/create)
+- Choose **reCAPTCHA v2** → "I'm not a robot" Checkbox
+- Add `localhost` to your allowed domains for local development
 
-### Required for Map Components:
+### EmailJS (Contact Form)
 
-- `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` - Mapbox access token
-- `NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL` - Custom dark map style
-- `NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL` - Custom light map style
-  - Get from: [Mapbox Account](https://account.mapbox.com/access-tokens/)
+| Variable                          | Description                                              |
+| --------------------------------- | -------------------------------------------------------- |
+| `NEXT_PUBLIC_EMAILJS_SERVICE_ID`  | Your EmailJS service ID (e.g. `service_xxxxxxx`)         |
+| `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | Your EmailJS email template ID (e.g. `template_xxxxxxx`) |
+| `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`  | Your EmailJS account public key                          |
+
+- Sign up at: [EmailJS](https://www.emailjs.com/)
+- **Service ID**: Create an email service (Gmail, Outlook, etc.) → copy the Service ID
+- **Template ID**: Create an email template with variables `{{from_name}}`, `{{email}}`, `{{message}}` → copy the Template ID
+- **Public Key**: Go to Account → General → copy your Public Key
+
+### Mapbox (Interactive Map)
+
+| Variable                             | Description                                                                |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`    | Mapbox access token for map rendering                                      |
+| `NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL` | Mapbox style URL for light theme (e.g. `mapbox://styles/mapbox/light-v11`) |
+| `NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL`  | Mapbox style URL for dark theme (e.g. `mapbox://styles/mapbox/dark-v11`)   |
+
+- Get your access token at: [Mapbox Access Tokens](https://account.mapbox.com/access-tokens/)
+- Create custom map styles at: [Mapbox Studio](https://studio.mapbox.com/) or use Mapbox defaults
+
+### Google Gemini API (AI Chatbot - Coming Soon)
+
+| Variable         | Description                                                     |
+| ---------------- | --------------------------------------------------------------- |
+| `GEMINI_API_KEY` | Google Gemini API key (server-side only, not exposed to client) |
+
+- Get your API key at: [Google AI Studio](https://aistudio.google.com/app/apikey)
+- **Note**: This is a server-side variable — it will NOT be exposed to the browser
+- Chatbot is currently disabled; will be enabled after deployment to Vercel/Netlify
+
+### Optional (Development)
+
+| Variable  | Description                                                              |
+| --------- | ------------------------------------------------------------------------ |
+| `ANALYZE` | Set to `true` to enable webpack bundle analysis during production builds |
 
 ### Setup Instructions:
 
-1. Copy environment file: `cp .env.example .env`
+1. Copy the example file: `cp .env.example .env`
 2. Fill in your API keys and tokens
-3. Restart the development server
+3. Restart the development server (`npm run dev`)
 
 ### Troubleshooting:
 
@@ -149,6 +182,24 @@ This project requires several environment variables to function properly. Copy `
 - **Contact form failing**: Verify `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` and EmailJS credentials
 - **Maps not loading**: Ensure `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` is valid
 - **reCAPTCHA issues**: Confirm domain is registered in Google reCAPTCHA admin
+
+## Customization
+
+This project is designed to be easily **forked and customized** as your own portfolio. All personal data (name, bio, projects, skills, timeline, SEO, etc.) is centralized in a single configuration file:
+
+```
+src/data/site-config.ts
+```
+
+To make this portfolio your own:
+
+1. Fork this repository
+2. Edit `src/data/site-config.ts` with your personal data
+3. Replace images in `src/media/` with your own
+4. Update `.env` with your API keys
+5. Deploy!
+
+For a detailed step-by-step guide, see **[CUSTOMIZATION.md](./CUSTOMIZATION.md)**.
 
 ## Features
 

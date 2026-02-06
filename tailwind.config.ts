@@ -71,6 +71,7 @@ const config: Config = {
         marquee2: 'marquee2 15s linear infinite',
       },
       screens: {
+        xs: '480px',
         w900: { raw: '(max-width: 900px)' },
         w500: { raw: '(max-width: 500px)' },
       },

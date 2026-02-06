@@ -9,6 +9,7 @@ import Image from 'next/image';
 import ronitLogo from '@/media/ronitLogo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { navLinks } from '@/data/site-config';
 
 const scrolltoHash = function (element_id: string) {
   const element = document.getElementById(element_id);
@@ -65,15 +66,13 @@ const NavBar = () => {
       >
         <div
           className={twMerge(
-            `mx-auto mt-4 flex h-[80px] w-full max-w-full
-        items-center justify-between px-6 transition-transform
-        duration-300 ease-in-out bg-yellow-300 dark:bg-darkBg transform `,
+            `mx-auto mt-2 sm:mt-4 flex h-[60px] sm:h-[70px] md:h-[80px] w-full max-w-full
+        items-center justify-between px-3 sm:px-6 transition-transform
+        duration-300 ease-in-out bg-yellow-300 dark:bg-darkBg transform
+        border-[3px] border-black dark:border-darkBorder
+        shadow-[8px_8px_0px_0px_#000000] dark:shadow-[8px_8px_0px_0px_#555555]`,
             showNav ? 'translate-y-0' : '-translate-y-[calc(100%+40px)]',
           )}
-          style={{
-            border: '3px solid black',
-            boxShadow: '8px 8px 0px 0px #000000',
-          }}
         >
           {/* Logo */}
           <h1
@@ -112,11 +111,9 @@ const NavBar = () => {
             <ThemeSwitcher />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 bg-main dark:bg-main transform hover:-rotate-3 transition-transform"
-              style={{
-                border: '2px solid black',
-                boxShadow: '4px 4px 0px 0px #000000',
-              }}
+              className="p-2 bg-main dark:bg-main transform hover:-rotate-3 transition-transform
+                border-2 border-black dark:border-darkBorder
+                shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
             >
               <div className="w-6 h-0.5 bg-black mb-1"></div>
               <div className="w-6 h-0.5 bg-black mb-1"></div>
@@ -128,13 +125,11 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="fixed top-[120px] z-50 w-full px-4" ref={menuRef}>
+        <div className="fixed top-[90px] sm:top-[110px] z-50 w-full px-2 sm:px-4" ref={menuRef}>
           <div
-            className="w-full bg-white dark:bg-darkBg p-4 transform"
-            style={{
-              border: '3px solid black',
-              boxShadow: '8px 8px 0px 0px #000000',
-            }}
+            className="w-full bg-white dark:bg-darkBg p-4 transform
+              border-[3px] border-black dark:border-darkBorder
+              shadow-[8px_8px_0px_0px_#000000] dark:shadow-[8px_8px_0px_0px_#555555]"
           >
             <MobileNavLinks setIsOpen={setIsOpen} />
             <div className="mt-4 p-2">
@@ -153,16 +148,9 @@ const NavBar = () => {
 };
 
 function NavLinks() {
-  const links = [
-    { href: '#home', label: 'Home' },
-    { href: '#journey', label: 'Journey' },
-    { href: '#projects', label: 'Projects' },
-    { href: 'https://dev.to/ronitjadhav', label: 'Blogs' },
-  ];
-
   return (
     <>
-      {links.map((link) => (
+      {navLinks.map((link) => (
         <a
           key={link.href}
           href={link.href}
@@ -174,6 +162,7 @@ function NavLinks() {
             border: '2px solid transparent',
             borderRadius: '0px',
           }}
+          // Desktop nav link styles — border kept inline for transparent default
           onClick={(e) => {
             if (link.href.startsWith('#')) {
               e.preventDefault();
@@ -196,27 +185,18 @@ function MobileNavLinks({
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const links = [
-    { href: '#home', label: 'Home' },
-    { href: '#journey', label: 'Journey' },
-    { href: '#projects', label: 'Projects' },
-    { href: 'https://dev.to/ronitjadhav', label: 'Blogs' },
-  ];
-
   return (
     <div className="flex flex-col space-y-3">
-      {links.map((link) => (
+      {navLinks.map((link) => (
         <a
           key={link.href}
           href={link.href}
           target={link.href.startsWith('http') ? '_blank' : '_self'}
           rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
           className="p-2 text-center text-lg font-bold bg-yellow-300 dark:bg-darkBg
-                             transform hover:rotate-2 transition-transform"
-          style={{
-            border: '2px solid black',
-            boxShadow: '4px 4px 0px 0px #000000',
-          }}
+                             transform hover:rotate-2 transition-transform
+                             border-2 border-black dark:border-darkBorder
+                             shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
           onClick={(e) => {
             if (link.href.startsWith('#')) {
               e.preventDefault();

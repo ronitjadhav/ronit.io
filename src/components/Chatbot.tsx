@@ -150,12 +150,12 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="bg-white dark:bg-darkBg border-2 border-black dark:border-white shadow-light dark:shadow-dark rounded-lg flex flex-col animate-in slide-in-from-bottom-4 duration-300 h-full">
+    <div className="bg-white dark:bg-darkBg border-2 border-black dark:border-white shadow-light dark:shadow-dark rounded-lg flex flex-col animate-in slide-in-from-bottom-4 duration-300 h-full max-h-[80vh] sm:max-h-full">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b-2 border-black dark:border-white bg-purple-300 rounded-t-base">
+      <div className="flex items-center justify-between p-3 sm:p-4 border-b-2 border-black dark:border-white bg-purple-300 rounded-t-base">
         <div className="flex items-center gap-2">
-          <MessageCircle className="w-5 h-5 text-black" />
-          <h3 className="font-heading text-lg text-black font-bold">Ask Ronit AI</h3>
+          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+          <h3 className="font-heading text-base sm:text-lg text-black font-bold">Ask Ronit AI</h3>
         </div>
         <Button variant="neutral" size="icon" onClick={onClose} className="w-8 h-8">
           <X className="w-4 h-4" />
@@ -245,7 +245,7 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t-2 border-black dark:border-white">
+      <div className="p-3 sm:p-4 border-t-2 border-black dark:border-white">
         <div className="flex gap-2">
           <input
             ref={inputRef}
@@ -255,13 +255,13 @@ export default function Chatbot({ isOpen, onClose }: ChatbotProps) {
             onKeyPress={handleKeyPress}
             placeholder="Ask me about Ronit..."
             disabled={isLoading}
-            className="flex-1 p-3 border-2 border-black dark:border-white rounded-base bg-white dark:bg-secondaryBlack text-black dark:text-darkText focus:outline-none focus:ring-2 focus:ring-purple-300 disabled:opacity-50"
+            className="flex-1 p-2 sm:p-3 text-sm sm:text-base border-2 border-black dark:border-white rounded-base bg-white dark:bg-secondaryBlack text-black dark:text-darkText focus:outline-none focus:ring-2 focus:ring-purple-300 disabled:opacity-50"
           />
           <Button
             onClick={() => handleSendMessage()}
             disabled={!inputMessage.trim() || isLoading}
             size="icon"
-            className="w-12 h-12 bg-purple-300 hover:bg-purple-400 border-2 border-black dark:border-white"
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-300 hover:bg-purple-400 border-2 border-black dark:border-white"
           >
             <Send className="w-4 h-4" />
           </Button>

@@ -19,7 +19,7 @@ export function InfoCardsContainer({ cards }: { cards: InfoCardProps[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full py-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 w-full py-4 sm:py-6 md:py-10">
       {cards.map((card, idx) => (
         <div
           key={idx}
@@ -55,7 +55,7 @@ function InfoCard(props: InfoCardProps & { isHovered: boolean }) {
   const { title, description, imageSrc, imageAlt, bgColor, imagePosition } = props;
 
   const infoCardClass = twMerge(
-    'relative flex flex-col-reverse md:flex-row w-full max-w-[720px] min-h-[300px] items-center gap-6 md:gap-12 rounded-lg border-2 border-slate-900 px-6 py-8 shadow-light dark:shadow-gray-500 dark:border-gray-500 z-10',
+    'relative flex flex-col-reverse md:flex-row w-full max-w-[720px] min-h-[200px] sm:min-h-[250px] md:min-h-[300px] items-center gap-4 sm:gap-6 md:gap-12 rounded-lg border-2 border-slate-900 px-4 sm:px-6 py-5 sm:py-6 md:py-8 shadow-light dark:shadow-gray-500 dark:border-gray-500 z-10',
     imagePosition === 'left' ? 'md:flex-row-reverse' : 'md:flex-row',
     bgColor,
   );
@@ -121,7 +121,7 @@ function InfoCard(props: InfoCardProps & { isHovered: boolean }) {
         <Image
           src={imageSrc}
           alt={imageAlt}
-          className="object-contain w-48 h-48 md:w-64 md:h-64"
+          className="object-contain w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-64 lg:h-64"
           width={256}
           height={256}
         />
