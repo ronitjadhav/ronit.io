@@ -90,7 +90,10 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    // next-themes writes `class` and `color-scheme` onto <html> from a blocking
+    // script before React hydrates, so the DOM legitimately differs from the
+    // server markup here. Required by next-themes; scoped to this one element.
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
