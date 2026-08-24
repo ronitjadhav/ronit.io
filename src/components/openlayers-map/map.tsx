@@ -408,7 +408,7 @@ const MapComponent: React.FC = () => {
                             transition-all duration-300 p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 md:mb-10"
         >
           <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-black dark:text-darkText text-center">
-            My Journey Through Time &amp; Space 🗺️
+            My Journey Through Time &amp; Space
           </h2>
         </div>
 

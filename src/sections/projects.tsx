@@ -49,7 +49,7 @@ const ProjectsShowcase = () => {
                             transition-all duration-300 p-3 sm:p-4 md:p-6 mb-6 sm:mb-10"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-black text-center dark:text-darkText">
-            Projects I&#39;ve Worked On 🚀
+            Projects I&#39;ve Worked On
           </h2>
         </div>
 
