@@ -42,7 +42,7 @@ export const siteConfig = {
 
 export const siteUrls = {
   /** Base URL of the deployed site (no trailing slash) */
-  baseUrl: 'https://ronitjadhav.github.io/ronit.io',
+  baseUrl: 'https://ronit.io',
 
   /** Your GitHub profile URL */
   github: 'https://github.com/ronitjadhav',
@@ -123,7 +123,7 @@ export interface Project {
   /** Live demo URL */
   live: string;
   /**
-   * Image filename inside src/media/ (e.g. 'digipin.jpeg').
+   * Image filename inside src/media/ (e.g. 'digipin.webp').
    * You must also add the actual image file to that folder.
    * The component will import it dynamically.
    */
@@ -165,7 +165,7 @@ export const projects: Project[] = [
     tech: ['Python', 'Qt', 'QGIS'],
     github: 'https://github.com/qgis/QGIS-Hub-Plugin',
     live: 'https://plugins.qgis.org/plugins/qgis_hub_plugin/',
-    image: 'QGIS-Banner.jpg',
+    image: 'QGIS-Banner.webp',
   },
   {
     title: 'Openlayers Benchmark',
@@ -183,55 +183,7 @@ export const projects: Project[] = [
     tech: ['Openlayers', 'Next.js', 'TypeScript', 'Tailwind CSS'],
     github: 'https://github.com/ronitjadhav/digipin-openlayers',
     live: 'https://digipin.maplabs.tech',
-    image: 'digipin.jpeg',
-  },
-];
-
-// ---------------------
-// About Me Cards
-// ---------------------
-
-export interface AboutCard {
-  title: string;
-  description: string;
-  /** SVG filename inside src/media/svgs/ (e.g. 'Character1.svg') */
-  image: string;
-  imageAlt: string;
-  imagePosition: 'left' | 'right';
-}
-
-export const aboutCards: AboutCard[] = [
-  {
-    title: 'About Me',
-    description:
-      "I'm currently working as a Geospatial Software Engineer at Camptocamp, where I specialize in geospatial software development.",
-    image: 'Character1.svg',
-    imageAlt: 'Character1',
-    imagePosition: 'right',
-  },
-  {
-    title: 'Geospatial Development',
-    description:
-      'I thrive on continuously learning various geospatial technologies, from GIS software to spatial databases, to shape ideas into functional applications.',
-    image: 'Character2.svg',
-    imageAlt: 'Character2',
-    imagePosition: 'left',
-  },
-  {
-    title: 'Interest in Technology',
-    description:
-      'Technology has fascinated me since I was young, especially the joy of building things. Combining tech with hands-on creation has always felt just right for me.',
-    image: 'Character3.svg',
-    imageAlt: 'Character3',
-    imagePosition: 'right',
-  },
-  {
-    title: 'Other Hobbies',
-    description:
-      'Here are some of my other passions: I like to dance, play chess, love watching F1, and am a Potterhead.',
-    image: 'Character4.svg',
-    imageAlt: 'Character4',
-    imagePosition: 'left',
+    image: 'digipin.webp',
   },
 ];
 
@@ -353,13 +305,13 @@ export const seoConfig = {
   ],
 
   /** Open Graph image URL (absolute URL) */
-  ogImage: 'https://ronitjadhav.github.io/ronit.io/ronit.png',
+  ogImage: `${siteUrls.baseUrl}/ronit.png`,
 
   /** Site name for Open Graph */
   siteName: 'Ronit Jadhav Portfolio',
 
-  /** Google Verification code (optional) */
-  googleVerification: 'your-google-verification-code',
+  /** Google Verification code (optional — leave empty to omit the meta tag) */
+  googleVerification: '',
 };
 
 // ---------------------

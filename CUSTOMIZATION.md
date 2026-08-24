@@ -118,26 +118,6 @@ export const projects = [
    };
    ```
 
-### About Cards (`aboutCards`)
-
-```ts
-export const aboutCards = [
-  {
-    title: 'About Me',
-    description: 'Your description...',
-    image: 'Character1.svg', // filename in src/media/svgs/
-    imageAlt: 'Character1',
-    imagePosition: 'right', // 'left' or 'right'
-  },
-];
-```
-
-**Replacing character images:**
-
-1. Add your SVG files to `src/media/svgs/`
-2. Update the `image` field in config
-3. In `src/sections/about.tsx`, import your SVG and add it to the `imageMap` object
-
 ### Journey Timeline (`timelineData`)
 
 ```ts
@@ -193,13 +173,12 @@ The `{name}` placeholder is replaced with `siteConfig.name` at runtime.
 
 ## Images
 
-| Image               | Location                  | Purpose                    |
-| ------------------- | ------------------------- | -------------------------- |
-| Profile photo       | `src/media/ronit.png`     | Hero section, preview card |
-| Logo                | `src/media/ronitLogo.png` | Navbar brand               |
-| Project screenshots | `src/media/*.{jpg,png}`   | Project cards              |
-| Character SVGs      | `src/media/svgs/*.svg`    | About section cards        |
-| Background SVG      | `public/landing-dark.svg` | Page background pattern    |
+| Image               | Location                   | Purpose                 |
+| ------------------- | -------------------------- | ----------------------- |
+| Profile photo       | `src/media/ronit.webp`     | Hero section            |
+| Logo                | `src/media/ronitLogo.webp` | Navbar brand            |
+| Project screenshots | `src/media/*.webp`         | Project cards           |
+| Background SVG      | `public/landing-dark.svg`  | Page background pattern |
 
 Replace these files with your own (keep the same filenames, or update the imports).
 
@@ -222,15 +201,8 @@ cp .env.example .env
 | `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`       | For journey map  | Mapbox access token    |
 | `NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL`    | For journey map  | Mapbox light style URL |
 | `NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL`     | For journey map  | Mapbox dark style URL  |
-| `GEMINI_API_KEY`                        | For chatbot      | Google Gemini API key  |
 
 See the [README](./README.md#environment-variables) for detailed setup instructions for each service.
-
----
-
-## FAQ Data (`src/data/faq-data.json`)
-
-The chatbot uses this file for fallback FAQ responses. Update the questions, answers, personality, and context to match your background.
 
 ---
 
@@ -240,9 +212,7 @@ The main page layout is in `src/app/page.tsx`. Sections are imported and rendere
 
 ```tsx
 <HeroSection />
-<MapComponent />        {/* Journey map */}
-<About />
-<Features />
+<MapComponent />        {/* Journey map, client-only */}
 <ProjectsShowcase />
 <Footer />
 ```

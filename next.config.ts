@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
       '@fortawesome/react-fontawesome',
       '@fortawesome/free-solid-svg-icons',
       'react-icons',
-      'framer-motion',
     ],
   },
 

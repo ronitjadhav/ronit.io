@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { motion } from 'framer-motion';
 import { ThemeSwitcher } from './theme-switcher';
 import { DialogComponent } from './getInTouchDialog';
 import Image from 'next/image';
-import ronitLogo from '@/media/ronitLogo.png';
+import ronitLogo from '@/media/ronitLogo.webp';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { navLinks } from '@/data/site-config';
@@ -48,22 +47,9 @@ const NavBar = () => {
     };
   }, [lastScrollY]);
 
-  const navbarVariants = {
-    hidden: { y: '-120%' },
-    visible: {
-      y: 0,
-      transition: { duration: 0.5, delay: 0.2 },
-    },
-  };
-
   return (
     <>
-      <motion.nav
-        className="sticky top-4 z-50 w-full px-4"
-        variants={navbarVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <nav className="sticky top-4 z-50 w-full px-4 animate-in slide-in-from-top-[120%] duration-500 fill-mode-both delay-200">
         <div
           className={twMerge(
             `mx-auto mt-2 sm:mt-4 flex h-[60px] sm:h-[70px] md:h-[80px] w-full max-w-full
@@ -75,11 +61,8 @@ const NavBar = () => {
           )}
         >
           {/* Logo */}
-          <h1
-            className="text-3xl font-black font-Space_Grotesk tracking-tight
-    text-black dark:text-white transform -rotate-2 hover:rotate-0 transition-transform
-    duration-300 min-w-[80px] xs:min-w-[100px] lg:text-5xl"
-          >
+          {/* ponytail: a div, not an h1 — the page's only h1 belongs to the hero */}
+          <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 min-w-[80px] xs:min-w-[100px]">
             <a
               href="#home"
               onClick={(e) => {
@@ -87,9 +70,9 @@ const NavBar = () => {
                 scrolltoHash('home');
               }}
             >
-              <Image src={ronitLogo} alt="Ronit Logo" width={70} height={70} />
+              <Image src={ronitLogo} alt="Ronit Jadhav — back to top" width={70} height={70} />
             </a>
-          </h1>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center text-base lg:text-lg space-x-6">
@@ -121,7 +104,7 @@ const NavBar = () => {
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Mobile Menu */}
       {isOpen && (

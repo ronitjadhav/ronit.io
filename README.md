@@ -8,7 +8,6 @@ Welcome to my personal website!
 
 - [About](#about)
 - [Screenshots](#screenshots)
-- [AI Chatbot](#ai-chatbot)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
 - [Customization](#customization)
@@ -22,8 +21,6 @@ Welcome to my personal website!
 
 **ronit.io** is my personal website where I share my projects, blog posts, and more. It's built using [Next.js](https://nextjs.org) and styled with [Tailwind CSS](https://tailwindcss.com). The site is designed to be fast, accessible, and easy to maintain.
 
-The website will feature an **AI-powered chatbot** (coming soon) that can answer questions about my professional background and experience, making it easy for visitors to learn more about my work and projects interactively.
-
 ## Screenshots
 
 <!-- If you have screenshots, add them here -->
@@ -34,40 +31,6 @@ The website will feature an **AI-powered chatbot** (coming soon) that can answer
 ![Screenshot of the Journey page of Ronit.io, showcasing the timeline of personal milestones](./screenshots/screenshot_journey.png)
 
 ![Screenshot of the Projects page of Ronit.io, displaying a list of projects with descriptions and links](./screenshots/screenshot_projects.png)
-
-## AI Chatbot (Coming Soon) 🚀
-
-The website will feature an **AI-powered FAQ chatbot** that can answer questions about Ronit's professional background, projects, and experience.
-
-> **Note**: The chatbot is currently disabled and shows "Coming Soon" on hover. It will be enabled once the site is deployed to a platform that supports server-side API routes (like Vercel or Netlify) instead of GitHub Pages.
-
-### Planned Features:
-
-- 🤖 **AI-Powered**: Will use Google Gemini API for intelligent responses
-- 🛡️ **Anti-Abuse Protection**: reCAPTCHA verification to prevent spam and misuse
-- 📱 **Responsive Design**: Will work seamlessly on desktop, tablet, and mobile
-- 🎨 **Neobrutalism Theme**: Clean, minimal design matching the site aesthetic
-- ⚡ **Quick Actions**: Pre-built suggestions for common questions
-- 🔒 **Session-Based**: Verify once per session for smooth user experience
-
-### How it will work:
-
-1. Click the "Ask Ronit AI" button (currently shows "Coming Soon")
-2. Complete reCAPTCHA verification (first-time only)
-3. Chat with the AI about Ronit's experience, projects, and professional background
-4. Get instant, contextual responses with suggested follow-up questions
-
-The chatbot will operate in two modes:
-
-- **With Gemini API**: Full AI capabilities with natural language understanding
-- **Without API**: Falls back to curated FAQ responses for basic questions
-
-### Security & Privacy:
-
-- reCAPTCHA verification prevents automated abuse and spam
-- No conversation data will be stored or logged
-- API calls will be rate-limited and monitored
-- All interactions will be session-based (no persistent data)
 
 ## Getting Started
 
@@ -120,7 +83,7 @@ This project requires several environment variables to function properly. Copy `
 cp .env.example .env
 ```
 
-### Google reCAPTCHA v2 (Contact Form & Chatbot verification)
+### Google reCAPTCHA v2 (Contact Form)
 
 | Variable                                | Description                                        |
 | --------------------------------------- | -------------------------------------------------- |
@@ -154,16 +117,6 @@ cp .env.example .env
 - Get your access token at: [Mapbox Access Tokens](https://account.mapbox.com/access-tokens/)
 - Create custom map styles at: [Mapbox Studio](https://studio.mapbox.com/) or use Mapbox defaults
 
-### Google Gemini API (AI Chatbot - Coming Soon)
-
-| Variable         | Description                                                     |
-| ---------------- | --------------------------------------------------------------- |
-| `GEMINI_API_KEY` | Google Gemini API key (server-side only, not exposed to client) |
-
-- Get your API key at: [Google AI Studio](https://aistudio.google.com/app/apikey)
-- **Note**: This is a server-side variable — it will NOT be exposed to the browser
-- Chatbot is currently disabled; will be enabled after deployment to Vercel/Netlify
-
 ### Optional (Development)
 
 | Variable  | Description                                                              |
@@ -178,7 +131,6 @@ cp .env.example .env
 
 ### Troubleshooting:
 
-- **Chatbot not working**: Currently disabled (Coming Soon) - will be enabled after deployment to Vercel/Netlify
 - **Contact form failing**: Verify `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` and EmailJS credentials
 - **Maps not loading**: Ensure `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` is valid
 - **reCAPTCHA issues**: Confirm domain is registered in Google reCAPTCHA admin
@@ -203,7 +155,6 @@ For a detailed step-by-step guide, see **[CUSTOMIZATION.md](./CUSTOMIZATION.md)*
 
 ## Features
 
-- **🤖 AI Chatbot (Coming Soon):** Interactive FAQ assistant powered by Google Gemini API with anti-abuse protection
 - **📧 Contact Form:** Secure contact form with reCAPTCHA verification and EmailJS integration
 - **🗺️ Interactive Maps:** Custom Mapbox integration with light/dark theme support
 - **📱 Responsive Design:** Optimized for desktop, tablet, and mobile devices
@@ -219,7 +170,6 @@ For a detailed step-by-step guide, see **[CUSTOMIZATION.md](./CUSTOMIZATION.md)*
 - **Next.js 15:** React framework with App Router and Turbopack for fast development
 - **TypeScript:** Strongly typed JavaScript for better development experience
 - **Tailwind CSS:** Utility-first CSS framework for rapid UI development
-- **Google Gemini API:** Advanced AI for intelligent chatbot responses
 - **Mapbox:** Interactive maps with custom styling
 - **EmailJS:** Client-side email sending for contact forms
 - **Google reCAPTCHA:** Bot protection and spam prevention
@@ -248,8 +198,8 @@ npm start
 ### Important Notes:
 
 - All `NEXT_PUBLIC_*` variables are exposed to the client-side
-- Keep server-side variables (like `GEMINI_API_KEY`) secure and never expose them
-- Test all features (chatbot, contact form, maps) after deployment
+- Keep any server-side variables you add secure and never expose them
+- Test all features (contact form, maps) after deployment
 - Ensure your domain is registered with Google reCAPTCHA for production
 
 ## Contributing

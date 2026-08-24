@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink, Github } from 'lucide-react';
-import digipinImage from '../media/digipin.jpeg';
-import qgisHubImage from '../media/QGIS-Banner.jpg';
+import digipinImage from '../media/digipin.webp';
+import qgisHubImage from '../media/QGIS-Banner.webp';
 import olBenchImage from '../media/olBench.webp';
 import geonetworkUiImage from '../media/geonetwork-ui.webp';
 import thinkhazardImage from '../media/thinkhazard.webp';
@@ -12,8 +12,8 @@ import { projects as projectsConfig } from '@/data/site-config';
 
 // Map image filenames from config to actual imported images
 const imageMap: Record<string, StaticImageData> = {
-  'digipin.jpeg': digipinImage,
-  'QGIS-Banner.jpg': qgisHubImage,
+  'digipin.webp': digipinImage,
+  'QGIS-Banner.webp': qgisHubImage,
   'olBench.webp': olBenchImage,
   'geonetwork-ui.webp': geonetworkUiImage,
   'thinkhazard.webp': thinkhazardImage,
@@ -48,9 +48,9 @@ const ProjectsShowcase = () => {
                             transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_#555555]
                             transition-all duration-300 p-3 sm:p-4 md:p-6 mb-6 sm:mb-10"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-black text-center dark:text-darkText">
-            Projects I&#39;ve Worked On 🚀
-          </h1>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-black text-center dark:text-darkText">
+            Projects I&#39;ve Worked On
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">

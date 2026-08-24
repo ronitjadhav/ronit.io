@@ -73,75 +73,85 @@ export function ReCaptchaDialog({
   }, [isCaptchaVisible]);
 
   const handleShowCaptcha = () => {
+    // With no site key there is nothing to verify, so go straight to the form.
+    // Rendering <ReCAPTCHA sitekey=""> makes Google's script throw during render,
+    // which unmounts the whole React tree — one unset env var blanks the site.
+    if (!googleReCaptchaKey) {
+      onVerified();
+      return;
+    }
     setIsCaptchaVisible(true);
     setCaptchaError(null);
   };
 
   // Modal content
-  const modalContent = isCaptchaVisible ? (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        margin: 0,
-        padding: 0,
-      }}
-    >
+  const modalContent =
+    isCaptchaVisible && googleReCaptchaKey ? (
       <div
-        ref={captchaContainerRef}
-        className="relative w-[calc(100vw-2rem)] max-w-md mx-auto my-auto rounded-base border-2 border-border dark:border-darkBorder bg-white dark:bg-darkBg shadow-light dark:shadow-dark"
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm"
         style={{
-          animation: 'fadeInScale 0.2s ease-out',
-          transformOrigin: 'center center',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          margin: 0,
+          padding: 0,
         }}
       >
-        <div className="flex flex-col p-4 sm:p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-heading text-text dark:text-darkText">
-              Verify you&apos;re human
-            </h3>
-            <button
-              onClick={handleClose}
-              className="text-text dark:text-darkText opacity-70 hover:opacity-100 transition-all hover:rotate-90 rounded-sm p-1"
-            >
-              <X className="h-5 w-5" />
-              <span className="sr-only">Close</span>
-            </button>
-          </div>
-
-          <div className="relative flex justify-center items-center min-h-[78px]">
-            <div className="recaptcha-container flex justify-center">
-              <ReCAPTCHA
-                sitekey={googleReCaptchaKey || ''}
-                onChange={handleCaptchaChange}
-                onError={handleCaptchaError}
-                size="normal"
-                theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
-                onExpired={() => setCaptchaError('CAPTCHA expired. Please try again.')}
-              />
+        <div
+          ref={captchaContainerRef}
+          className="relative w-[calc(100vw-2rem)] max-w-md mx-auto my-auto rounded-base border-2 border-border dark:border-darkBorder bg-white dark:bg-darkBg shadow-light dark:shadow-dark"
+          style={{
+            animation: 'fadeInScale 0.2s ease-out',
+            transformOrigin: 'center center',
+          }}
+        >
+          <div className="flex flex-col p-4 sm:p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-heading text-text dark:text-darkText">
+                Verify you&apos;re human
+              </h3>
+              <button
+                onClick={handleClose}
+                className="text-text dark:text-darkText opacity-70 hover:opacity-100 transition-all hover:rotate-90 rounded-sm p-1"
+              >
+                <X className="h-5 w-5" />
+                <span className="sr-only">Close</span>
+              </button>
             </div>
-          </div>
 
-          {captchaError && <p className="text-red-500 text-sm text-center mt-3">{captchaError}</p>}
+            <div className="relative flex justify-center items-center min-h-[78px]">
+              <div className="recaptcha-container flex justify-center">
+                <ReCAPTCHA
+                  sitekey={googleReCaptchaKey}
+                  onChange={handleCaptchaChange}
+                  onError={handleCaptchaError}
+                  size="normal"
+                  theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+                  onExpired={() => setCaptchaError('CAPTCHA expired. Please try again.')}
+                />
+              </div>
+            </div>
 
-          <div className="mt-5 flex justify-end">
-            <Button
-              variant="neutral"
-              size="default"
-              onClick={handleClose}
-              className="transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY"
-            >
-              Cancel
-            </Button>
+            {captchaError && (
+              <p className="text-red-500 text-sm text-center mt-3">{captchaError}</p>
+            )}
+
+            <div className="mt-5 flex justify-end">
+              <Button
+                variant="neutral"
+                size="default"
+                onClick={handleClose}
+                className="transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  ) : null;
+    ) : null;
 
   return (
     <>
