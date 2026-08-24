@@ -8,7 +8,6 @@ Welcome to my personal website!
 
 - [About](#about)
 - [Screenshots](#screenshots)
-- [AI Chatbot](#ai-chatbot-planned-)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
 - [Customization](#customization)
@@ -32,15 +31,6 @@ Welcome to my personal website!
 ![Screenshot of the Journey page of Ronit.io, showcasing the timeline of personal milestones](./screenshots/screenshot_journey.png)
 
 ![Screenshot of the Projects page of Ronit.io, displaying a list of projects with descriptions and links](./screenshots/screenshot_projects.png)
-
-## AI Chatbot (Planned) 🚀
-
-The hero has an **"Ask Ronit AI"** button that is disabled and shows "Coming Soon" on hover — a
-placeholder for a planned FAQ chatbot. There is no implementation behind it: this site is a static
-export (GitHub Pages), which cannot run the server-side API route a chatbot needs. An earlier
-Gemini-based prototype lived in `src/app/api/chatbot/` and `src/components/Chatbot.tsx`; it was
-removed because it could never run on this host. Recover it from git history if you move to a
-platform with server functions (Vercel, Netlify, Cloudflare).
 
 ## Getting Started
 
@@ -141,7 +131,6 @@ cp .env.example .env
 
 ### Troubleshooting:
 
-- **"Ask Ronit AI" does nothing**: intentional — the button is a disabled placeholder (see [AI Chatbot](#ai-chatbot-planned-))
 - **Contact form failing**: Verify `NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY` and EmailJS credentials
 - **Maps not loading**: Ensure `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` is valid
 - **reCAPTCHA issues**: Confirm domain is registered in Google reCAPTCHA admin
