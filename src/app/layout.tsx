@@ -6,9 +6,7 @@ import { siteConfig, siteUrls, seoConfig, skills } from '@/data/site-config';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  display: 'swap', // Better font loading performance
-  preload: true,
-  variable: '--font-space-grotesk',
+  display: 'swap',
 });
 
 // Metadata needs to be exported this way in Next.js 13+
@@ -19,10 +17,10 @@ export const metadata: Metadata = {
   },
   description: seoConfig.description,
   keywords: seoConfig.keywords,
-  authors: [{ name: siteConfig.name, url: new URL(siteUrls.baseUrl).origin }],
+  authors: [{ name: siteConfig.name, url: siteUrls.baseUrl }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
-  metadataBase: new URL(new URL(siteUrls.baseUrl).origin),
+  metadataBase: new URL(siteUrls.baseUrl),
   alternates: {
     canonical: siteUrls.baseUrl,
   },
@@ -61,9 +59,7 @@ export const metadata: Metadata = {
     images: [seoConfig.ogImage],
     creator: siteUrls.twitterHandle,
   },
-  verification: {
-    google: seoConfig.googleVerification,
-  },
+  verification: seoConfig.googleVerification ? { google: seoConfig.googleVerification } : undefined,
   category: 'technology',
   classification: 'Portfolio Website',
 };
