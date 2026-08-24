@@ -64,11 +64,21 @@ const Footer = () => {
             </h3>
             <div className="flex flex-col items-center lg:items-start mb-4 sm:mb-6 md:mb-8">
               <div className="flex space-x-4 sm:space-x-6 mb-4 sm:mb-6">
-                <a href={siteUrls.github} target="_blank" rel="noopener noreferrer">
-                  <FaGithub className="text-2xl sm:text-3xl md:text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
+                <a
+                  href={siteUrls.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub profile"
+                >
+                  <FaGithub className="text-2xl sm:text-3xl md:text-4xl text-gray-800 dark:text-white hover:opacity-70 transition-opacity duration-300" />
                 </a>
-                <a href={siteUrls.linkedin} target="_blank" rel="noopener noreferrer">
-                  <FaLinkedin className="text-2xl sm:text-3xl md:text-4xl text-gray-800 dark:text-white hover:text-cerulean-400 transition-colors duration-300" />
+                <a
+                  href={siteUrls.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn profile"
+                >
+                  <FaLinkedin className="text-2xl sm:text-3xl md:text-4xl text-gray-800 dark:text-white hover:opacity-70 transition-opacity duration-300" />
                 </a>
               </div>
             </div>

@@ -55,6 +55,20 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        // Splash overlay: hold, fade, then take itself out of the layout for good.
+        splash: {
+          '0%, 60%': { opacity: '1', visibility: 'visible' },
+          '100%': { opacity: '0', visibility: 'hidden' },
+        },
+        'spin-slow': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(0deg) scale(1.1)' },
+          '25%': { transform: 'rotate(-10deg) scale(1.1)' },
+          '75%': { transform: 'rotate(10deg) scale(1.1)' },
+        },
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-100%)' },
@@ -67,6 +81,9 @@ const config: Config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        splash: 'splash 700ms ease-in forwards',
+        'spin-slow': 'spin-slow 3s linear infinite',
+        wiggle: 'wiggle 0.4s ease-in-out',
         marquee: 'marquee 15s linear infinite',
         marquee2: 'marquee2 15s linear infinite',
       },

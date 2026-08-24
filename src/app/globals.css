@@ -42,10 +42,21 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
-/* GPU acceleration for better performance */
-.gpu-accelerate {
-  transform: translateZ(0);
-  will-change: transform;
+/* Respect the OS "reduce motion" setting: no entrance animations, frozen marquee. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .rfm-marquee,
+  .rfm-initial-child-container {
+    animation-play-state: paused !important;
+  }
 }
 
 /* Add consistent section spacing */
