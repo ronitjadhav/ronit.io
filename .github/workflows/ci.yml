@@ -46,6 +46,11 @@ jobs:
         run: npm run lint
         continue-on-error: false
 
+      # next-env.d.ts is gitignored and supplies the image/route module
+      # declarations, so it has to exist before tsc runs.
+      - name: Generate Next.js types
+        run: ${{ steps.detect-package-manager.outputs.runner }} next typegen
+
       - name: Run TypeScript type check
         run: ${{ steps.detect-package-manager.outputs.runner }} tsc --noEmit
         continue-on-error: false
