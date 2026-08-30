@@ -103,8 +103,8 @@ export default function RootLayout({
       <body className={spaceGrotesk.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
+          defaultTheme={siteConfig.defaultTheme}
+          enableSystem={siteConfig.defaultTheme === 'system'}
           disableTransitionOnChange
         >
           {children}

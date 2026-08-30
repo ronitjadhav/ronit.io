@@ -7,7 +7,7 @@ import * as React from 'react';
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
-    <NextThemesProvider {...props} defaultTheme="light" enableSystem={false}>
+    <NextThemesProvider defaultTheme="light" enableSystem={false} {...props}>
       {children}
     </NextThemesProvider>
   );
