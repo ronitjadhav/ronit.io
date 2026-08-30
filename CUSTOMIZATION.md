@@ -27,17 +27,19 @@ export const siteConfig = {
   location: 'Your Country',
   email: 'you@example.com',
   greetings: ['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000],
+  defaultTheme: 'light',
 };
 ```
 
-| Field       | Where it appears                                                             |
-| ----------- | ---------------------------------------------------------------------------- |
-| `name`      | Hero section, footer copyright, SEO metadata, OG image, JSON-LD              |
-| `jobTitle`  | OG image, SEO metadata                                                       |
-| `bio`       | Hero section, LinkedIn preview card                                          |
-| `location`  | JSON-LD schema                                                               |
-| `email`     | Contact page (if used)                                                       |
-| `greetings` | Hero section typing animation (alternates `[text, delay, text, delay, ...]`) |
+| Field          | Where it appears                                                             |
+| -------------- | ---------------------------------------------------------------------------- |
+| `name`         | Hero section, footer copyright, SEO metadata, OG image, JSON-LD              |
+| `jobTitle`     | OG image, SEO metadata                                                       |
+| `bio`          | Hero section, LinkedIn preview card                                          |
+| `location`     | JSON-LD schema                                                               |
+| `email`        | Contact page (if used)                                                       |
+| `greetings`    | Hero section typing animation (alternates `[text, delay, text, delay, ...]`) |
+| `defaultTheme` | Theme on first visit — `'light'`, `'dark'`, or `'system'` (follows the OS)   |
 
 ### URLs & Social Links (`siteUrls`)
 
@@ -100,7 +102,7 @@ export const projects = [
     tech: ['React', 'TypeScript'],
     github: 'https://github.com/you/project',
     live: 'https://project.example.com',
-    image: 'project-screenshot.png', // filename in src/media/
+    image: myProjectImage, // imported at the top of site-config.ts
   },
 ];
 ```
@@ -108,15 +110,13 @@ export const projects = [
 **Adding a new project:**
 
 1. Add the project image to `src/media/`
-2. Add the project entry to the `projects` array in `site-config.ts`
-3. In `src/sections/projects.tsx`, import your image and add it to the `imageMap` object:
+2. Import it at the top of `site-config.ts`:
    ```ts
    import myProjectImage from '../media/my-project.png';
-   const imageMap = {
-     // ...existing entries
-     'my-project.png': myProjectImage,
-   };
    ```
+3. Add the project entry to the `projects` array, referencing the import
+
+Projects appear on the site in array order, so put the one you want featured first.
 
 ### Journey Timeline (`timelineData`)
 

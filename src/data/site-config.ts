@@ -9,6 +9,16 @@
  * ============================================================
  */
 
+import type { StaticImageData } from 'next/image';
+
+import digipinImage from '../media/digipin.webp';
+import geonetworkUiImage from '../media/geonetwork-ui.webp';
+import geoserverCloudMcpImage from '../media/geoservercloud-mcp.webp';
+import odoolingsImage from '../media/odoolings.webp';
+import olBenchImage from '../media/olBench.webp';
+import qgisHubImage from '../media/QGIS-Banner.webp';
+import thinkhazardImage from '../media/thinkhazard.webp';
+
 // ---------------------
 // Personal Information
 // ---------------------
@@ -33,6 +43,9 @@ export const siteConfig = {
   greetings: ['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000, 'Namaste!', 1000] as (
     string | number
   )[],
+
+  /** Default color theme on first visit: 'light', 'dark', or 'system' */
+  defaultTheme: 'light' as 'light' | 'dark' | 'system',
 };
 
 // ---------------------
@@ -121,12 +134,8 @@ export interface Project {
   github: string;
   /** Live demo URL */
   live: string;
-  /**
-   * Image filename inside src/media/ (e.g. 'digipin.webp').
-   * You must also add the actual image file to that folder.
-   * The component will import it dynamically.
-   */
-  image: string;
+  /** Thumbnail, imported from src/media/ at the top of this file */
+  image: StaticImageData;
 }
 
 export const projects: Project[] = [
@@ -137,7 +146,7 @@ export const projects: Project[] = [
     tech: ['Python', 'Odoo', 'Next.js', 'Docker', 'PostgreSQL'],
     github: 'https://github.com/ronitjadhav/odoolings',
     live: 'https://odoolings.ronit.io',
-    image: 'odoolings.webp',
+    image: odoolingsImage,
   },
   {
     title: 'GeoServer MCP',
@@ -146,7 +155,7 @@ export const projects: Project[] = [
     tech: ['Python', 'GeoServer', 'MCP', 'FastMCP', 'REST API', 'Docker'],
     github: 'https://github.com/ronitjadhav/geoservercloud-mcp',
     live: 'https://pypi.org/project/geoservercloud-mcp/',
-    image: 'geoservercloud-mcp.webp',
+    image: geoserverCloudMcpImage,
   },
   {
     title: 'Geonetwork-UI',
@@ -155,7 +164,7 @@ export const projects: Project[] = [
     tech: ['Angular', 'TypeScript', 'Tailwind CSS', 'Jest', 'Cypress'],
     github: 'https://github.com/geonetwork/geonetwork-ui',
     live: 'https://geonetwork-ui.labs.camptocamp.com/datahub',
-    image: 'geonetwork-ui.webp',
+    image: geonetworkUiImage,
   },
   {
     title: 'ThinkHazard (World Bank)',
@@ -164,7 +173,7 @@ export const projects: Project[] = [
     tech: ['Python', 'Pyramid', 'GeoPandas', 'Docker', 'Kubernetes'],
     github: 'https://github.com/GFDRR/thinkhazard',
     live: 'https://thinkhazard.org',
-    image: 'thinkhazard.webp',
+    image: thinkhazardImage,
   },
   {
     title: 'QGIS Hub Plugin',
@@ -173,7 +182,7 @@ export const projects: Project[] = [
     tech: ['Python', 'Qt', 'QGIS'],
     github: 'https://github.com/qgis/QGIS-Hub-Plugin',
     live: 'https://plugins.qgis.org/plugins/qgis_hub_plugin/',
-    image: 'QGIS-Banner.webp',
+    image: qgisHubImage,
   },
   {
     title: 'Openlayers Benchmark',
@@ -182,7 +191,7 @@ export const projects: Project[] = [
     tech: ['Openlayers', 'TypeScript'],
     github: 'https://github.com/openlayers/bench',
     live: 'https://openlayers.org/bench/',
-    image: 'olBench.webp',
+    image: olBenchImage,
   },
   {
     title: 'Digipin',
@@ -191,7 +200,7 @@ export const projects: Project[] = [
     tech: ['Openlayers', 'Next.js', 'TypeScript', 'Tailwind CSS'],
     github: 'https://github.com/ronitjadhav/digipin-openlayers',
     live: 'https://digipin.maplabs.tech',
-    image: 'digipin.webp',
+    image: digipinImage,
   },
 ];
 

@@ -1,34 +1,11 @@
 import React from 'react';
 import { ArrowSquareOut } from '@phosphor-icons/react/ssr';
 import { FaGithub } from 'react-icons/fa';
-import digipinImage from '../media/digipin.webp';
-import qgisHubImage from '../media/QGIS-Banner.webp';
-import olBenchImage from '../media/olBench.webp';
-import geonetworkUiImage from '../media/geonetwork-ui.webp';
-import thinkhazardImage from '../media/thinkhazard.webp';
-import geoserverCloudMcpImage from '../media/geoservercloud-mcp.webp';
-import odoolingsImage from '../media/odoolings.webp';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { projects as projectsConfig } from '@/data/site-config';
-
-// Map image filenames from config to actual imported images
-const imageMap: Record<string, StaticImageData> = {
-  'digipin.webp': digipinImage,
-  'QGIS-Banner.webp': qgisHubImage,
-  'olBench.webp': olBenchImage,
-  'geonetwork-ui.webp': geonetworkUiImage,
-  'thinkhazard.webp': thinkhazardImage,
-  'geoservercloud-mcp.webp': geoserverCloudMcpImage,
-  'odoolings.webp': odoolingsImage,
-};
+import { projects } from '@/data/site-config';
 
 const ProjectsShowcase = () => {
-  const projects = projectsConfig.map((p) => ({
-    ...p,
-    image: imageMap[p.image] || digipinImage,
-  }));
-
   return (
     <div className="relative w-full py-8 sm:py-12 md:py-16 p-3 sm:p-5 md:p-8 bg-white dark:bg-black">
       {/* Grid background */}
