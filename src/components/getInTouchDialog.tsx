@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ReCaptchaDialog } from './ReCaptchaDialog';
 import emailjs from '@emailjs/browser';
 import { toast } from 'react-toastify';
-import { Loader2 } from 'lucide-react';
+import { CircleNotch } from '@phosphor-icons/react/ssr';
 
 interface DialogProps {
   triggerButtonText: string;
@@ -184,7 +184,7 @@ export function DialogComponent({
                       >
                         {isLoading ? (
                           <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <CircleNotch className="mr-2 h-4 w-4 animate-spin" />
                             Sending...
                           </>
                         ) : (

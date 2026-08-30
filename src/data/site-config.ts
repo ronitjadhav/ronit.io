@@ -31,8 +31,7 @@ export const siteConfig = {
 
   /** Greeting sequence for the hero typing animation ([text, delay, text, delay, ...]) */
   greetings: ['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000, 'Namaste!', 1000] as (
-    | string
-    | number
+    string | number
   )[],
 };
 

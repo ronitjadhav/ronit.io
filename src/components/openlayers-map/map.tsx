@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Menu, ChevronLeft, MapPin, Home } from 'lucide-react';
+import { List, CaretLeft, MapPin, House } from '@phosphor-icons/react/ssr';
 import { cn } from '@/lib/utils';
 import 'ol/ol.css';
 import Map from 'ol/Map';
@@ -148,7 +148,7 @@ const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, 
         className="p-2 bg-black dark:bg-darkBg text-white dark:text-darkText hover:bg-gray-800 dark:hover:bg-black transition-colors rounded md:hidden" // Hide close button on desktop
         aria-label="Close timeline"
       >
-        <ChevronLeft size={24} />
+        <CaretLeft size={24} />
       </button>
     </div>
     {/* Scrollable area with continuous vertical line */}
@@ -183,7 +183,7 @@ const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
                        hover:shadow-none hover:translate-x-1 hover:translate-y-1
                        transition-all duration-200 flex items-center justify-center"
     >
-      <Home size={16} className="sm:w-5 sm:h-5" />
+      <House size={16} className="sm:w-5 sm:h-5" />
     </button>
   </div>
 );
@@ -205,9 +205,11 @@ const MapComponent: React.FC = () => {
   // The map's event handlers are installed once, so they read these through refs
   // rather than being torn down and rebuilt whenever the values change.
   const activeIndexRef = useRef(activeIndex);
-  activeIndexRef.current = activeIndex;
   const isMobileRef = useRef(isMobile);
-  isMobileRef.current = isMobile;
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+    isMobileRef.current = isMobile;
+  });
 
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
   const mapboxLightStyle = process.env.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL;
@@ -265,7 +267,7 @@ const MapComponent: React.FC = () => {
       overlay.setPosition((feature.getGeometry() as Point).getCoordinates());
     };
 
-    const featureAt = (event: MapBrowserEvent<UIEvent>) =>
+    const featureAt = (event: MapBrowserEvent) =>
       mapInstance.forEachFeatureAtPixel(event.pixel, (f) => f as Feature, {
         layerFilter: (l) => l === markerLayer,
       });
@@ -273,7 +275,7 @@ const MapComponent: React.FC = () => {
     // Hover. Browsers already coalesce pointermove to one event per frame and
     // hit-testing a handful of points is trivial, so no throttling is needed.
     let hovered: Feature | null = null;
-    const handlePointerMove = (event: MapBrowserEvent<UIEvent>) => {
+    const handlePointerMove = (event: MapBrowserEvent) => {
       if (event.dragging) return;
       const feature = featureAt(event);
       mapInstance.getTargetElement().style.cursor = feature ? 'pointer' : '';
@@ -292,7 +294,7 @@ const MapComponent: React.FC = () => {
       hovered = null;
     };
 
-    const handleClick = (event: MapBrowserEvent<UIEvent>) => {
+    const handleClick = (event: MapBrowserEvent) => {
       const feature = featureAt(event);
       if (!feature) return;
 
@@ -457,7 +459,7 @@ const MapComponent: React.FC = () => {
                                  hover:shadow-none hover:translate-x-1 hover:translate-y-1
                                  transition-all duration-200"
             >
-              <Menu size={24} />
+              <List size={24} />
             </button>
           )}
 

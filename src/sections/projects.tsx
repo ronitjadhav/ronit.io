@@ -1,5 +1,6 @@
 import React from 'react';
-import { ExternalLink, Github } from 'lucide-react';
+import { ArrowSquareOut } from '@phosphor-icons/react/ssr';
+import { FaGithub } from 'react-icons/fa';
 import digipinImage from '../media/digipin.webp';
 import qgisHubImage from '../media/QGIS-Banner.webp';
 import olBenchImage from '../media/olBench.webp';
@@ -100,7 +101,7 @@ const ProjectsShowcase = () => {
                     border-2 border-black dark:border-darkBorder
                     shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
                 >
-                  <Github size={18} />
+                  <FaGithub size={18} />
                   Code
                 </a>
                 <a
@@ -111,7 +112,7 @@ const ProjectsShowcase = () => {
                     border-2 border-black dark:border-darkBorder
                     shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
                 >
-                  <ExternalLink size={18} />
+                  <ArrowSquareOut size={18} />
                   {project.live.includes('pypi.org') ? 'PyPI' : 'Live Demo'}
                 </a>
               </div>

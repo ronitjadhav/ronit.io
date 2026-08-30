@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { X } from 'lucide-react';
+import { X } from '@phosphor-icons/react/ssr';
 import { useTheme } from 'next-themes';
 import { createPortal } from 'react-dom';
 
@@ -20,16 +20,10 @@ export function ReCaptchaDialog({
 }: ReCaptchaDialogProps) {
   const [isCaptchaVisible, setIsCaptchaVisible] = useState(false);
   const [captchaError, setCaptchaError] = useState<string | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
   const captchaContainerRef = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();
 
   const googleReCaptchaKey = process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY;
-
-  // Ensure component is mounted before rendering portal
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleCaptchaChange = (value: string | null) => {
     if (value) {
@@ -164,7 +158,7 @@ export function ReCaptchaDialog({
       </Button>
 
       {/* Use createPortal to render modal at document.body level */}
-      {isMounted && modalContent && createPortal(modalContent, document.body)}
+      {modalContent && createPortal(modalContent, document.body)}
 
       <style jsx global>{`
         @keyframes fadeInScale {

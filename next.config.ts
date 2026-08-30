@@ -1,7 +1,9 @@
 import type { NextConfig } from 'next';
 
+import bundleAnalyzer from '@next/bundle-analyzer';
+
 // Only use bundle analyzer for production builds (not with Turbopack)
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true' && process.env.NODE_ENV === 'production',
 });
 
@@ -14,11 +16,7 @@ const nextConfig: NextConfig = {
 
   // Enable experimental optimizations
   experimental: {
-    optimizePackageImports: [
-      '@fortawesome/react-fontawesome',
-      '@fortawesome/free-solid-svg-icons',
-      'react-icons',
-    ],
+    optimizePackageImports: ['@phosphor-icons/react', 'react-icons'],
   },
 
   // Turbopack configuration (moved from experimental.turbo)

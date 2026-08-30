@@ -1,13 +1,12 @@
 'use client';
 
+import { ArrowSquareOut } from '@phosphor-icons/react/ssr';
 import React, { useEffect, useState, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { ThemeSwitcher } from './theme-switcher';
 import { DialogComponent } from './getInTouchDialog';
 import Image from 'next/image';
 import ronitLogo from '@/media/ronitLogo.webp';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { navLinks } from '@/data/site-config';
 
 const scrolltoHash = function (element_id: string) {
@@ -155,7 +154,7 @@ function NavLinks() {
         >
           {link.label}
           {link.href.startsWith('http') && (
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-2" />
+            <ArrowSquareOut className="ml-2 inline h-[1em] w-[1em]" />
           )}
         </a>
       ))}
@@ -190,7 +189,7 @@ function MobileNavLinks({
         >
           {link.label}
           {link.href.startsWith('http') && (
-            <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-2" />
+            <ArrowSquareOut className="ml-2 inline h-[1em] w-[1em]" />
           )}
         </a>
       ))}
