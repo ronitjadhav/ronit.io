@@ -131,6 +131,15 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'Odoolings',
+    description:
+      'A free, open-source Odoo 19 development tutorial that teaches by building one real app, with a rustlings-style CLI that checks your work.',
+    tech: ['Python', 'Odoo', 'Next.js', 'Docker', 'PostgreSQL'],
+    github: 'https://github.com/ronitjadhav/odoolings',
+    live: 'https://odoolings.ronit.io',
+    image: 'odoolings.webp',
+  },
+  {
     title: 'GeoServer MCP',
     description:
       'A MCP server that enables LLM agents to manage and administer GeoServer instances using natural language.',

@@ -7,6 +7,7 @@ import olBenchImage from '../media/olBench.webp';
 import geonetworkUiImage from '../media/geonetwork-ui.webp';
 import thinkhazardImage from '../media/thinkhazard.webp';
 import geoserverCloudMcpImage from '../media/geoservercloud-mcp.webp';
+import odoolingsImage from '../media/odoolings.webp';
 import Image, { StaticImageData } from 'next/image';
 import { cn } from '@/lib/utils';
 import { projects as projectsConfig } from '@/data/site-config';
@@ -19,6 +20,7 @@ const imageMap: Record<string, StaticImageData> = {
   'geonetwork-ui.webp': geonetworkUiImage,
   'thinkhazard.webp': thinkhazardImage,
   'geoservercloud-mcp.webp': geoserverCloudMcpImage,
+  'odoolings.webp': odoolingsImage,
 };
 
 const ProjectsShowcase = () => {
