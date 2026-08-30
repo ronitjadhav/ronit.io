@@ -8,6 +8,18 @@
   box-sizing: border-box;
 }
 
+/* Keep the sticky navbar from covering a section's start when jumping to its
+   anchor. Matches the navbar's own height (top-4 + margin + h-[60/70/80px]). */
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
+@media (min-width: 768px) {
+  section[id] {
+    scroll-margin-top: 8rem;
+  }
+}
+
 body {
   --sb-track-color: #ffffff;
   --sb-thumb-color: #000000;

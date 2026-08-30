@@ -11,7 +11,7 @@ import { navLinks } from '@/data/site-config';
 
 const scrolltoHash = function (element_id: string) {
   const element = document.getElementById(element_id);
-  element?.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+  element?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
 };
 
 const NavBar = () => {
