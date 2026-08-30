@@ -36,15 +36,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Run ESLint
-        run: ${{ steps.detect-package-manager.outputs.runner }} next lint
+        run: npm run lint
         continue-on-error: false
+
+      # next-env.d.ts is gitignored and supplies the image/route module
+      # declarations, so it has to exist before tsc runs.
+      - name: Generate Next.js types
+        run: ${{ steps.detect-package-manager.outputs.runner }} next typegen
 
       - name: Run TypeScript type check
         run: ${{ steps.detect-package-manager.outputs.runner }} tsc --noEmit
@@ -89,7 +94,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Run npm audit
         run: npm audit --audit-level=moderate

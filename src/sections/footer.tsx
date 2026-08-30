@@ -1,8 +1,7 @@
 'use client';
+import { ArrowSquareOut } from '@phosphor-icons/react/ssr';
 import React from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { navLinks, siteUrls, siteConfig, footerConfig } from '@/data/site-config';
 
 function NavLinks() {
@@ -32,7 +31,7 @@ function NavLinks() {
           >
             {link.label}
             {link.href.startsWith('http') && (
-              <FontAwesomeIcon icon={faExternalLinkAlt} className="ml-2" />
+              <ArrowSquareOut className="ml-2 inline h-[1em] w-[1em]" />
             )}
           </a>
         </li>

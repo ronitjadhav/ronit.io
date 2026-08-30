@@ -1,0 +1,35 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for all routine minor/patch bumps; majors get their own PR each,
+      # since those are the ones that need a human to read a changelog.
+      minor-and-patch:
+        update-types: ['minor', 'patch']
+    ignore:
+      # Tailwind 4 is a config-to-CSS rewrite, not a version bump. Unpin when
+      # someone does that migration deliberately.
+      - dependency-name: tailwindcss
+        update-types: ['version-update:semver-major']
+      # typescript-eslint does not support TS 7 yet (typescript-eslint#10940).
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      # eslint-plugin-react inside eslint-config-next still calls the
+      # context.getFilename() API that ESLint 10 removed.
+      - dependency-name: eslint
+        update-types: ['version-update:semver-major']
+      # Track the Node version in .nvmrc, not the newest @types/node major.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
