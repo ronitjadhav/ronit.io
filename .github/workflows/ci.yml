@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Detect package manager
         id: detect-package-manager
@@ -34,7 +34,7 @@ jobs:
           fi
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
@@ -73,7 +73,7 @@ jobs:
         continue-on-error: false
 
       - name: Cache build artifacts
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .next/cache
@@ -89,10 +89,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
 
