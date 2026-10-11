@@ -179,7 +179,7 @@ const HeroSection = memo(function HeroSection() {
               className="flex items-center mx-4 sm:mx-6 lg:mx-8 hover:scale-110 transition-transform duration-200"
               key={id}
             >
-              <skill.Icon className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
+              <skill.Icon aria-hidden className="text-2xl sm:text-3xl lg:text-4xl mr-2 sm:mr-3" />
               <span className="text-lg sm:text-xl lg:text-2xl font-heading">{skill.text}</span>
             </div>
           ))}
