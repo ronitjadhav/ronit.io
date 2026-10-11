@@ -105,6 +105,7 @@ cp .env.example .env
 - **Service ID**: Create an email service (Gmail, Outlook, etc.) → copy the Service ID
 - **Template ID**: Create an email template with variables `{{from_name}}`, `{{email}}`, `{{message}}` → copy the Template ID
 - **Public Key**: Go to Account → General → copy your Public Key
+- **Spam protection**: In the template's **Settings** tab, enable **reCAPTCHA V2 verification** and paste your reCAPTCHA secret key. The form sends the token; without this setting EmailJS never checks it
 
 ### Mapbox (Interactive Map)
 
