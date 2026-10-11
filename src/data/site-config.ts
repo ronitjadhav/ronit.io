@@ -14,9 +14,10 @@ import type { StaticImageData } from 'next/image';
 import digipinImage from '../media/digipin.webp';
 import geonetworkUiImage from '../media/geonetwork-ui.webp';
 import geoserverCloudMcpImage from '../media/geoservercloud-mcp.webp';
+import geoserverManagerImage from '../media/geoserver-manager.webp';
 import odoolingsImage from '../media/odoolings.webp';
 import olBenchImage from '../media/olBench.webp';
-import qgisHubImage from '../media/QGIS-Banner.webp';
+import qgisHubImage from '../media/qgis-hub.webp';
 import thinkhazardImage from '../media/thinkhazard.webp';
 
 // ---------------------
@@ -139,6 +140,15 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    title: 'GeoServer Manager',
+    description:
+      'A QGIS plugin to administer a GeoServer through its REST API: workspaces, stores, layers, styles, tile cache and settings. Publish layers from QGIS, or bring what the server has back as WMS, WFS or WMTS.',
+    tech: ['Python', 'QGIS', 'PyQt', 'GeoServer', 'REST API'],
+    github: 'https://github.com/ronitjadhav/qgis-geoserver-manager',
+    live: 'https://plugins.qgis.org/plugins/geoserver_manager/',
+    image: geoserverManagerImage,
+  },
   {
     title: 'Odoolings',
     description:
