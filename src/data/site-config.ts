@@ -234,10 +234,10 @@ export interface TimelineEntry {
 export const timelineData: TimelineEntry[] = [
   {
     id: 1,
-    title: 'Software Engineer @ Camptocamp',
+    title: 'Intern → Software Engineer @ Camptocamp',
     date: 'Oct 2023 - Present',
     description:
-      'Kicked off my journey into the open-source geospatial realm at Camptocamp, working with QGIS, Geonetwork-UI, developing custom GIS dashboards, and contributing to QGIS plugins. Diving into Docker, web GIS, and everything open-source!',
+      'Started as an intern building the OpenLayers rendering benchmark, then stayed on as a Software Engineer. Building open-source geospatial software: Geonetwork-UI, QGIS plugins, GeoServer tooling, and custom GIS dashboards.',
     location: [13.427683548268714, 52.499819181584776],
     locationName: 'Berlin, Germany (Hybrid)',
     popupTitle: 'Camptocamp',
@@ -271,7 +271,7 @@ export const timelineData: TimelineEntry[] = [
   {
     id: 4,
     title: 'Student Intern @ University of Cologne',
-    date: '2019 - 2019',
+    date: '2019',
     description:
       'Interned at the University of Cologne, applying GIS and spatial analysis to hydrological modeling with ArcSWAT for the Mula-Mutha river. Automated tasks using Python and supported geospatial research for water resources.',
     location: [6.936245553273681, 50.92747527039799],

@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { List, CaretLeft, MapPin, House } from '@phosphor-icons/react/ssr';
+import { MapPin, House, Play, Stop } from '@phosphor-icons/react/ssr';
 import { cn } from '@/lib/utils';
 import 'ol/ol.css';
 import Map from 'ol/Map';
@@ -8,97 +8,153 @@ import View from 'ol/View';
 import Overlay from 'ol/Overlay';
 import type MapBrowserEvent from 'ol/MapBrowserEvent';
 import type BaseLayer from 'ol/layer/Base';
+import type { Coordinate } from 'ol/coordinate';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { fromLonLat } from 'ol/proj';
+import { boundingExtent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import { Style, Icon } from 'ol/style';
+import LineString from 'ol/geom/LineString';
+import { Style, Circle as CircleStyle, Fill, Stroke, Text } from 'ol/style';
+import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
+import { primaryAction } from 'ol/events/condition';
+import { Attribution } from 'ol/control';
 import { MapboxVectorLayer } from 'ol-mapbox-style';
 import { useTheme } from 'next-themes';
 import { timelineData, type TimelineEntry } from '@/data/site-config';
 
-interface TimelineItemProps {
-  entry: TimelineEntry;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-interface TimelineContainerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-}
-
-interface ZoomControlProps {
-  onZoom: (direction: 'in' | 'out') => void;
-  onReset: () => void;
-}
-
 // --- Constants (module scope: none of this depends on props or state) ---
-const MARKER_ICON = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
-  <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="marker-shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.3"/>
-      </filter>
-    </defs>
-    <g filter="url(#marker-shadow)">
-      <circle cx="18" cy="18" r="14" fill="#FFD700" stroke="#000000" stroke-width="2"/>
-      <circle cx="18" cy="18" r="6" fill="#000000"/>
-    </g>
-  </svg>
-`)}`;
 
-const MARKER_STYLE = new Style({
-  image: new Icon({
-    anchor: [0.5, 0.5],
-    anchorXUnits: 'fraction',
-    anchorYUnits: 'fraction',
-    src: MARKER_ICON,
-    scale: 1,
-  }),
-});
-
-const INITIAL_VIEW = { center: fromLonLat([10, 45]), zoom: 3 };
+const MARKER_FILL = '#FFD700';
+const ACTIVE_FILL = '#76fbd9'; // tailwind `main`, the site's button colour
+const ROUTE_COLOR = '#2b55ff'; // the hero greeting's blue
 const BASEMAP_Z = 0;
+const ROUTE_Z = 5;
 const MARKER_Z = 10;
+const PLAY_STEP_MS = 3200;
+
+// Markers carry their timeline number, with the site's hard offset shadow.
+// Index 0 is the normal style, index 1 the selected one (bigger, drawn on top).
+const markerStyles = (n: number) =>
+  [false, true].map((active) => {
+    const radius = active ? 17 : 13;
+    return [
+      new Style({
+        image: new CircleStyle({
+          radius,
+          fill: new Fill({ color: '#000' }),
+          displacement: [3, -3],
+        }),
+        zIndex: active ? 3 : 1,
+      }),
+      new Style({
+        image: new CircleStyle({
+          radius,
+          fill: new Fill({ color: active ? ACTIVE_FILL : MARKER_FILL }),
+          stroke: new Stroke({ color: '#000', width: 2 }),
+        }),
+        text: new Text({
+          text: String(n),
+          font: `bold ${active ? 15 : 13}px sans-serif`,
+          fill: new Fill({ color: '#000' }),
+        }),
+        zIndex: active ? 4 : 2,
+      }),
+    ];
+  });
+const MARKER_STYLES = timelineData.map((_, i) => markerStyles(i + 1));
+
+const COORDS = timelineData.map((entry) => fromLonLat(entry.location));
+const JOURNEY_EXTENT = boundingExtent(COORDS);
+
+// Timeline order is newest first; the journey runs oldest first.
+const CHRONOLOGICAL = timelineData.map((_, i) => i).reverse();
+
+// A curved hop between two places: a quadratic Bézier whose control point is
+// the midpoint pushed sideways by a sixth of the distance. Always to the north,
+// so the back-and-forth hops between Europe and India bend the same way instead
+// of crossing.
+const arc = ([x1, y1]: Coordinate, [x2, y2]: Coordinate): Coordinate[] => {
+  const side = x2 >= x1 ? 1 : -1;
+  const cx = (x1 + x2) / 2 - (side * (y2 - y1)) / 6;
+  const cy = (y1 + y2) / 2 + (side * (x2 - x1)) / 6;
+  return Array.from({ length: 33 }, (_, i) => {
+    const t = i / 32;
+    const u = 1 - t;
+    return [u * u * x1 + 2 * u * t * cx + t * t * x2, u * u * y1 + 2 * u * t * cy + t * t * y2];
+  });
+};
+
+const ROUTE = new LineString(
+  CHRONOLOGICAL.slice(1).flatMap((to, i) => arc(COORDS[CHRONOLOGICAL[i]], COORDS[to])),
+);
+
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Out, across and back in (the OpenLayers "fly to" pattern), so a long hop such
+// as Pune to Cologne reads as travel rather than a blur.
+const flyTo = (view: View, [x, y]: Coordinate, zoom = 8) => {
+  const duration = reducedMotion() ? 0 : 1600;
+  // Land with the place 90px below the middle: the popup above it then fits
+  // even in the short map on phones.
+  const center = [x, y + 90 * view.getResolutionForZoom(zoom)];
+  view.cancelAnimations();
+  view.animate({ center, duration });
+  view.animate(
+    { zoom: Math.min(view.getZoom() ?? zoom, 4), duration: duration / 2 },
+    { zoom, duration: duration / 2 },
+  );
+};
+
+// Every place in view, clear of the zoom buttons (right) and the popups (top).
+const fitJourney = (view: View, duration = 0) =>
+  view.fit(JOURNEY_EXTENT, { padding: [70, 72, 40, 40], maxZoom: 6, duration });
 
 // --- Components ---
 
-const TimelineItem: React.FC<TimelineItemProps> = ({ entry, isActive, onClick }) => (
+const NumberBadge: React.FC<{ n: number; active: boolean }> = ({ n, active }) => (
+  <span
+    className={cn(
+      'absolute left-3 top-4 z-10 flex h-7 w-7 items-center justify-center rounded-full',
+      'border-2 border-black text-sm font-black text-black shadow-[2px_2px_0px_0px_#000]',
+      active ? 'bg-main' : 'bg-[#FFD700]',
+    )}
+  >
+    {n}
+  </span>
+);
+
+const TimelineItem: React.FC<{
+  entry: TimelineEntry;
+  n: number;
+  isActive: boolean;
+  onClick: () => void;
+}> = ({ entry, n, isActive, onClick }) => (
   <button
     type="button"
     onClick={onClick}
     aria-current={isActive}
-    className={`
-      relative cursor-pointer w-full text-left transition-colors duration-200 rounded-md
-      pl-10 sm:pl-14 md:pl-16 pr-2 sm:pr-4 py-3 sm:py-4
-      border-l-4 border-transparent
-      ${isActive ? 'bg-yellow-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-600'}
-    `}
+    className={cn(
+      'relative w-full text-left transition-colors duration-200 rounded-md pl-14 pr-3 py-3 sm:py-4',
+      isActive ? 'bg-yellow-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-600',
+    )}
   >
-    {/* Minimalistic pointer only - vertical line is now in the container */}
-    <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-2 h-2 bg-black dark:bg-white rounded-full z-10"></div>
-
-    {/* Content Area */}
-    <div className="flex-1">
-      <h3 className="font-black text-base sm:text-lg md:text-xl mb-1">{entry.title}</h3>
-      <p className="text-xs sm:text-sm font-mono font-bold text-gray-600 dark:text-gray-400">
-        {entry.date}
-      </p>
-      <p className="mt-1.5 sm:mt-2 text-sm sm:text-base leading-relaxed">{entry.description}</p>
-      <div className="mt-2 sm:mt-3 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-        <MapPin size={14} className="sm:w-4 sm:h-4" />
-        <span>{entry.locationName}</span>
-      </div>
+    <NumberBadge n={n} active={isActive} />
+    <h3 className="font-black text-base sm:text-lg mb-1">{entry.title}</h3>
+    <p className="text-xs sm:text-sm font-mono font-bold text-gray-600 dark:text-gray-400">
+      {entry.date}
+    </p>
+    <p className="mt-1.5 sm:mt-2 text-sm sm:text-base leading-relaxed">{entry.description}</p>
+    <div className="mt-2 sm:mt-3 flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+      <MapPin size={14} />
+      <span>{entry.locationName}</span>
     </div>
   </button>
 );
 
-const Popup: React.FC<{ title: string; description: string }> = ({ title, description }) => (
+const Popup: React.FC<{ entry: TimelineEntry }> = ({ entry }) => (
   <div className="relative">
-    {/* Popup Box */}
     <div
       className="absolute bottom-2 left-1/2 -translate-x-1/2 z-50
                     bg-white dark:bg-darkBg border-2 sm:border-4 border-black dark:border-darkBorder
@@ -107,83 +163,53 @@ const Popup: React.FC<{ title: string; description: string }> = ({ title, descri
                     min-w-[180px] sm:min-w-[250px] max-w-[250px] sm:max-w-[350px]"
     >
       <h3
-        className="font-black text-base sm:text-xl mb-1 sm:mb-2 border-b-2 sm:border-b-4 border-black dark:border-darkBorder pb-1 sm:pb-2
+        className="font-black text-base sm:text-xl border-b-2 sm:border-b-4 border-black dark:border-darkBorder pb-1 sm:pb-2
                        text-black dark:text-white"
       >
-        {title}
+        {entry.popupTitle}
       </h3>
-      <p className="text-sm sm:text-base leading-relaxed text-gray-700 dark:text-gray-300">
-        {description}
+      <p className="mt-1 sm:mt-2 text-xs font-mono font-bold text-gray-600 dark:text-gray-400">
+        {entry.date}
+      </p>
+      <p className="mt-1 text-sm sm:text-base leading-relaxed text-gray-700 dark:text-gray-300">
+        {entry.popupDescription}
       </p>
     </div>
     {/* Pointer triangle */}
     <div
       className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4
                     bg-white dark:bg-darkBg border-b-4 border-r-4
-                    border-black dark:border-darkBorder rotate-45 z-40" // Ensure triangle is below box but above map elements potentially
+                    border-black dark:border-darkBorder rotate-45 z-40"
     ></div>
   </div>
 );
 
-const TimelineContainer: React.FC<TimelineContainerProps> = ({ isOpen, onClose, children }) => (
-  <div
-    className={`
-        absolute top-0 left-0
-        h-full w-full sm:w-[380px] md:w-[420px]
-        bg-white/95 dark:bg-darkBg/95 backdrop-blur-md
-        border-r-2 sm:border-r-4 border-black dark:border-darkBorder
-        transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        z-20
-        flex flex-col
-        overflow-hidden
-        ${!isOpen ? 'invisible md:visible' : 'visible'}
-    `}
-    // Added md:visible when closed to prevent layout shift on desktop if it was fully hidden
-  >
-    <div className="flex-none flex items-center justify-between p-3 sm:p-4 border-b-2 sm:border-b-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg">
-      <h3 className="font-black text-lg sm:text-xl text-black dark:text-white">Journey Timeline</h3>
-      <button
-        onClick={onClose}
-        className="p-2 bg-black dark:bg-darkBg text-white dark:text-darkText hover:bg-gray-800 dark:hover:bg-black transition-colors rounded md:hidden" // Hide close button on desktop
-        aria-label="Close timeline"
-      >
-        <CaretLeft size={24} />
-      </button>
-    </div>
-    {/* Scrollable area with continuous vertical line */}
-    <div className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 relative">{children}</div>
-  </div>
-);
+const MAP_BUTTON = `bg-bg dark:bg-darkBg text-text dark:text-darkText w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 font-black
+  border-2 sm:border-4 border-black dark:border-white rounded-lg flex items-center justify-center
+  shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
+  hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200`;
 
-const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
-  <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 lg:top-4 right-2 sm:right-4 flex flex-col gap-1.5 sm:gap-2 z-10">
-    {[
-      { label: '+', direction: 'in' as const, aria: 'Zoom in' },
-      { label: '−', direction: 'out' as const, aria: 'Zoom out' },
-    ].map(({ label, direction, aria }) => (
-      <button
-        key={direction}
-        onClick={() => onZoom(direction)}
-        aria-label={aria}
-        className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 text-lg sm:text-xl md:text-2xl font-black
-                         border-2 sm:border-4 border-black dark:border-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
-                         hover:shadow-none hover:translate-x-1 hover:translate-y-1
-                         transition-all duration-200"
-      >
-        {label}
-      </button>
-    ))}
-    {/* Reset to Initial View Button */}
+const ZoomControl: React.FC<{ onZoom: (direction: 'in' | 'out') => void; onReset: () => void }> = ({
+  onZoom,
+  onReset,
+}) => (
+  <div className="absolute top-3 right-3 flex flex-col gap-1.5 sm:gap-2 z-10">
     <button
-      onClick={onReset}
-      aria-label="Reset to initial view"
-      className="bg-bg dark:bg-darkBg text-text dark:text-darkText w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 text-sm sm:text-base md:text-lg font-black
-                       border-2 sm:border-4 border-black dark:border-white rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
-                       hover:shadow-none hover:translate-x-1 hover:translate-y-1
-                       transition-all duration-200 flex items-center justify-center"
+      onClick={() => onZoom('in')}
+      aria-label="Zoom in"
+      className={cn(MAP_BUTTON, 'text-lg sm:text-xl md:text-2xl')}
     >
-      <House size={16} className="sm:w-5 sm:h-5" />
+      +
+    </button>
+    <button
+      onClick={() => onZoom('out')}
+      aria-label="Zoom out"
+      className={cn(MAP_BUTTON, 'text-lg sm:text-xl md:text-2xl')}
+    >
+      −
+    </button>
+    <button onClick={onReset} aria-label="Show the whole journey" className={MAP_BUTTON}>
+      <House size={18} />
     </button>
   </div>
 );
@@ -191,43 +217,32 @@ const ZoomControl: React.FC<ZoomControlProps> = ({ onZoom, onReset }) => (
 // --- Main Map Component ---
 const MapComponent: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapBoxRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
   const popupElRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<Overlay | null>(null);
+  const markerLayerRef = useRef<VectorLayer | null>(null);
   const basemapRef = useRef<BaseLayer | null>(null);
 
   const [map, setMap] = useState<Map | null>(null);
   const [popupEntry, setPopupEntry] = useState<TimelineEntry | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const [isTimelineOpen, setIsTimelineOpen] = useState<boolean>(true);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [playing, setPlaying] = useState(false);
+  // The text outlives `visible`, so it stays on screen while the hint fades out.
+  const [hint, setHint] = useState({ text: '', visible: false });
   const { theme } = useTheme();
 
-  // The map's event handlers are installed once, so they read these through refs
-  // rather than being torn down and rebuilt whenever the values change.
+  // The map's event handlers are installed once, so they read this through a ref
+  // rather than being torn down and rebuilt whenever it changes.
   const activeIndexRef = useRef(activeIndex);
-  const isMobileRef = useRef(isMobile);
   useEffect(() => {
     activeIndexRef.current = activeIndex;
-    isMobileRef.current = isMobile;
-  });
+    markerLayerRef.current?.changed(); // restyle: the selected marker grows
+  }, [activeIndex]);
 
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
   const mapboxLightStyle = process.env.NEXT_PUBLIC_MAPBOX_LIGHT_STYLE_URL;
   const mapboxDarkStyle = process.env.NEXT_PUBLIC_MAPBOX_DARK_STYLE_URL;
-
-  // Track the mobile breakpoint. matchMedia fires only when the breakpoint is
-  // crossed; the old resize listener fired on every pixel of a window drag.
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const apply = (mobile: boolean) => {
-      setIsMobile(mobile);
-      setIsTimelineOpen(!mobile);
-    };
-    apply(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => apply(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
 
   // Create the map once. Nothing in here depends on the theme or the viewport,
   // so neither a theme toggle nor a resize throws away the map — and with it the
@@ -243,73 +258,107 @@ const MapComponent: React.FC = () => {
     });
     overlayRef.current = overlay;
 
-    const markers = timelineData.map((entry) => {
-      const feature = new Feature({ geometry: new Point(fromLonLat(entry.location)), ...entry });
-      feature.setStyle(MARKER_STYLE);
-      return feature;
-    });
-
+    const markers = timelineData.map(
+      (entry, i) => new Feature({ geometry: new Point(COORDS[i]), ...entry }),
+    );
     const markerLayer = new VectorLayer({
       source: new VectorSource({ features: markers, wrapX: false }),
+      style: (feature) => {
+        const i = timelineData.findIndex((e) => e.id === feature.get('id'));
+        return MARKER_STYLES[i][i === activeIndexRef.current ? 1 : 0];
+      },
       zIndex: MARKER_Z,
+    });
+    markerLayerRef.current = markerLayer;
+
+    const routeLayer = new VectorLayer({
+      source: new VectorSource({ features: [new Feature(ROUTE)] }),
+      style: new Style({ stroke: new Stroke({ color: ROUTE_COLOR, width: 3, lineDash: [8, 8] }) }),
+      zIndex: ROUTE_Z,
+    });
+
+    // The map sits in a long page, so it must not take over page scrolling:
+    // the wheel zooms only with Ctrl/⌘ (a trackpad pinch sends ctrlKey too), and
+    // on a touch screen one finger scrolls the page while two move the map.
+    const dragPan: DragPan = new DragPan({
+      condition: (e) =>
+        (e.originalEvent as PointerEvent).pointerType === 'touch'
+          ? dragPan.getPointerCount() === 2
+          : primaryAction(e),
+    });
+    const mouseWheelZoom = new MouseWheelZoom({
+      condition: (e) =>
+        (e.originalEvent as WheelEvent).ctrlKey || (e.originalEvent as WheelEvent).metaKey,
     });
 
     const mapInstance = new Map({
       target: mapRef.current,
-      layers: [markerLayer],
+      layers: [routeLayer, markerLayer],
       overlays: [overlay],
-      controls: [],
-      view: new View({ ...INITIAL_VIEW, maxZoom: 18, minZoom: 2 }),
+      // Mapbox and OpenStreetMap require their attribution to be shown.
+      controls: [new Attribution()],
+      interactions: defaultInteractions({
+        dragPan: false,
+        mouseWheelZoom: false,
+        altShiftDragRotate: false,
+        pinchRotate: false, // nothing on screen could turn the map back north
+      }).extend([dragPan, mouseWheelZoom]),
+      view: new View({ center: [0, 0], zoom: 2, maxZoom: 18, minZoom: 2 }),
     });
+    fitJourney(mapInstance.getView());
 
-    const showPopup = (feature: Feature) => {
-      setPopupEntry(feature.getProperties() as TimelineEntry);
-      overlay.setPosition((feature.getGeometry() as Point).getCoordinates());
+    // Explain the gestures when someone tries the old ones.
+    const modKey = /Mac|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Ctrl';
+    let hintTimer = 0;
+    const flashHint = (text: string) => {
+      setHint({ text, visible: true });
+      window.clearTimeout(hintTimer);
+      hintTimer = window.setTimeout(() => setHint((h) => ({ ...h, visible: false })), 1500);
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey && !e.metaKey) flashHint(`Use ${modKey} + scroll to zoom the map`);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) flashHint('Use two fingers to move the map');
+    };
+    const viewport = mapInstance.getViewport();
+    viewport.addEventListener('wheel', onWheel, { passive: true });
+    viewport.addEventListener('touchmove', onTouchMove, { passive: true });
+
+    const showPopup = (entry: TimelineEntry) => {
+      setPopupEntry(entry);
+      overlay.setPosition(COORDS[timelineData.indexOf(entry)]);
     };
 
-    const featureAt = (event: MapBrowserEvent) =>
-      mapInstance.forEachFeatureAtPixel(event.pixel, (f) => f as Feature, {
+    const entryAt = (event: MapBrowserEvent) => {
+      const feature = mapInstance.forEachFeatureAtPixel(event.pixel, (f) => f, {
         layerFilter: (l) => l === markerLayer,
       });
+      return feature ? timelineData.find((e) => e.id === feature.get('id')) : undefined;
+    };
 
-    // Hover. Browsers already coalesce pointermove to one event per frame and
-    // hit-testing a handful of points is trivial, so no throttling is needed.
-    let hovered: Feature | null = null;
+    // Hover previews a place; leaving it brings back the selected one, if any.
+    let hovered: TimelineEntry | undefined;
     const handlePointerMove = (event: MapBrowserEvent) => {
       if (event.dragging) return;
-      const feature = featureAt(event);
-      mapInstance.getTargetElement().style.cursor = feature ? 'pointer' : '';
+      const entry = entryAt(event);
+      mapInstance.getTargetElement().style.cursor = entry ? 'pointer' : '';
+      if (entry === hovered) return;
+      hovered = entry;
 
-      if (feature) {
-        if (feature !== hovered) {
-          hovered = feature;
-          showPopup(feature);
-        }
-        return;
-      }
-
-      // Keep the popup up if it belongs to the item selected in the timeline.
-      const active = activeIndexRef.current >= 0 ? timelineData[activeIndexRef.current] : null;
-      if (!active || hovered?.get('id') !== active.id) overlay.setPosition(undefined);
-      hovered = null;
+      const active = timelineData[activeIndexRef.current];
+      if (entry) showPopup(entry);
+      else if (active) showPopup(active);
+      else overlay.setPosition(undefined);
     };
 
     const handleClick = (event: MapBrowserEvent) => {
-      const feature = featureAt(event);
-      if (!feature) return;
-
-      const props = feature.getProperties() as TimelineEntry;
-      setActiveIndex(timelineData.findIndex((item) => item.id === props.id));
-      showPopup(feature);
-
-      const view = mapInstance.getView();
-      view.animate({
-        center: (feature.getGeometry() as Point).getCoordinates(),
-        zoom: Math.max((view.getZoom() ?? INITIAL_VIEW.zoom) + 2, 8),
-        duration: 1000,
-      });
-
-      if (isMobileRef.current) setIsTimelineOpen(false);
+      const entry = entryAt(event);
+      if (!entry) return;
+      setPlaying(false);
+      setActiveIndex(timelineData.indexOf(entry));
+      showPopup(entry);
+      flyTo(mapInstance.getView(), COORDS[timelineData.indexOf(entry)]);
     };
 
     mapInstance.on('pointermove', handlePointerMove);
@@ -317,8 +366,12 @@ const MapComponent: React.FC = () => {
     setMap(mapInstance);
 
     return () => {
+      window.clearTimeout(hintTimer);
+      viewport.removeEventListener('wheel', onWheel);
+      viewport.removeEventListener('touchmove', onTouchMove);
       mapInstance.dispose(); // also drops its listeners, layers and overlays
       overlayRef.current = null;
+      markerLayerRef.current = null;
       basemapRef.current = null;
       setMap(null);
     };
@@ -347,42 +400,70 @@ const MapComponent: React.FC = () => {
     };
   }, [map, theme, mapboxToken, mapboxLightStyle, mapboxDarkStyle]);
 
+  const select = useCallback(
+    (index: number) => {
+      if (!map || !overlayRef.current) return;
+      setActiveIndex(index);
+      setPopupEntry(timelineData[index]);
+      overlayRef.current.setPosition(COORDS[index]);
+      flyTo(map.getView(), COORDS[index]);
+    },
+    [map],
+  );
+
+  // Keep the selected entry in sight. Only the list scrolls (on desktop it is its
+  // own scroll box; on phones it is not, and this does nothing).
+  useEffect(() => {
+    const list = listRef.current;
+    const item = list?.children[activeIndex] as HTMLElement | undefined;
+    if (!list || !item) return;
+    list.scrollTo({ top: item.offsetTop - 8, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  }, [activeIndex]);
+
+  // Play the journey oldest first, one stop every few seconds, ending on today.
+  useEffect(() => {
+    if (!playing) return;
+    let step = 0;
+    let timer = 0;
+    const next = () => {
+      if (step === CHRONOLOGICAL.length) {
+        setPlaying(false);
+        return;
+      }
+      select(CHRONOLOGICAL[step++]);
+      timer = window.setTimeout(next, PLAY_STEP_MS);
+    };
+    next();
+    return () => window.clearTimeout(timer);
+  }, [playing, select]);
+
   const handleTimelineClick = (index: number) => {
-    if (!map || !overlayRef.current) return;
-    const entry = timelineData[index];
-    const coords = fromLonLat(entry.location);
-
-    setActiveIndex(index);
-    setPopupEntry(entry);
-    overlayRef.current.setPosition(coords);
-
-    map.getView().animate({
-      center: coords,
-      zoom: Math.max(map.getView().getZoom() ?? 8, 8),
-      duration: 800,
+    setPlaying(false);
+    select(index);
+    // On phones the list sits under the map: bring the map back into view.
+    mapBoxRef.current?.scrollIntoView({
+      behavior: reducedMotion() ? 'auto' : 'smooth',
+      block: 'nearest',
     });
-
-    if (isMobile) setIsTimelineOpen(false);
   };
 
   const handleZoom = (direction: 'in' | 'out') => {
     if (!map) return;
     const view = map.getView();
-    const target = (view.getZoom() ?? INITIAL_VIEW.zoom) + (direction === 'in' ? 1 : -1);
+    const target = (view.getZoom() ?? 2) + (direction === 'in' ? 1 : -1);
     view.animate({
       zoom: Math.min(Math.max(target, view.getMinZoom()), view.getMaxZoom()),
       duration: 250,
     });
   };
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     if (!map) return;
-    map.getView().animate({ ...INITIAL_VIEW, duration: 800 });
+    setPlaying(false);
     setActiveIndex(-1);
     overlayRef.current?.setPosition(undefined);
-  }, [map]);
-
-  const toggleTimeline = () => setIsTimelineOpen((prev) => !prev);
+    fitJourney(map.getView(), reducedMotion() ? 0 : 800);
+  };
 
   // --- Render ---
   return (
@@ -414,64 +495,84 @@ const MapComponent: React.FC = () => {
           </h2>
         </div>
 
-        {/* Map and Timeline Container */}
+        {/* Timeline beside the map on desktop, under it on phones. Side by side,
+            the panel never covers the map, so the whole map is usable. */}
         <div
-          className="relative border-2 sm:border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
+          className="grid md:grid-cols-[minmax(300px,380px)_1fr] md:h-[600px] lg:h-[680px]
+                            border-2 sm:border-4 border-black dark:border-darkBorder bg-white dark:bg-darkBg
                             shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
                             dark:shadow-[4px_4px_0px_0px_#555555] dark:sm:shadow-[8px_8px_0px_0px_#555555]
-                            h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[750px]
-                            overflow-hidden rounded-md" // Added slight rounding
+                            overflow-hidden rounded-md"
         >
-          {/* Map viewport. Everything else is a sibling: OpenLayers owns this
-              element's children, so React-rendered UI must stay outside it. */}
-          <div ref={mapRef} className="w-full h-full" aria-label="Interactive Journey Map" />
-
-          {/* Timeline Sidebar */}
-          <TimelineContainer isOpen={isTimelineOpen} onClose={toggleTimeline}>
-            {timelineData.map((entry, index) => (
-              <TimelineItem
-                key={entry.id}
-                entry={entry}
-                isActive={index === activeIndex}
-                onClick={() => handleTimelineClick(index)}
-              />
-            ))}
-          </TimelineContainer>
-
-          {/* Instructional Text Overlay - improved positioning */}
           <div
-            className="absolute top-4 right-4 left-auto md:right-20 lg:right-24 z-10
-                            bg-white/80 dark:bg-black/80 backdrop-blur-sm p-2 px-3 rounded-md
-                            border-2 border-black dark:border-darkBorder shadow-md
-                            text-xs sm:text-sm text-black dark:text-white font-medium max-w-[200px] sm:max-w-xs"
+            ref={mapBoxRef}
+            className="relative h-[360px] sm:h-[460px] md:h-auto md:order-2 scroll-mt-24
+                              border-b-2 sm:border-b-4 md:border-b-0 md:border-l-4 border-black dark:border-darkBorder"
           >
-            Click markers or timeline items to explore!
+            {/* Map viewport. Everything else is a sibling: OpenLayers owns this
+                element's children, so React-rendered UI must stay outside it. */}
+            <div
+              ref={mapRef}
+              className="absolute inset-0"
+              aria-label="Map of the places in my journey"
+            />
+
+            <ZoomControl onZoom={handleZoom} onReset={handleReset} />
+
+            {/* Gesture hint, shown briefly when someone scrolls or swipes over the map */}
+            <div
+              aria-hidden="true"
+              className={cn(
+                'pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-black/45 p-4',
+                'text-center text-lg sm:text-xl font-bold text-white transition-opacity duration-300',
+                hint.visible ? 'opacity-100' : 'opacity-0',
+              )}
+            >
+              {hint.text}
+            </div>
+
+            {/* Popup body. OpenLayers moves this node into its own overlay
+                container and positions it; React keeps rendering its contents. */}
+            <div ref={popupElRef}>{popupEntry && <Popup entry={popupEntry} />}</div>
           </div>
 
-          {/* Mobile Toggle Button for Timeline */}
-          {!isTimelineOpen && (
-            <button
-              onClick={toggleTimeline}
-              aria-label="Open timeline"
-              className="md:hidden absolute top-4 left-4 z-30 p-3 bg-bg dark:bg-darkBg text-black dark:text-darkText
-                                 border-4 border-black dark:border-white rounded-lg
-                                 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]
-                                 hover:shadow-none hover:translate-x-1 hover:translate-y-1
-                                 transition-all duration-200"
-            >
-              <List size={24} />
-            </button>
-          )}
+          <div className="flex min-h-0 flex-col md:order-1">
+            <div className="flex flex-none items-center justify-between gap-3 p-3 sm:p-4 border-b-2 sm:border-b-4 border-black dark:border-darkBorder">
+              <h3 className="font-black text-lg sm:text-xl text-black dark:text-white">
+                Journey Timeline
+              </h3>
+              <button
+                onClick={() => setPlaying((p) => !p)}
+                aria-pressed={playing}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-black bg-main rounded-base
+                                  border-2 border-black shadow-[3px_3px_0px_0px_#000]
+                                  hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-200"
+              >
+                {playing ? <Stop size={16} weight="fill" /> : <Play size={16} weight="fill" />}
+                {playing ? 'Stop' : 'Play journey'}
+              </button>
+            </div>
 
-          {/* Zoom Controls */}
-          <ZoomControl onZoom={handleZoom} onReset={handleReset} />
-
-          {/* Popup body. OpenLayers moves this node into its own overlay
-              container and positions it; React keeps rendering its contents. */}
-          <div ref={popupElRef}>
-            {popupEntry && (
-              <Popup title={popupEntry.popupTitle} description={popupEntry.popupDescription} />
-            )}
+            {/* `relative` makes this the items' offsetParent, for the scroll above */}
+            <ol ref={listRef} className="relative flex-1 min-h-0 md:overflow-y-auto p-2 space-y-1">
+              {timelineData.map((entry, index) => (
+                <li key={entry.id} className="relative">
+                  {/* Dashed link down to the next badge, like the route on the map */}
+                  {index < timelineData.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-[25px] top-[30px] -bottom-[34px] z-[1] border-l-2 border-dashed border-black/30 dark:border-white/30"
+                    />
+                  )}
+                  <TimelineItem
+                    entry={entry}
+                    n={index + 1}
+                    isActive={index === activeIndex}
+                    onClick={() => handleTimelineClick(index)}
+                  />
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </div>
