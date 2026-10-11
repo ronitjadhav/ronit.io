@@ -1,6 +1,5 @@
 'use client';
 import dynamic from 'next/dynamic';
-import LoadingScreen from '@/components/loadingScreen';
 import Navbar from '@/components/Navbar';
 import Header from '@/sections/HeroSection';
 import Footer from '@/sections/footer';
@@ -23,7 +22,6 @@ const LazyToastContainer = dynamic(
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-white dark:bg-darkBg p-2 sm:p-4 md:p-6 lg:p-8">
-      <LoadingScreen />
       {/* Contour SVG background behind all sections. Dark mode keeps more of it:
           the strokes are teal on near-black there, so they fade much faster than
           they do over white. */}

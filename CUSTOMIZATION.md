@@ -25,7 +25,7 @@ export const siteConfig = {
   jobTitle: 'Your Job Title',
   bio: 'A short bio about yourself...',
   location: 'Your Country',
-  email: 'you@example.com',
+  employer: 'Your Company',
   greetings: ['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000],
   defaultTheme: 'light',
 };
@@ -37,7 +37,7 @@ export const siteConfig = {
 | `jobTitle`     | OG image, SEO metadata                                                       |
 | `bio`          | Hero section, LinkedIn preview card                                          |
 | `location`     | JSON-LD schema                                                               |
-| `email`        | Contact page (if used)                                                       |
+| `employer`     | JSON-LD schema (`worksFor`)                                                  |
 | `greetings`    | Hero section typing animation (alternates `[text, delay, text, delay, ...]`) |
 | `defaultTheme` | Theme on first visit — `'light'`, `'dark'`, or `'system'` (follows the OS)   |
 

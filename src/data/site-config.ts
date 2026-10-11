@@ -32,13 +32,13 @@ export const siteConfig = {
   jobTitle: 'Geospatial Developer & Software Engineer',
 
   /** Short bio displayed in the hero section */
-  bio: "Based in Germany, I'm a Geospatial Developer and a Software Engineer. I love to work with maps, data, and code. I'm passionate about open-source, web technologies, and building cool stuff.",
+  bio: "Based in Germany, I'm a Geospatial Developer and Software Engineer at Camptocamp. I build open-source GIS software, from web mapping apps to QGIS plugins and GeoServer tools. I love working with maps, data, and code.",
+
+  /** Current employer, used in the JSON-LD schema */
+  employer: 'Camptocamp',
 
   /** Your country / location */
   location: 'Germany',
-
-  /** Your email address */
-  email: 'hi@ronit.io',
 
   /** Greeting sequence for the hero typing animation ([text, delay, text, delay, ...]) */
   greetings: ['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000, 'Namaste!', 1000] as (
@@ -99,7 +99,7 @@ export interface Skill {
    * Supported values: 'SiArcgis', 'SiQgis', 'SiOpenlayers', 'SiLeaflet',
    * 'SiPython', 'SiJavascript', 'SiTypescript', 'SiAngular',
    * 'SiPostgresql', 'SiGit', 'SiDocker', 'SiKubernetes',
-   * 'SiArgo', 'SiApacheairflow', 'SiOsgeo'
+   * 'SiArgo', 'SiApacheairflow', 'SiOsgeo', 'SiOdoo'
    */
   icon: string;
 }
@@ -115,6 +115,7 @@ export const skills: Skill[] = [
   { text: 'Apache Airflow', icon: 'SiApacheairflow' },
   { text: 'GeoServer', icon: 'SiOsgeo' },
   { text: 'Python', icon: 'SiPython' },
+  { text: 'Odoo', icon: 'SiOdoo' },
   { text: 'JavaScript', icon: 'SiJavascript' },
   { text: 'TypeScript', icon: 'SiTypescript' },
   { text: 'Angular', icon: 'SiAngular' },

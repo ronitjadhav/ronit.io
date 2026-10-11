@@ -14,6 +14,7 @@ import {
   SiJavascript,
   SiKubernetes,
   SiLeaflet,
+  SiOdoo,
   SiOpenlayers,
   SiOsgeo,
   SiPython,
@@ -34,6 +35,7 @@ const iconMap: Record<string, IconType> = {
   SiOpenlayers,
   SiLeaflet,
   SiPython,
+  SiOdoo,
   SiJavascript,
   SiTypescript,
   SiAngular,
@@ -73,7 +75,7 @@ const HeroSection = memo(function HeroSection() {
       {/* Radial gradient for the container to give a faded look */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
-      <div className="mx-auto max-w-full px-3 sm:px-5 py-2 sm:py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-between relative z-10 flex-1">
+      <div className="mx-auto max-w-full px-3 sm:px-5 py-2 sm:py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-6 lg:justify-between lg:gap-0 relative z-10 flex-1">
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start lg:pl-8 order-2 lg:order-1">
           <div className={cn(enter, 'delay-300')}>
             <TypeAnimation
