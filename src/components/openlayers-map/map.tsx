@@ -11,7 +11,8 @@ import type BaseLayer from 'ol/layer/Base';
 import type { Coordinate } from 'ol/coordinate';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import type { AttributionLike } from 'ol/source/Source';
 import { boundingExtent } from 'ol/extent';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
@@ -89,6 +90,22 @@ const arc = ([x1, y1]: Coordinate, [x2, y2]: Coordinate): Coordinate[] => {
 const ROUTE = new LineString(
   CHRONOLOGICAL.slice(1).flatMap((to, i) => arc(COORDS[CHRONOLOGICAL[i]], COORDS[to])),
 );
+
+// The text credit Mapbox requires. Their TileJSON gives OpenLayers none, so it is
+// set here; "Improve this map" opens their feedback tool at the current view.
+const MAPBOX_ATTRIBUTION: AttributionLike = ({ viewState }) => {
+  const [lon, lat] = toLonLat(viewState.center);
+  const link = (href: string, text: string) =>
+    `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+  return [
+    link('https://www.mapbox.com/about/maps/', '© Mapbox'),
+    link('https://www.openstreetmap.org/copyright', '© OpenStreetMap'),
+    link(
+      `https://apps.mapbox.com/feedback/#/${lon.toFixed(4)}/${lat.toFixed(4)}/${Math.round(viewState.zoom)}`,
+      '<strong>Improve this map</strong>',
+    ),
+  ];
+};
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -295,8 +312,8 @@ const MapComponent: React.FC = () => {
       target: mapRef.current,
       layers: [routeLayer, markerLayer],
       overlays: [overlay],
-      // Mapbox and OpenStreetMap require their attribution to be shown.
-      controls: [new Attribution()],
+      // Shows the basemap's credit, expanded as Mapbox requires (logo further down).
+      controls: [new Attribution({ collapsible: false })],
       interactions: defaultInteractions({
         dragPan: false,
         mouseWheelZoom: false,
@@ -386,6 +403,7 @@ const MapComponent: React.FC = () => {
       accessToken: mapboxToken,
       zIndex: BASEMAP_Z,
     });
+    basemap.getSource()?.setAttributions(MAPBOX_ATTRIBUTION);
     map.addLayer(basemap);
 
     // Drop the old basemap only once the new one is in place, so the map never
@@ -506,7 +524,7 @@ const MapComponent: React.FC = () => {
         >
           <div
             ref={mapBoxRef}
-            className="relative h-[360px] sm:h-[460px] md:h-auto md:order-2 scroll-mt-24
+            className="relative h-[360px] sm:h-[460px] md:h-auto md:order-2 scroll-mt-24 [&_.ol-attribution]:max-w-[calc(100%-6.5rem)]
                               border-b-2 sm:border-b-4 md:border-b-0 md:border-l-4 border-black dark:border-darkBorder"
           >
             {/* Map viewport. Everything else is a sibling: OpenLayers owns this
@@ -518,6 +536,16 @@ const MapComponent: React.FC = () => {
             />
 
             <ZoomControl onZoom={handleZoom} onReset={handleReset} />
+
+            {/* Mapbox's logo, required alongside the text credit. Their unaltered
+                artwork, from the mapbox-gl stylesheet. */}
+            <a
+              href="https://www.mapbox.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Mapbox"
+              className="absolute bottom-1 left-2 z-10 block h-[23px] w-[88px] bg-[url('/mapbox-logo.svg')] bg-no-repeat"
+            />
 
             {/* Gesture hint, shown briefly when someone scrolls or swipes over the map */}
             <div
