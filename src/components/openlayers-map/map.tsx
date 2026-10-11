@@ -266,6 +266,7 @@ const MapComponent: React.FC = () => {
   // user's current pan and zoom.
   useEffect(() => {
     if (!mapRef.current || !popupElRef.current) return;
+    const target = mapRef.current;
 
     const overlay = new Overlay({
       element: popupElRef.current,
@@ -309,7 +310,7 @@ const MapComponent: React.FC = () => {
     });
 
     const mapInstance = new Map({
-      target: mapRef.current,
+      target,
       layers: [routeLayer, markerLayer],
       overlays: [overlay],
       // Shows the basemap's credit, expanded as Mapbox requires (logo further down).
@@ -338,9 +339,10 @@ const MapComponent: React.FC = () => {
     const onTouchMove = (e: TouchEvent) => {
       if (e.touches.length === 1) flashHint('Use two fingers to move the map');
     };
-    const viewport = mapInstance.getViewport();
-    viewport.addEventListener('wheel', onWheel, { passive: true });
-    viewport.addEventListener('touchmove', onTouchMove, { passive: true });
+    // On the target, not the viewport: both events bubble up to it, and the
+    // viewport is gone once the map is disposed.
+    target.addEventListener('wheel', onWheel, { passive: true });
+    target.addEventListener('touchmove', onTouchMove, { passive: true });
 
     const showPopup = (entry: TimelineEntry) => {
       setPopupEntry(entry);
@@ -359,7 +361,7 @@ const MapComponent: React.FC = () => {
     const handlePointerMove = (event: MapBrowserEvent) => {
       if (event.dragging) return;
       const entry = entryAt(event);
-      mapInstance.getTargetElement().style.cursor = entry ? 'pointer' : '';
+      target.style.cursor = entry ? 'pointer' : '';
       if (entry === hovered) return;
       hovered = entry;
 
@@ -384,8 +386,8 @@ const MapComponent: React.FC = () => {
 
     return () => {
       window.clearTimeout(hintTimer);
-      viewport.removeEventListener('wheel', onWheel);
-      viewport.removeEventListener('touchmove', onTouchMove);
+      target.removeEventListener('wheel', onWheel);
+      target.removeEventListener('touchmove', onTouchMove);
       mapInstance.dispose(); // also drops its listeners, layers and overlays
       overlayRef.current = null;
       markerLayerRef.current = null;
