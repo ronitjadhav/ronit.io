@@ -102,6 +102,7 @@ export const projects = [
     tech: ['React', 'TypeScript'],
     github: 'https://github.com/you/project',
     live: 'https://project.example.com',
+    post: 'https://dev.to/you/post', // optional
     image: myProjectImage, // imported at the top of site-config.ts
   },
 ];

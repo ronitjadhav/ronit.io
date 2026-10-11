@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowSquareOut } from '@phosphor-icons/react/ssr';
+import { ArrowSquareOut, Article } from '@phosphor-icons/react/ssr';
 import { FaGithub } from 'react-icons/fa';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -100,6 +100,19 @@ const ProjectsShowcase = () => {
                   <ArrowSquareOut size={18} />
                   {LIVE_LABELS[new URL(project.live).hostname] ?? 'Live Demo'}
                 </a>
+                {project.post && (
+                  <a
+                    href={project.post}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-pink-300 text-black font-bold text-sm sm:text-base transform transition-transform hover:-translate-y-1 hover:shadow-lg dark:text-black
+                      border-2 border-black dark:border-darkBorder
+                      shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
+                  >
+                    <Article size={18} />
+                    Read post
+                  </a>
+                )}
               </div>
             </div>
           ))}
