@@ -67,6 +67,7 @@ export function DialogComponent({
             to_name: 'Ronit Jadhav',
             from_name: input.name,
             email: input.email,
+            reply_to: input.email,
             message: input.message,
             // Checked by EmailJS when the template has reCAPTCHA V2 verification on.
             'g-recaptcha-response': captchaToken,
