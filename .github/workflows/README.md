@@ -56,7 +56,7 @@ The CI workflow is designed to be used as a required status check for pull reque
 2. ✅ TypeScript compilation succeeds
 3. ✅ Code is properly formatted
 4. ✅ Application builds without errors
-5. ⚠️ Dependencies are audited for security issues
+5. ✅ No dependency that ships has a high or critical advisory (`npm audit --omit=dev`)
 
 ## Adding New Checks
 

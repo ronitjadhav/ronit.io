@@ -82,7 +82,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-build-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
 
-  # Optional: Add a job for dependency security scanning
+  # Fails on a high or critical advisory in a dependency that ships. Build-only
+  # tools are left out: they never reach visitors, and Dependabot alerts cover them.
   security-audit:
     runs-on: ubuntu-latest
     name: Security Audit
@@ -97,8 +98,7 @@ jobs:
           node-version: '24'
 
       - name: Run npm audit
-        run: npm audit --audit-level=moderate
-        continue-on-error: true # Allow this to pass with warnings
+        run: npm audit --omit=dev --audit-level=high
 
   # Job to check if all required checks pass
   all-checks-pass:
