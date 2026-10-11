@@ -14,9 +14,10 @@ import type { StaticImageData } from 'next/image';
 import digipinImage from '../media/digipin.webp';
 import geonetworkUiImage from '../media/geonetwork-ui.webp';
 import geoserverCloudMcpImage from '../media/geoservercloud-mcp.webp';
+import geoserverManagerImage from '../media/geoserver-manager.webp';
 import odoolingsImage from '../media/odoolings.webp';
 import olBenchImage from '../media/olBench.webp';
-import qgisHubImage from '../media/QGIS-Banner.webp';
+import qgisHubImage from '../media/qgis-hub.webp';
 import thinkhazardImage from '../media/thinkhazard.webp';
 
 // ---------------------
@@ -31,13 +32,13 @@ export const siteConfig = {
   jobTitle: 'Geospatial Developer & Software Engineer',
 
   /** Short bio displayed in the hero section */
-  bio: "Based in Germany, I'm a Geospatial Developer and a Software Engineer. I love to work with maps, data, and code. I'm passionate about open-source, web technologies, and building cool stuff.",
+  bio: "Based in Germany, I'm a Geospatial Developer and Software Engineer at Camptocamp. I build open-source GIS software, from web mapping apps to QGIS plugins and GeoServer tools. I love working with maps, data, and code.",
+
+  /** Current employer, used in the JSON-LD schema */
+  employer: 'Camptocamp',
 
   /** Your country / location */
   location: 'Germany',
-
-  /** Your email address */
-  email: 'hi@ronit.io',
 
   /** Greeting sequence for the hero typing animation ([text, delay, text, delay, ...]) */
   greetings: ['Hello!', 1000, 'Hola!', 1000, 'Bonjour!', 1000, 'Namaste!', 1000] as (
@@ -98,7 +99,7 @@ export interface Skill {
    * Supported values: 'SiArcgis', 'SiQgis', 'SiOpenlayers', 'SiLeaflet',
    * 'SiPython', 'SiJavascript', 'SiTypescript', 'SiAngular',
    * 'SiPostgresql', 'SiGit', 'SiDocker', 'SiKubernetes',
-   * 'SiArgo', 'SiApacheairflow', 'SiOsgeo'
+   * 'SiArgo', 'SiApacheairflow', 'SiOsgeo', 'SiOdoo'
    */
   icon: string;
 }
@@ -114,6 +115,7 @@ export const skills: Skill[] = [
   { text: 'Apache Airflow', icon: 'SiApacheairflow' },
   { text: 'GeoServer', icon: 'SiOsgeo' },
   { text: 'Python', icon: 'SiPython' },
+  { text: 'Odoo', icon: 'SiOdoo' },
   { text: 'JavaScript', icon: 'SiJavascript' },
   { text: 'TypeScript', icon: 'SiTypescript' },
   { text: 'Angular', icon: 'SiAngular' },
@@ -139,6 +141,15 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    title: 'GeoServer Manager',
+    description:
+      'A QGIS plugin to administer a GeoServer through its REST API: workspaces, stores, layers, styles, tile cache and settings. Publish layers from QGIS, or bring what the server has back as WMS, WFS or WMTS.',
+    tech: ['Python', 'QGIS', 'PyQt', 'GeoServer', 'REST API'],
+    github: 'https://github.com/ronitjadhav/qgis-geoserver-manager',
+    live: 'https://plugins.qgis.org/plugins/geoserver_manager/',
+    image: geoserverManagerImage,
+  },
   {
     title: 'Odoolings',
     description:
@@ -223,10 +234,10 @@ export interface TimelineEntry {
 export const timelineData: TimelineEntry[] = [
   {
     id: 1,
-    title: 'Software Engineer @ Camptocamp',
+    title: 'Intern → Software Engineer @ Camptocamp',
     date: 'Oct 2023 - Present',
     description:
-      'Kicked off my journey into the open-source geospatial realm at Camptocamp, working with QGIS, Geonetwork-UI, developing custom GIS dashboards, and contributing to QGIS plugins. Diving into Docker, web GIS, and everything open-source!',
+      'Started as an intern building the OpenLayers rendering benchmark, then stayed on as a Software Engineer. Building open-source geospatial software: Geonetwork-UI, QGIS plugins, GeoServer tooling, and custom GIS dashboards.',
     location: [13.427683548268714, 52.499819181584776],
     locationName: 'Berlin, Germany (Hybrid)',
     popupTitle: 'Camptocamp',
@@ -260,7 +271,7 @@ export const timelineData: TimelineEntry[] = [
   {
     id: 4,
     title: 'Student Intern @ University of Cologne',
-    date: '2019 - 2019',
+    date: '2019',
     description:
       'Interned at the University of Cologne, applying GIS and spatial analysis to hydrological modeling with ArcSWAT for the Mula-Mutha river. Automated tasks using Python and supported geospatial research for water resources.',
     location: [6.936245553273681, 50.92747527039799],

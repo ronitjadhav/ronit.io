@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -14,10 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ReCaptchaDialog } from './ReCaptchaDialog';
+import { ReCaptchaDialog, googleReCaptchaKey } from './ReCaptchaDialog';
 import emailjs from '@emailjs/browser';
 import { toast } from 'react-toastify';
-import { CircleNotch } from '@phosphor-icons/react/ssr';
 
 interface DialogProps {
   triggerButtonText: string;
@@ -38,7 +37,8 @@ export function DialogComponent({
 }: DialogProps) {
   const [input, setInput] = useState({ name: '', email: '', message: '' });
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCaptchaOpen, setIsCaptchaOpen] = useState(false);
+  const closeCaptcha = useCallback(() => setIsCaptchaOpen(false), []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -53,11 +53,41 @@ export function DialogComponent({
     return null;
   };
 
-  const resetForm = () => {
-    setInput({ name: '', email: '', message: '' });
+  const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+  const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+  const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+  const sendEmail = async (captchaToken?: string) => {
+    try {
+      await toast.promise(
+        emailjs.send(
+          serviceID!,
+          templateID!,
+          {
+            to_name: 'Ronit Jadhav',
+            from_name: input.name,
+            email: input.email,
+            reply_to: input.email,
+            message: input.message,
+            // Checked by EmailJS when the template has reCAPTCHA V2 verification on.
+            'g-recaptcha-response': captchaToken,
+          },
+          publicKey,
+        ),
+        { pending: 'Sending…', success: 'Message sent successfully!' },
+      );
+      setInput({ name: '', email: '', message: '' });
+    } catch (err: unknown) {
+      const errorMessage =
+        (err as { text?: string; message?: string })?.text ||
+        (err as Error).message ||
+        'Failed to send message';
+      toast.error(errorMessage);
+      setIsOpen(true); // reopen with what they typed, so they can retry
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationError = validateForm();
@@ -65,53 +95,33 @@ export function DialogComponent({
       toast.error(validationError);
       return;
     }
-
-    const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-    const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
     if (!serviceID || !templateID || !publicKey) {
       toast.error('Email service configuration is missing');
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const emailRes = await emailjs.send(
-        serviceID,
-        templateID,
-        {
-          to_name: 'Ronit Jadhav',
-          from_name: input.name,
-          email: input.email,
-          message: input.message,
-        },
-        publicKey,
-      );
-
-      if (emailRes.status === 200) {
-        toast.success('Message sent successfully!');
-        resetForm();
-        setIsOpen(false);
-      }
-    } catch (err: unknown) {
-      const errorMessage =
-        (err as { text?: string; message?: string })?.text ||
-        (err as Error).message ||
-        'Failed to send message';
-      toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    // The form's modal blocks clicks outside it, the captcha included, so close it
+    // first. The input lives in this component and survives the close.
+    setIsOpen(false);
+    if (googleReCaptchaKey) setIsCaptchaOpen(true);
+    else sendEmail();
   };
 
   return (
     <>
+      <Button
+        className={`transition-all hover:scale-[1.02] active:scale-[0.98] ${buttonClassName}`}
+        onClick={() => setIsOpen(true)}
+      >
+        {triggerButtonText}
+      </Button>
       <ReCaptchaDialog
-        triggerButtonText={triggerButtonText}
-        buttonClassName={buttonClassName}
-        onVerified={() => setIsOpen(true)}
+        open={isCaptchaOpen}
+        onClose={closeCaptcha}
+        onVerified={(token) => {
+          setIsCaptchaOpen(false);
+          sendEmail(token);
+        }}
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogPortal>
@@ -139,7 +149,6 @@ export function DialogComponent({
                           value={input.name}
                           onChange={handleInputChange}
                           className={`mt-1 block w-full ${inputClassName}`}
-                          disabled={isLoading}
                           required
                         />
                       </div>
@@ -155,7 +164,6 @@ export function DialogComponent({
                           value={input.email}
                           onChange={handleInputChange}
                           className={`mt-1 block w-full ${inputClassName}`}
-                          disabled={isLoading}
                           required
                         />
                       </div>
@@ -170,7 +178,6 @@ export function DialogComponent({
                           value={input.message}
                           onChange={handleInputChange}
                           className={`mt-1 block w-full min-h-[100px] ${inputClassName}`}
-                          disabled={isLoading}
                           required
                         />
                       </div>
@@ -179,17 +186,10 @@ export function DialogComponent({
                     <DialogFooter className="mt-6">
                       <Button
                         type="submit"
-                        disabled={isLoading || !input.name || !input.email || !input.message}
+                        disabled={!input.name || !input.email || !input.message}
                         className="w-full bg-main text-black disabled:opacity-50 h-12 text-base font-heading md:text-lg lg:h-14 lg:text-xl"
                       >
-                        {isLoading ? (
-                          <>
-                            <CircleNotch className="mr-2 h-4 w-4 animate-spin" />
-                            Sending...
-                          </>
-                        ) : (
-                          'Send Message'
-                        )}
+                        Send Message
                       </Button>
                     </DialogFooter>
                   </form>

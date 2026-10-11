@@ -84,7 +84,7 @@ export default function RootLayout({
     knowsAbout: skills.map((s) => s.text),
     worksFor: {
       '@type': 'Organization',
-      name: 'Freelance',
+      name: siteConfig.employer,
     },
     sameAs: [siteUrls.github, siteUrls.linkedin].filter(Boolean),
   };

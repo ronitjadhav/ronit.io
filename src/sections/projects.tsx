@@ -5,6 +5,12 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { projects } from '@/data/site-config';
 
+// Button text for the `live` link, by host. Anything else is a demo.
+const LIVE_LABELS: Record<string, string> = {
+  'pypi.org': 'PyPI',
+  'plugins.qgis.org': 'QGIS Plugin',
+};
+
 const ProjectsShowcase = () => {
   return (
     <div className="relative w-full py-8 sm:py-12 md:py-16 p-3 sm:p-5 md:p-8 bg-white dark:bg-black">
@@ -37,7 +43,7 @@ const ProjectsShowcase = () => {
           {projects.map((project) => (
             <div
               key={project.title}
-              className="group bg-bg p-3 sm:p-4 md:p-6 rounded-lg transform transition-transform hover:scale-105 dark:bg-darkBg
+              className="group flex flex-col bg-bg p-3 sm:p-4 md:p-6 rounded-lg transform transition-transform hover:scale-105 dark:bg-darkBg
                 border-[3px] border-black dark:border-darkBorder
                 shadow-[8px_8px_0px_0px_#000000] dark:shadow-[8px_8px_0px_0px_#555555]"
             >
@@ -71,7 +77,7 @@ const ProjectsShowcase = () => {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-2 sm:gap-4">
+              <div className="mt-auto flex flex-wrap gap-2 sm:gap-4">
                 <a
                   href={project.github}
                   target="_blank"
@@ -92,7 +98,7 @@ const ProjectsShowcase = () => {
                     shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
                 >
                   <ArrowSquareOut size={18} />
-                  {project.live.includes('pypi.org') ? 'PyPI' : 'Live Demo'}
+                  {LIVE_LABELS[new URL(project.live).hostname] ?? 'Live Demo'}
                 </a>
               </div>
             </div>

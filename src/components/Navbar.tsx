@@ -19,6 +19,7 @@ const NavBar = () => {
   const [showNav, setShowNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +33,14 @@ const NavBar = () => {
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      // The toggle button is outside the menu too; closing here would let its
+      // click reopen the menu straight away.
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(target) &&
+        !menuButtonRef.current?.contains(target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -92,7 +100,10 @@ const NavBar = () => {
           <div className="md:hidden flex items-center gap-4">
             <ThemeSwitcher />
             <button
+              ref={menuButtonRef}
               onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
               className="p-2 bg-main dark:bg-main transform hover:-rotate-3 transition-transform
                 border-2 border-black dark:border-darkBorder
                 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#555555]"
@@ -118,7 +129,7 @@ const NavBar = () => {
               <DialogComponent
                 triggerButtonText="Get in Touch!"
                 dialogTitle="Get in Touch"
-                dialogDescription="Please fill out the form below to get in touch with us."
+                dialogDescription="Please fill out the form below to get in touch with me."
                 inputLabels={{ name: 'Name', email: 'Email', message: 'Message' }}
               />
             </div>
