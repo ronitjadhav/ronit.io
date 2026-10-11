@@ -66,6 +66,9 @@ To add new quality checks:
 2. Ensure it fails fast with `continue-on-error: false`
 3. Update this README with the new check
 
+Actions are pinned to a commit SHA, with the version in a comment. A moved tag
+cannot change what runs. Dependabot updates both the SHA and the comment.
+
 ## Branch Protection
 
 Consider setting up branch protection rules to require:
