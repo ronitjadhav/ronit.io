@@ -493,13 +493,13 @@ const MapComponent: React.FC = () => {
       <div
         className={cn(
           'absolute inset-0',
-          '[background-size:20px_20px]',
-          '[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]',
-          'dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]',
+          'bg-size-[20px_20px]',
+          'bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]',
+          'dark:bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]',
         )}
       />
       {/* Radial gradient for the container to give a faded look */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
       <div className="max-w-full mx-auto px-2 sm:px-5 relative z-10">
         {/* Title Section */}
@@ -524,9 +524,11 @@ const MapComponent: React.FC = () => {
                             dark:shadow-[4px_4px_0px_0px_#555555] dark:sm:shadow-[8px_8px_0px_0px_#555555]
                             overflow-hidden rounded-md"
         >
+          {/* The credit's max-width keeps it clear of the Mapbox logo. It needs `!`:
+              ol.css is not in a cascade layer, so it beats any utility. */}
           <div
             ref={mapBoxRef}
-            className="relative h-[360px] sm:h-[460px] md:h-auto md:order-2 scroll-mt-24 [&_.ol-attribution]:max-w-[calc(100%-6.5rem)]
+            className="relative h-[360px] sm:h-[460px] md:h-auto md:order-2 scroll-mt-24 [&_.ol-attribution]:max-w-[calc(100%-6.5rem)]!
                               border-b-2 sm:border-b-4 md:border-b-0 md:border-l-4 border-black dark:border-darkBorder"
           >
             {/* Map viewport. Everything else is a sibling: OpenLayers owns this
@@ -592,7 +594,7 @@ const MapComponent: React.FC = () => {
                   {index < timelineData.length - 1 && (
                     <span
                       aria-hidden="true"
-                      className="absolute left-[25px] top-[30px] -bottom-[34px] z-[1] border-l-2 border-dashed border-black/30 dark:border-white/30"
+                      className="absolute left-[25px] top-[30px] bottom-[-34px] z-1 border-l-2 border-dashed border-black/30 dark:border-white/30"
                     />
                   )}
                   <TimelineItem

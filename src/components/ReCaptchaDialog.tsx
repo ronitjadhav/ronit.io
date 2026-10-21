@@ -51,7 +51,7 @@ export function ReCaptchaDialog({ open, onClose, onVerified }: ReCaptchaDialogPr
   if (!open || !googleReCaptchaKey) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-xs">
       <div
         ref={captchaContainerRef}
         className="relative w-[calc(100vw-2rem)] max-w-md mx-auto my-auto rounded-base border-2 border-border dark:border-darkBorder bg-white dark:bg-darkBg shadow-light dark:shadow-dark animate-in fade-in-0 zoom-in-90 duration-200"
@@ -63,7 +63,7 @@ export function ReCaptchaDialog({ open, onClose, onVerified }: ReCaptchaDialogPr
             </h3>
             <button
               onClick={onClose}
-              className="text-text dark:text-darkText opacity-70 hover:opacity-100 transition-all hover:rotate-90 rounded-sm p-1"
+              className="text-text dark:text-darkText opacity-70 hover:opacity-100 transition-all hover:rotate-90 rounded-xs p-1"
             >
               <X className="h-5 w-5" />
               <span className="sr-only">Close</span>
