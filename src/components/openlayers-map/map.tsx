@@ -532,6 +532,7 @@ const MapComponent: React.FC = () => {
             <div
               ref={mapRef}
               className="absolute inset-0"
+              role="region"
               aria-label="Map of the places in my journey"
             />
 

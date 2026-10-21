@@ -136,6 +136,8 @@ export interface Project {
   github: string;
   /** Live demo URL */
   live: string;
+  /** Optional blog post about the project, shown as a "Read post" button */
+  post?: string;
   /** Thumbnail, imported from src/media/ at the top of this file */
   image: StaticImageData;
 }
@@ -193,6 +195,7 @@ export const projects: Project[] = [
     tech: ['Python', 'Qt', 'QGIS'],
     github: 'https://github.com/qgis/QGIS-Hub-Plugin',
     live: 'https://plugins.qgis.org/plugins/qgis_hub_plugin/',
+    post: 'https://dev.to/ronitjadhav/qgis-hub-plugin-04-a-cleaner-ui-and-new-resource-types-3gcf',
     image: qgisHubImage,
   },
   {
@@ -211,6 +214,7 @@ export const projects: Project[] = [
     tech: ['Openlayers', 'Next.js', 'TypeScript', 'Tailwind CSS'],
     github: 'https://github.com/ronitjadhav/digipin-openlayers',
     live: 'https://digipin.maplabs.tech',
+    post: 'https://dev.to/ronitjadhav/discover-digipin-the-future-of-addressing-in-india-can',
     image: digipinImage,
   },
 ];
