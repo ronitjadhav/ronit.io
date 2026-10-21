@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Detect package manager
         id: detect-package-manager
@@ -34,7 +34,7 @@ jobs:
           fi
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
@@ -73,7 +73,7 @@ jobs:
         continue-on-error: false
 
       - name: Cache build artifacts
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             .next/cache
@@ -82,23 +82,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-build-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
 
-  # Optional: Add a job for dependency security scanning
+  # Fails on a high or critical advisory in a dependency that ships. Build-only
+  # tools are left out: they never reach visitors, and Dependabot alerts cover them.
   security-audit:
     runs-on: ubuntu-latest
     name: Security Audit
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
 
       - name: Run npm audit
-        run: npm audit --audit-level=moderate
-        continue-on-error: true # Allow this to pass with warnings
+        run: npm audit --omit=dev --audit-level=high
 
   # Job to check if all required checks pass
   all-checks-pass:

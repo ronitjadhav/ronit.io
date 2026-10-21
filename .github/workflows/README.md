@@ -56,7 +56,7 @@ The CI workflow is designed to be used as a required status check for pull reque
 2. ✅ TypeScript compilation succeeds
 3. ✅ Code is properly formatted
 4. ✅ Application builds without errors
-5. ⚠️ Dependencies are audited for security issues
+5. ✅ No dependency that ships has a high or critical advisory (`npm audit --omit=dev`)
 
 ## Adding New Checks
 
@@ -65,6 +65,9 @@ To add new quality checks:
 1. Add a new step to the `quality-checks` job in `ci.yml`
 2. Ensure it fails fast with `continue-on-error: false`
 3. Update this README with the new check
+
+Actions are pinned to a commit SHA, with the version in a comment. A moved tag
+cannot change what runs. Dependabot updates both the SHA and the comment.
 
 ## Branch Protection
 
