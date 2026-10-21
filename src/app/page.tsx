@@ -33,7 +33,7 @@ export default function Home() {
       <div className="relative z-10 mx-auto w-container max-w-full bg-white dark:bg-black border-2 border-black dark:border-darkBorder shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#555555] sm:border-2 md:border-4 md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:md:shadow-[12px_12px_0px_0px_#555555] min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] lg:min-h-[calc(100vh-4rem)]">
         <Navbar />
         <main className="flex min-h-full flex-col">
-          <div className="flex-grow">
+          <div className="grow">
             <section id="home">
               <Header />
             </section>

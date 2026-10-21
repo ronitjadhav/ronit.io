@@ -11,10 +11,6 @@ updates:
       minor-and-patch:
         update-types: ['minor', 'patch']
     ignore:
-      # Tailwind 4 is a config-to-CSS rewrite, not a version bump. Unpin when
-      # someone does that migration deliberately.
-      - dependency-name: tailwindcss
-        update-types: ['version-update:semver-major']
       # typescript-eslint does not support TS 7 yet (typescript-eslint#10940).
       - dependency-name: typescript
         update-types: ['version-update:semver-major']

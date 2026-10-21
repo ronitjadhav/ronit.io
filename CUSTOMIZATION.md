@@ -224,19 +224,18 @@ To remove a section, simply comment out or delete its line. To add a new section
 
 ## Theme Customization
 
-The neobrutalism color scheme is defined in `tailwind.config.ts`:
+The neobrutalism color scheme is defined in the `@theme` block of `src/app/globals.css` (Tailwind CSS 4 has no JavaScript config):
 
-```ts
-colors: {
-  main: '#76fbd9',      // Primary accent color
-  mainAccent: '#4ddbb5',
-  bg: '#e0f0ff',        // Light mode background
-  darkBg: '#212121',    // Dark mode background
-  // ...
+```css
+@theme {
+  --color-main: #76fbd9; /* Primary accent color */
+  --color-bg: #ffffff; /* Light mode background */
+  --color-darkBg: #212121; /* Dark mode background */
+  /* ... */
 }
 ```
 
-Modify these values to change the site's color palette.
+Each `--color-<name>` becomes utilities such as `bg-<name>` and `text-<name>`. Modify these values to change the site's color palette.
 
 ---
 

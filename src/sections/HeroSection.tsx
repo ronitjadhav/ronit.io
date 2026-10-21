@@ -56,10 +56,13 @@ const skills = siteSkills.map((skill) => ({
 }));
 
 const HeroSection = memo(function HeroSection() {
-  // ponytail: entrance animations are CSS (tailwindcss-animate), not JS — the hero
+  // ponytail: entrance animations are CSS (tw-animate-css), not JS — the hero
   // is above the fold, so it must paint before hydration. `enter` = the shared
   // fade-up; `delay-*` staggers it the way framer's staggerChildren used to.
-  const enter = 'animate-in fade-in slide-in-from-bottom-5 duration-500 ease-out fill-mode-both';
+  // The slide is an explicit length: tw-animate-css reads `-5` as 5% of the
+  // element's height, not 5 spacing units.
+  const enter =
+    'animate-in fade-in slide-in-from-bottom-[1.25rem] duration-500 ease-out fill-mode-both';
 
   return (
     <header className="relative flex min-h-[500px] sm:min-h-[600px] max-h-[900px] h-screen w-full flex-col items-center justify-center bg-white dark:bg-black overflow-hidden pb-14 sm:pb-16 md:pb-20">
@@ -67,13 +70,13 @@ const HeroSection = memo(function HeroSection() {
       <div
         className={cn(
           'absolute inset-0',
-          '[background-size:20px_20px]',
-          '[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]',
-          'dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]',
+          'bg-size-[20px_20px]',
+          'bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]',
+          'dark:bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]',
         )}
       />
       {/* Radial gradient for the container to give a faded look */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
       <div className="mx-auto max-w-full px-3 sm:px-5 py-2 sm:py-4 md:py-8 lg:py-4 text-left flex flex-col lg:flex-row items-center justify-center gap-4 sm:gap-6 lg:justify-between lg:gap-0 relative z-10 flex-1">
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start lg:pl-8 order-2 lg:order-1">
@@ -96,7 +99,7 @@ const HeroSection = memo(function HeroSection() {
           <p
             className={cn(
               enter,
-              'delay-700 my-3 sm:my-5 md:my-6 lg:my-8 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed lg:leading-relaxed text-center lg:text-left max-w-2xl lg:max-w-xl',
+              'delay-700 my-3 sm:my-5 md:my-6 lg:my-8 text-sm sm:text-base md:text-lg lg:text-xl font-normal leading-relaxed text-center lg:text-left max-w-2xl lg:max-w-xl',
             )}
           >
             {siteConfig.bio}
@@ -129,7 +132,7 @@ const HeroSection = memo(function HeroSection() {
             {/* Contact button with proper spacing for mobile */}
             <div
               className={cn(
-                'animate-in fade-in zoom-in-95 duration-500 fill-mode-both delay-[1500ms]',
+                'animate-in fade-in zoom-in-95 duration-500 fill-mode-both delay-1500',
                 'relative z-10 mt-2 active:scale-95 transition-transform',
               )}
             >

@@ -1,56 +1,128 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+/* next-themes puts a `dark` class on <html>; the default would follow the OS. */
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant w500 (@media (max-width: 500px));
+
+@theme {
+  --breakpoint-xs: 30rem;
+  --width-container: 1400px;
+
+  --color-main: #76fbd9;
+  --color-overlay: rgba(0, 0, 0, 0.8); /* behind modals */
+  --color-bg: #ffffff;
+  --color-text: #000;
+  --color-border: #000;
+  --color-darkBg: #212121;
+  --color-darkText: #eeefe9;
+  --color-darkBorder: #000;
+  /* not pitch black, because borders and box shadows are */
+  --color-secondaryBlack: #212121;
+
+  /* Tailwind 3's values for the palette shades this site uses. Tailwind 4
+     moved its palette to OKLCH, which is more saturated. Delete these to
+     take the new colours. */
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-gray-100: #f3f4f6;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-green-400: #4ade80;
+  --color-pink-300: #f9a8d4;
+  --color-red-500: #ef4444;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-300: #fde047;
+
+  --radius-base: 5px;
+  --shadow-light: 4px 4px 0px 0px #000;
+  --shadow-dark: 4px 4px 0px 0px #000;
+  /* A pressed button moves onto its shadow. */
+  --translate-boxShadowX: 4px;
+  --translate-boxShadowY: 4px;
+  --translate-reverseBoxShadowX: -4px;
+  --translate-reverseBoxShadowY: -4px;
+  --font-weight-base: 500;
+  --font-weight-heading: 700;
+
+  --animate-wiggle: wiggle 0.4s ease-in-out;
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg) scale(1.1);
+    }
+    25% {
+      transform: rotate(-10deg) scale(1.1);
+    }
+    75% {
+      transform: rotate(10deg) scale(1.1);
+    }
+  }
 }
 
-/* Keep the sticky navbar from covering a section's start when jumping to its
-   anchor. Matches the navbar's own height (top-4 + margin + h-[60/70/80px]). */
-section[id] {
-  scroll-margin-top: 6rem;
-}
+/* In a layer, so that utilities win over these. Unlayered CSS beats every
+   layer, whatever its specificity. */
+@layer base {
+  /* Tailwind 4 gives buttons the default cursor. */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
 
-@media (min-width: 768px) {
+  /* Keep the sticky navbar from covering a section's start when jumping to its
+     anchor. Matches the navbar's own height (top-4 + margin + h-[60/70/80px]). */
   section[id] {
-    scroll-margin-top: 8rem;
+    scroll-margin-top: 6rem;
   }
-}
 
-body {
-  --sb-track-color: #ffffff;
-  --sb-thumb-color: #000000;
-  @apply text-text dark:text-darkText;
-  /* Improve text rendering */
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body::-webkit-scrollbar {
-  width: 10px;
-}
-
-@media (min-width: 640px) {
-  body::-webkit-scrollbar {
-    width: 16px;
+  @media (min-width: 768px) {
+    section[id] {
+      scroll-margin-top: 8rem;
+    }
   }
-}
 
-body::-webkit-scrollbar-track {
-  background: var(--sb-track-color);
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--sb-thumb-color);
-}
-
-@supports not selector(::-webkit-scrollbar) {
   body {
-    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    --sb-track-color: #ffffff;
+    --sb-thumb-color: #000000;
+    @apply text-text dark:text-darkText;
+    /* Improve text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  @media (min-width: 640px) {
+    body::-webkit-scrollbar {
+      width: 16px;
+    }
+  }
+
+  body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+  }
+
+  body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    body {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
+
+  /* Add consistent section spacing */
+  section {
+    position: relative;
+    overflow: visible;
   }
 }
 
@@ -69,10 +141,4 @@ body::-webkit-scrollbar-thumb {
   .rfm-initial-child-container {
     animation-play-state: paused !important;
   }
-}
-
-/* Add consistent section spacing */
-section {
-  position: relative;
-  overflow: visible;
 }
