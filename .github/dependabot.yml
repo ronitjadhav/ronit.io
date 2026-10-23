@@ -1,9 +1,14 @@
 version: 2
 updates:
+  # Monthly, and only releases at least a week old: a compromised version is
+  # usually caught and pulled within days. Security updates ignore both and
+  # arrive at once.
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5
     groups:
       # One PR for all routine minor/patch bumps; majors get their own PR each,
@@ -18,14 +23,16 @@ updates:
       # context.getFilename() API that ESLint 10 removed.
       - dependency-name: eslint
         update-types: ['version-update:semver-major']
-      # Track the Node version in .nvmrc, not the newest @types/node major.
+      # Track the Node major the workflows use, not the newest @types/node major.
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns: ['*']
