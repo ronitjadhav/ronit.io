@@ -46,12 +46,10 @@ cd ronit.io
 2. **Install dependencies:**
 
 ```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
+npm ci
 ```
+
+This installs the exact versions recorded in `package-lock.json`. Other package managers ignore that file and resolve fresh versions. Install scripts are turned off in `.npmrc`.
 
 3. **Set up environment variables:**
 
