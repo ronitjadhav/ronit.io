@@ -11,6 +11,7 @@
 
 import type { StaticImageData } from 'next/image';
 
+import berthImage from '../media/berth.webp';
 import digipinImage from '../media/digipin.webp';
 import geonetworkUiImage from '../media/geonetwork-ui.webp';
 import geoserverCloudMcpImage from '../media/geoservercloud-mcp.webp';
@@ -129,13 +130,16 @@ export const skills: Skill[] = [
 
 export interface Project {
   title: string;
+  /** One line on the card, two at most */
+  summary: string;
+  /** The full story, shown under "Details" */
   description: string;
   /** List of technology names shown as badges */
   tech: string[];
   /** GitHub repository URL */
   github: string;
-  /** Live demo URL */
-  live: string;
+  /** Live demo, store or package page; leave out when there is none */
+  live?: string;
   /** Optional blog post about the project, shown as a "Read post" button */
   post?: string;
   /** Thumbnail, imported from src/media/ at the top of this file */
@@ -144,7 +148,17 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'Berth',
+    summary: 'Docker containers, one click away in the GNOME top bar.',
+    description:
+      'A GNOME Shell extension that puts Docker containers in the top bar, grouped by Compose project. Start, stop, read logs or open a shell without typing a docker command, and see which containers use an image before removing it.',
+    tech: ['JavaScript', 'GNOME Shell', 'Docker'],
+    github: 'https://github.com/ronitjadhav/berth',
+    image: berthImage,
+  },
+  {
     title: 'GeoServer Manager',
+    summary: 'Administer a GeoServer from inside QGIS.',
     description:
       'A QGIS plugin to administer a GeoServer through its REST API: workspaces, stores, layers, styles, tile cache and settings. Publish layers from QGIS, or bring what the server has back as WMS, WFS or WMTS.',
     tech: ['Python', 'QGIS', 'PyQt', 'GeoServer', 'REST API'],
@@ -153,43 +167,8 @@ export const projects: Project[] = [
     image: geoserverManagerImage,
   },
   {
-    title: 'Odoolings',
-    description:
-      'A free, open-source Odoo 19 development tutorial that teaches by building one real app, with a rustlings-style CLI that checks your work.',
-    tech: ['Python', 'Odoo', 'Next.js', 'Docker', 'PostgreSQL'],
-    github: 'https://github.com/ronitjadhav/odoolings',
-    live: 'https://odoolings.ronit.io',
-    image: odoolingsImage,
-  },
-  {
-    title: 'GeoServer MCP',
-    description:
-      'A MCP server that enables LLM agents to manage and administer GeoServer instances using natural language.',
-    tech: ['Python', 'GeoServer', 'MCP', 'FastMCP', 'REST API', 'Docker'],
-    github: 'https://github.com/ronitjadhav/geoservercloud-mcp',
-    live: 'https://pypi.org/project/geoservercloud-mcp/',
-    image: geoserverCloudMcpImage,
-  },
-  {
-    title: 'Geonetwork-UI',
-    description:
-      'A modern frontend suite for GeoNetwork catalogs. I contributed to the development and enhancement of the Datahub, Metadata Editor, and Map Viewer components.',
-    tech: ['Angular', 'TypeScript', 'Tailwind CSS', 'Jest', 'Cypress'],
-    github: 'https://github.com/geonetwork/geonetwork-ui',
-    live: 'https://geonetwork-ui.labs.camptocamp.com/datahub',
-    image: geonetworkUiImage,
-  },
-  {
-    title: 'ThinkHazard (World Bank)',
-    description:
-      'An open-source web tool developed for the World Bank and GFDRR. It enables project planners to assess natural hazard risks (like floods, earthquakes, and landslides) for any location and receive mitigation recommendations.',
-    tech: ['Python', 'Pyramid', 'GeoPandas', 'Docker', 'Kubernetes'],
-    github: 'https://github.com/GFDRR/thinkhazard',
-    live: 'https://thinkhazard.org',
-    image: thinkhazardImage,
-  },
-  {
     title: 'QGIS Hub Plugin',
+    summary: 'Browse and add QGIS Hub resources without leaving QGIS.',
     description:
       'Developed at Camptocamp with help from Ismail Sunni, this plugin allows QGIS users to easily browse and add resources from the QGIS Hub directly into their projects. It supports grid and list views, search, and filtering by resource type.',
     tech: ['Python', 'Qt', 'QGIS'],
@@ -199,23 +178,65 @@ export const projects: Project[] = [
     image: qgisHubImage,
   },
   {
-    title: 'Openlayers Benchmark',
+    title: 'Odoolings',
+    summary: 'Learn Odoo 19 by building a real app, checked as you go.',
     description:
-      'Developed at Camptocamp as part of my internship, this project helps to benchmark the performance of WebGL and Canvas rendering in Openlayers. It includes a variety of tests and visualizations to compare the rendering speed of different layers.',
-    tech: ['Openlayers', 'TypeScript'],
-    github: 'https://github.com/openlayers/bench',
-    live: 'https://openlayers.org/bench/',
-    image: olBenchImage,
+      'A free, open-source Odoo 19 development tutorial that teaches by building one real app, with a rustlings-style CLI that checks your work.',
+    tech: ['Python', 'Odoo', 'Next.js', 'Docker', 'PostgreSQL'],
+    github: 'https://github.com/ronitjadhav/odoolings',
+    live: 'https://odoolings.ronit.io',
+    image: odoolingsImage,
+  },
+  {
+    title: 'GeoServer MCP',
+    summary: 'Run a GeoServer in plain language through LLM agents.',
+    description:
+      'A MCP server that enables LLM agents to manage and administer GeoServer instances using natural language.',
+    tech: ['Python', 'GeoServer', 'MCP', 'FastMCP', 'REST API', 'Docker'],
+    github: 'https://github.com/ronitjadhav/geoservercloud-mcp',
+    live: 'https://pypi.org/project/geoservercloud-mcp/',
+    image: geoserverCloudMcpImage,
   },
   {
     title: 'Digipin',
+    summary: "Find India's DIGIPIN digital address for any location.",
     description:
       'Search for the DIGIPIN for your location. This app demonstrates how to use the Digital Postal Index Number (DIGIPIN) by the Department of Posts in India, aiming to simplify geo-coded addressing for public and private services.',
-    tech: ['Openlayers', 'Next.js', 'TypeScript', 'Tailwind CSS'],
+    tech: ['OpenLayers', 'Next.js', 'TypeScript', 'Tailwind CSS'],
     github: 'https://github.com/ronitjadhav/digipin-openlayers',
     live: 'https://digipin.maplabs.tech',
     post: 'https://dev.to/ronitjadhav/discover-digipin-the-future-of-addressing-in-india-can',
     image: digipinImage,
+  },
+  {
+    title: 'ThinkHazard',
+    summary: 'Natural hazard risk for any place, for the World Bank.',
+    description:
+      'An open-source web tool developed for the World Bank and GFDRR. It enables project planners to assess natural hazard risks (like floods, earthquakes, and landslides) for any location and receive mitigation recommendations.',
+    tech: ['Python', 'Pyramid', 'GeoPandas', 'Docker', 'Kubernetes'],
+    github: 'https://github.com/GFDRR/thinkhazard',
+    live: 'https://thinkhazard.org',
+    image: thinkhazardImage,
+  },
+  {
+    title: 'Geonetwork-UI',
+    summary: 'Datahub, editor and map viewer for GeoNetwork catalogs.',
+    description:
+      'A modern frontend suite for GeoNetwork catalogs. I contributed to the development and enhancement of the Datahub, Metadata Editor, and Map Viewer components.',
+    tech: ['Angular', 'TypeScript', 'Tailwind CSS', 'Jest', 'Cypress'],
+    github: 'https://github.com/geonetwork/geonetwork-ui',
+    live: 'https://geonetwork-ui.labs.camptocamp.com/datahub',
+    image: geonetworkUiImage,
+  },
+  {
+    title: 'OpenLayers Benchmark',
+    summary: 'Measures WebGL against Canvas rendering in OpenLayers.',
+    description:
+      'Developed at Camptocamp as part of my internship, this project helps to benchmark the performance of WebGL and Canvas rendering in OpenLayers. It includes a variety of tests and visualizations to compare the rendering speed of different layers.',
+    tech: ['OpenLayers', 'TypeScript'],
+    github: 'https://github.com/openlayers/bench',
+    live: 'https://openlayers.org/bench/',
+    image: olBenchImage,
   },
 ];
 
