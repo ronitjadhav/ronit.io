@@ -98,10 +98,11 @@ The `icon` field maps to [react-icons/si](https://react-icons.github.io/react-ic
 export const projects = [
   {
     title: 'Project Name',
-    description: 'What this project does...',
+    summary: 'One line on what it does', // shown on the card
+    description: 'The full story...', // shown under "Details"
     tech: ['React', 'TypeScript'],
     github: 'https://github.com/you/project',
-    live: 'https://project.example.com',
+    live: 'https://project.example.com', // optional: demo, store or package page
     post: 'https://dev.to/you/post', // optional
     image: myProjectImage, // imported at the top of site-config.ts
   },
@@ -117,7 +118,11 @@ export const projects = [
    ```
 3. Add the project entry to the `projects` array, referencing the import
 
-Projects appear on the site in array order, so put the one you want featured first.
+Projects appear on the site in array order, so put the one you want featured first. Each card shows the image, the title, the `summary` and the links; "Details" opens the full description, the `tech` list and the `post` link.
+
+Keep the summary to about 55 characters. Cards in a row line up when it fits on two lines and the title on one.
+
+The image is shown whole, as a 16:9 sticker on a coloured band, so keep the logo or picture centred with some margin (the existing thumbnails are 1280×720, the logo on white). The band colours take turns in array order.
 
 ### Journey Timeline (`timelineData`)
 

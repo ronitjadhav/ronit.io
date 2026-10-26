@@ -162,7 +162,7 @@ For a detailed step-by-step guide, see **[CUSTOMIZATION.md](./CUSTOMIZATION.md)*
 - **⚡ Performance:** Built with Next.js 15 and optimized for speed
 - **♿ Accessibility:** WCAG compliant with proper ARIA labels and keyboard navigation
 - **🔍 SEO Optimized:** Built-in SEO best practices with meta tags and sitemaps
-- **📊 Projects Showcase:** Detailed project portfolio with descriptions and live links
+- **📊 Projects Showcase:** Project cards with a one-line summary that open in place for the full details
 
 ## Technologies Used
 
