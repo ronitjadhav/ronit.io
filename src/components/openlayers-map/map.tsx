@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { MapPin, House, Play, Stop } from '@phosphor-icons/react/ssr';
+import { CaretDown, MapPin, House, Play, Stop } from '@phosphor-icons/react/ssr';
 import { cn } from '@/lib/utils';
 import 'ol/ol.css';
 import Map from 'ol/Map';
@@ -153,16 +153,38 @@ const TimelineItem: React.FC<{
     onClick={onClick}
     aria-current={isActive}
     className={cn(
-      'relative w-full text-left transition-colors duration-200 rounded-md pl-14 pr-3 py-3 sm:py-4',
+      'relative w-full text-left transition-colors duration-200 rounded-md pl-14 pr-10 md:pr-3 py-3 sm:py-4',
       isActive ? 'bg-yellow-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-600',
     )}
   >
     <NumberBadge n={n} active={isActive} />
+    <CaretDown
+      aria-hidden
+      size={16}
+      weight="bold"
+      className={cn(
+        'absolute right-3 top-5 transition-transform duration-300 md:hidden',
+        isActive && 'rotate-180',
+      )}
+    />
     <h3 className="font-black text-base sm:text-lg mb-1">{entry.title}</h3>
     <p className="text-xs sm:text-sm font-mono font-bold text-gray-600 dark:text-gray-400">
       {entry.date}
     </p>
-    <p className="mt-1.5 sm:mt-2 text-sm sm:text-base leading-relaxed">{entry.description}</p>
+    {/* Phones show only the selected entry's story, so the list stays short
+        under the map. Clipped, not removed: screen readers still get it. */}
+    <div
+      className={cn(
+        'grid transition-[grid-template-rows] duration-300 ease-out md:grid-rows-[1fr]',
+        isActive ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+      )}
+    >
+      <p className="min-h-0 overflow-hidden">
+        <span className="block pt-1.5 sm:pt-2 text-sm sm:text-base leading-relaxed">
+          {entry.description}
+        </span>
+      </p>
+    </div>
     <div className="mt-2 sm:mt-3 flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
       <MapPin size={14} />
       <span>{entry.locationName}</span>
@@ -459,6 +481,12 @@ const MapComponent: React.FC = () => {
 
   const handleTimelineClick = (index: number) => {
     setPlaying(false);
+    // A second tap closes the entry again (on phones that folds its story away).
+    if (index === activeIndex) {
+      setActiveIndex(-1);
+      overlayRef.current?.setPosition(undefined);
+      return;
+    }
     select(index);
     // On phones the list sits under the map: bring the map back into view.
     mapBoxRef.current?.scrollIntoView({
