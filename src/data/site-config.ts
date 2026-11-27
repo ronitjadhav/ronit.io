@@ -183,8 +183,8 @@ export const projects: Project[] = [
     description:
       'A free, open-source Odoo 19 development tutorial that teaches by building one real app, with a rustlings-style CLI that checks your work.',
     tech: ['Python', 'Odoo', 'Next.js', 'Docker', 'PostgreSQL'],
-    github: 'https://github.com/ronitjadhav/odoolings',
-    live: 'https://odoolings.ronit.io',
+    github: 'https://github.com/camptocamp/odoolings',
+    live: 'https://camptocamp.github.io/odoolings/',
     image: odoolingsImage,
   },
   {
